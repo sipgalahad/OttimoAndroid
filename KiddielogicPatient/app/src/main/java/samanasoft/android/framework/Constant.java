@@ -3,7 +3,12 @@ package samanasoft.android.framework;
 public class Constant {
 	public static final String[] SHORT_MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }; 
 	public static final String[] MONTHS = { "January", "February", "March", "April", "May", "June", "July", 
-											"August", "September", "October", "November", "December" }; 
+											"August", "September", "October", "November", "December" };
+    public static class Url
+    {
+        public static final String APP_DATA_URL = "http://192.168.0.102/appdata/ottimo";
+        public static final String APP_URL = "http://192.168.0.102/research/Ottimov2.0";
+    }
 	public static class FormatString
     {
         public static final String DATE_FORMAT = "dd-MMM-yyyy";

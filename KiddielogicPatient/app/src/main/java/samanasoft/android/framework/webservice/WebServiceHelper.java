@@ -25,7 +25,7 @@ import samanasoft.android.ottimo.common.Constant;
 
 public class WebServiceHelper {
 	private static final String NAMESPACE = "http://tempuri.org/";
-    private static final String URL = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
+    private static final String URL = samanasoft.android.framework.Constant.Url.APP_URL + "/BridgingServer/Program/Mobile/MobileService.asmx";
     //private static String URL = "";
     private static final String SOAP_ACTION = "http://tempuri.org/GetMobileListObject";     
     private static final String METHOD_NAME = "GetMobileListObject";

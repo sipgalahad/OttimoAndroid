@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity {
                         BusinessLayer.insertPatient(getBaseContext(), entity);
                     }
                     mAuthTask3 = new DownloadImageTask(entity);
-                    mAuthTask3.execute(String.format("http://192.168.0.102/appdata/ottimo/data/Patient/%1$s/%1$s.jpg", entity.MedicalNo));
+                    mAuthTask3.execute(String.format("%2$s/data/Patient/%1$s/%1$s.jpg", entity.MedicalNo, Constant.Url.APP_DATA_URL));
 
                 } else {
                     showProgress(false);
@@ -276,6 +276,7 @@ public class LoginActivity extends AppCompatActivity {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
+            Log.d("Url", urldisplay);
             return downloadBitmap(urldisplay);
         }
 
