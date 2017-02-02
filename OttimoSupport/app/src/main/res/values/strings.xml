@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Ottimo</string>
+    <string name="action_view_log">View Log</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_loaddata">Load Data</string>
+
+    <string name="DBName">OttimoSupport</string>
+    <string name="DBVersion">1</string>
+    <string name="DefaultActivity">MainActivity</string>
+    <string name="Sample">Sample</string>
+
+</resources>

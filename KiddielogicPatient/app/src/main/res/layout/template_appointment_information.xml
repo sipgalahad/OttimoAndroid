@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:background="@drawable/list_row_bg"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1.0">
+            <TextView
+                style="@style/txtPersonInformationName"
+                android:layout_width="0dp"
+                android:layout_weight=".70"
+                android:id="@+id/txtAppointmentDate"
+                android:text="05-Jan-2017 08:11" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".30"
+                android:textColor="#26ff00"
+                android:textAlignment="viewEnd"
+                android:gravity="right"
+                android:id="@+id/txtAppointmentConfirmed"
+                android:text="Confirmed"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1.0">
+            <TextView
+                style="@style/txtBase"
+                android:layout_width="0dp"
+                android:layout_weight=".75"
+                android:id="@+id/txtAppointmentInformationParamedicName"
+                android:text="Dr. Hanifah Oswari, SPaK (Pediatrician)"/>
+        </LinearLayout>
+        <TextView
+            style="@style/txtBase"
+            android:id="@+id/txtAppointmentInformationVisitTypeName"
+            android:text="Kunjungan Berobat"/>
+    </LinearLayout>
+</LinearLayout>

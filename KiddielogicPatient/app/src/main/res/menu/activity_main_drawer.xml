@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_personal_data"
+            android:icon="@drawable/ic_menu_personal_data"
+            android:title="My Personal Data" />
+        <item
+            android:id="@+id/nav_appointment"
+            android:icon="@drawable/ic_menu_appointment"
+            android:title="My Appointment" />
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Change Password" />
+    </group>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_message_center"
+                android:icon="@drawable/ic_menu_message_center"
+                android:title="Message Center" />
+            <item
+                android:id="@+id/nav_manage_account"
+                android:icon="@drawable/ic_menu_manage_account"
+                android:title="Manage Account" />
+        </menu>
+    </item>
+
+</menu>

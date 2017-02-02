@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:id="@+id/txtAppointmentDate"/>
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/spnParamedic"
+        android:layout_below="@+id/txtAppointmentDate"/>
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/spnVisitType"
+        android:layout_below="@+id/spnParamedic"/>
+    <samanasoft.android.ottimosupport.MultiSpinner
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/spnVaccinationType"
+        android:layout_below="@+id/spnVisitType"
+        />
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/spnTemplateText"
+        android:layout_below="@+id/spnVaccinationType"/>
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/spnStatus"
+        android:layout_below="@+id/spnTemplateText"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:id="@+id/btnRefresh"
+        android:layout_below="@+id/spnStatus"/>
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/rdoCheck"
+        android:layout_below="@+id/btnRefresh">
+        <RadioButton android:id="@+id/radio_checkall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check All"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/radio_uncheckall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uncheck All"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/lvwPatient"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rdoCheck">
+    </ListView>
+
+</RelativeLayout>
