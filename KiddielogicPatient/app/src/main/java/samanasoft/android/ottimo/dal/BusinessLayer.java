@@ -305,27 +305,6 @@ public class BusinessLayer {
         }
         return result;
     }
-    public static WebServiceResponse Login(Context context, String medicalNo, String password){
-        WebServiceResponse result = new WebServiceResponse();
-        try {
-            JSONObject response = WebServiceHelper.Login(context, medicalNo, password);
-
-            JSONArray returnObj = WebServiceHelper.getReturnObject(response);
-            DateTime timestamp = WebServiceHelper.getTimestamp(response);
-
-            List<DataLayer.Patient> lst = new ArrayList<DataLayer.Patient>();
-            for (int i = 0; i < returnObj.length();++i){
-                JSONObject row = (JSONObject) returnObj.get(i);
-                lst.add((DataLayer.Patient)WebServiceHelper.JSONObjectToObject(row, new Patient()));
-            }
-            result.returnObj = lst;
-            result.timestamp = timestamp;
-        } catch (Exception e) {
-            result = null;
-            e.printStackTrace();
-        }
-        return result;
-    }
     public static WebServiceResponse ChangePassword(Context context, Integer MRN, String oldPassword, String newPassword){
         WebServiceResponse result = new WebServiceResponse();
         try {

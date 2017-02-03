@@ -177,6 +177,15 @@ public class WebServiceHelper {
 			return null;
 		}
 	}
+
+	public static JSONArray getCustomReturnObject(JSONObject response, String customField){
+		try {
+			return response.getJSONArray(customField);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	public static DateTime getTimestamp(JSONObject response){
 		return JsonDateToDateTime(response.optString("Timestamp"));

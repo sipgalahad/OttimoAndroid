@@ -14,12 +14,14 @@ import android.os.AsyncTask;
 
 import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.webservice.WebServiceHelper;
 import samanasoft.android.ottimo.dal.DataLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,12 +33,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -65,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-    private LoadAppointmentTask mAuthTask2 = null;
     private DownloadImageTask mAuthTask3 = null;
 
     // UI references.
@@ -197,7 +202,7 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, WebServiceResponse> {
+    public class UserLoginTask extends AsyncTask<Void, Void, WebServiceResponsePatient> {
 
         private final String mMedicalNo;
         private final String mPassword;
@@ -208,9 +213,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected WebServiceResponse doInBackground(Void... params) {
+        protected WebServiceResponsePatient doInBackground(Void... params) {
             try {
-                WebServiceResponse result = BusinessLayer.Login(getBaseContext(), mMedicalNo, mPassword);
+                WebServiceResponsePatient result = Login(getBaseContext(), mMedicalNo, mPassword);
                 return result;
             }
             catch (Exception ex) {
@@ -220,7 +225,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final WebServiceResponse result) {
+        protected void onPostExecute(final WebServiceResponsePatient result) {
             mAuthTask = null;
             if(result == null){
                 Toast.makeText(getBaseContext(), "Login Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
@@ -229,9 +234,9 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 Patient entity = null;
-                if (result.returnObj != null) {
+                if (result.returnObjPatient != null) {
                     @SuppressWarnings("unchecked")
-                    List<Patient> lstPatient = (List<Patient>) result.returnObj;
+                    List<Patient> lstPatient = (List<Patient>) result.returnObjPatient;
                     for (Patient entity1 : lstPatient) {
                         Log.d("testtest", entity1.PreferredName + "; " + entity1.MedicalNo);
                         entity = entity1;
@@ -242,10 +247,47 @@ public class LoginActivity extends AppCompatActivity {
                     Patient tempPatient = BusinessLayer.getPatient(getBaseContext(), entity.MRN);
                     if (tempPatient == null) {
                         entity.LastSyncDateTime = result.timestamp;
+                        entity.LastSyncAppointmentDateTime = result.timestamp;
                         BusinessLayer.insertPatient(getBaseContext(), entity);
+                        List<DataLayer.Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
+                        for (DataLayer.Appointment entity2 : lstOldAppointment) {
+                            BusinessLayer.deleteAppointment(getBaseContext(), entity2.AppointmentID);
+                        }
+
+                        @SuppressWarnings("unchecked")
+                        List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObjAppointment;
+                        for (DataLayer.Appointment entity2 : lstAppointment) {
+                            BusinessLayer.insertAppointment(getBaseContext(), entity2);
+                        }
+                        Log.d("img", result.returnObjImg);
+                        if(!result.returnObjImg.equals("")) {
+                            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                            File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+                            File mypath = new File(directory, entity.MedicalNo + ".jpg");
+
+                            FileOutputStream fos = null;
+                            try {
+                                fos = new FileOutputStream(mypath);
+
+                                byte[] decodedString = Base64.decode(result.returnObjImg, Base64.DEFAULT);
+                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                decodedByte.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
                     }
-                    mAuthTask3 = new DownloadImageTask(entity);
-                    mAuthTask3.execute(String.format("%2$s/data/Patient/%1$s/%1$s.jpg", entity.MedicalNo, Constant.Url.APP_DATA_URL));
+                    //mAuthTask3 = new DownloadImageTask(entity);
+                    //mAuthTask3.execute(String.format("%2$s/data/Patient/%1$s/%1$s.jpg", entity.MedicalNo, Constant.Url.APP_DATA_URL));
+                    Intent i = new Intent(getBaseContext(), MainActivity.class);
+                    i.putExtra("mrn", entity.MRN);
+                    startActivity(i);
 
                 } else {
                     showProgress(false);
@@ -333,8 +375,9 @@ public class LoginActivity extends AppCompatActivity {
             }
             else
                 Log.d("Result Foto", "Null");
-            mAuthTask2 = new LoadAppointmentTask(entityPatient.MRN);
-            mAuthTask2.execute((Void) null);
+            Intent i = new Intent(getBaseContext(), MainActivity.class);
+            i.putExtra("mrn", entityPatient.MRN);
+            startActivity(i);
         }
 
         @Override
@@ -343,68 +386,41 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
         }
     }
+    public WebServiceResponsePatient Login(Context context, String medicalNo, String password){
+        WebServiceResponsePatient result = new WebServiceResponsePatient();
+        try {
+            JSONObject response = WebServiceHelper.Login(context, medicalNo, password);
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class LoadAppointmentTask extends AsyncTask<Void, Void, WebServiceResponse> {
+            JSONArray returnObjAppointment = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAppointment");
+            JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");
+            String img = response.optString("ReturnObjImage");
+            DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
-        private final Integer mMRN;
-        LoadAppointmentTask(Integer MRN) {
-            mMRN = MRN;
-        }
-
-        @Override
-        protected WebServiceResponse doInBackground(Void... params) {
-            String filterExpression = String.format("MRN = '%1$s' AND StartDate >= '%2$s' AND GCAppointmentStatus IN ('%3$s','%4$s','%5$s')", mMRN, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.OPEN, Constant.AppointmentStatus.SEND_CONFIRMATION, Constant.AppointmentStatus.CONFIRMED);
-            Log.d("filterExpression", filterExpression);
-            try {
-                WebServiceResponse result = BusinessLayer.getWebServiceListAppointment(getBaseContext(), filterExpression);
-                return result;
+            List<DataLayer.Patient> lst = new ArrayList<Patient>();
+            for (int i = 0; i < returnObjPatient.length();++i){
+                JSONObject row = (JSONObject) returnObjPatient.get(i);
+                lst.add((DataLayer.Patient)WebServiceHelper.JSONObjectToObject(row, new Patient()));
             }
-            catch (Exception ex) {
-                Toast.makeText(getBaseContext(), "Get Appointment Failed", Toast.LENGTH_SHORT).show();
+            List<DataLayer.Appointment> lst2 = new ArrayList<DataLayer.Appointment>();
+            for (int i = 0; i < returnObjAppointment.length();++i){
+                JSONObject row = (JSONObject) returnObjAppointment.get(i);
+                lst2.add((DataLayer.Appointment)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Appointment()));
             }
-            return null;
+            result.returnObjPatient = lst;
+            result.returnObjAppointment = lst2;
+            result.returnObjImg = img;
+            result.timestamp = timestamp;
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
         }
-
-        @Override
-        protected void onPostExecute(final WebServiceResponse result) {
-            mAuthTask2 = null;
-            showProgress(false);
-
-            if(result == null){
-                Toast.makeText(getBaseContext(), "Login Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                if (result.returnObj != null) {
-                    List<DataLayer.Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", mMRN));
-                    for (DataLayer.Appointment entity : lstOldAppointment) {
-                        BusinessLayer.deleteAppointment(getBaseContext(), entity.AppointmentID);
-                    }
-
-                    @SuppressWarnings("unchecked")
-                    List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObj;
-                    for (DataLayer.Appointment entity : lstAppointment) {
-                        BusinessLayer.insertAppointment(getBaseContext(), entity);
-                    }
-
-                    Patient entityPatient = BusinessLayer.getPatient(getBaseContext(), mMRN);
-                    entityPatient.LastSyncAppointmentDateTime = result.timestamp;
-                    BusinessLayer.updatePatient(getBaseContext(), entityPatient);
-                }
-                Intent i = new Intent(getBaseContext(), MainActivity.class);
-                i.putExtra("mrn", mMRN);
-                startActivity(i);
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask2 = null;
-            showProgress(false);
-        }
+        return result;
+    }
+    public class WebServiceResponsePatient {
+        public DateTime timestamp;
+        public List<?> returnObjPatient;
+        public List<?> returnObjAppointment;
+        public String returnObjImg;
     }
 }
 
