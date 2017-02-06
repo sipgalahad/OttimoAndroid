@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class SchedulerSetupReceiver extends BroadcastReceiver {
-    private static final String APP_TAG = "com.hascode.android";
+public class AlarmSyncDataAutoStart extends BroadcastReceiver {
+    AlarmSyncDataHelper alarm = new AlarmSyncDataHelper();
 
     @Override
     public void onReceive(final Context ctx, final Intent intent) {
-        Log.d(APP_TAG, "SchedulerSetupReceiver.onReceive() called");
-        AlarmHelper.startAlarm(ctx);
+        Log.d("Test Alarm", "AlarmSyncDataAutoStart.onReceive() called");
+        alarm.setAlarm(ctx);
     }
 
 }

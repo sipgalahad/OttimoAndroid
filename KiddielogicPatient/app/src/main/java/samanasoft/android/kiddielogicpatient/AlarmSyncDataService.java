@@ -1,0 +1,195 @@
+package samanasoft.android.kiddielogicpatient;
+import android.app.Service;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.IBinder;
+import android.util.Base64;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.webservice.WebServiceHelper;
+import samanasoft.android.framework.webservice.WebServiceResponse;
+import samanasoft.android.ottimo.dal.BusinessLayer;
+import samanasoft.android.ottimo.dal.DataLayer;
+import samanasoft.android.ottimo.dal.DataLayer.Patient;
+import samanasoft.android.ottimo.dal.DataLayer.Appointment;
+import samanasoft.android.framework.Constant;
+
+public class AlarmSyncDataService extends Service {
+    private static final String APP_TAG = "com.hascode.android.scheduler";
+    @Override
+    public IBinder onBind(final Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
+        if(isOnline(this)) {
+            List<Patient> lstEntity = BusinessLayer.getPatientList(this, "");
+            for (Patient entity : lstEntity) {
+                (new GetPatientTask(this, entity)).execute();
+            }
+        }
+        return Service.START_NOT_STICKY;
+    }
+
+    private class GetPatientTask extends AsyncTask<String, Double, WebServiceResponsePatient> {
+        private boolean isRefreshPatientList = false;
+        private Context context = null;
+        private Patient entity = null;
+        GetPatientTask(Context context, Patient mEntity){
+            this.context = context;
+            this.entity = mEntity;
+        }
+        @Override
+        protected void onPreExecute() {
+            if(!isRefreshPatientList){
+                isRefreshPatientList = true;
+            }
+            else{
+                this.cancel(true);
+            }
+        }
+
+        protected WebServiceResponsePatient doInBackground(String... args) {
+            WebServiceResponsePatient result = SyncPatient(context, entity.MRN, entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB));
+            return result;
+        }
+        protected void onPostExecute(WebServiceResponsePatient result) {
+            isRefreshPatientList = false;
+            if (result.returnObjPatient != null) {
+                @SuppressWarnings("unchecked")
+                List<Patient> lstPatient = (List<Patient>) result.returnObjPatient;
+                for (Patient entity1 : lstPatient) {
+                    entity1.LastSyncAppointmentDateTime = result.timestamp;
+                    entity1.LastSyncDateTime = result.timestamp;
+                    BusinessLayer.updatePatient(context, entity1);
+                }
+            }
+            if (result.returnObjAppointment != null) {
+                @SuppressWarnings("unchecked")
+                List<Appointment> lstAppointment = (List<Appointment>) result.returnObjAppointment;
+
+                String lstAppointmentID = "";
+                for (Appointment entity : lstAppointment) {
+                    if (!lstAppointmentID.equals(""))
+                        lstAppointmentID += ",";
+                    lstAppointmentID += entity.AppointmentID;
+                }
+
+                if (!lstAppointmentID.equals("")) {
+                    List<Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(context, String.format("AppointmentID IN (%1$s)", lstAppointmentID));
+                    for (Appointment entity : lstOldAppointment) {
+                        BusinessLayer.deleteAppointment(context, entity.AppointmentID);
+                    }
+
+                    for (Appointment entity : lstAppointment) {
+                        Appointment oldData = BusinessLayer.getAppointment(context, entity.AppointmentID);
+                        if (oldData == null) {
+                            if (entity.GCAppointmentStatus != Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus != Constant.AppointmentStatus.VOID)
+                                BusinessLayer.insertAppointment(context, entity);
+                        } else {
+                            if (entity.GCAppointmentStatus == Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus == Constant.AppointmentStatus.VOID)
+                                BusinessLayer.deleteAppointment(context, entity.AppointmentID);
+                            else
+                                BusinessLayer.updateAppointment(context, entity);
+                        }
+                    }
+                }
+            }
+            if(!result.returnObjImg.equals("")) {
+                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+                File mypath = new File(directory, entity.MedicalNo + ".jpg");
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mypath);
+
+                    byte[] decodedString = Base64.decode(result.returnObjImg, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    decodedByte.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    }
+
+    public WebServiceResponsePatient SyncPatient(Context context, Integer MRN, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
+        WebServiceResponsePatient result = new WebServiceResponsePatient();
+        try {
+            JSONObject response = WebServiceHelper.SyncPatient(context, MRN, patientLastUpdatedDate, photoLastUpdatedDate, appointmentLastUpdatedDate);
+
+            List<DataLayer.Appointment> lst2 = new ArrayList<DataLayer.Appointment>();
+            if (!response.isNull("ReturnObjAppointment")) {
+                JSONArray returnObjAppointment = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAppointment");
+                for (int i = 0; i < returnObjAppointment.length();++i){
+                    JSONObject row = (JSONObject) returnObjAppointment.get(i);
+                    lst2.add((DataLayer.Appointment)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Appointment()));
+                }
+            }
+
+            List<DataLayer.Patient> lst = new ArrayList<Patient>();
+            if (!response.isNull("ReturnObjPatient")) {
+                JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");
+                for (int i = 0; i < returnObjPatient.length();++i){
+                    JSONObject row = (JSONObject) returnObjPatient.get(i);
+                    lst.add((DataLayer.Patient)WebServiceHelper.JSONObjectToObject(row, new Patient()));
+                }
+            }
+
+            String img = "";
+            if (!response.isNull("ReturnObjImage"))
+                img = response.optString("ReturnObjImage");
+
+            DateTime timestamp = WebServiceHelper.getTimestamp(response);
+
+            result.returnObjPatient = lst;
+            result.returnObjAppointment = lst2;
+            result.returnObjImg = img;
+            result.timestamp = timestamp;
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public class WebServiceResponsePatient {
+        public DateTime timestamp;
+        public List<?> returnObjPatient;
+        public List<?> returnObjAppointment;
+        public String returnObjImg;
+    }
+
+    public boolean isOnline(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //should check null because in airplane mode it will be null
+        return (netInfo != null && netInfo.isConnected());
+    }
+
+}

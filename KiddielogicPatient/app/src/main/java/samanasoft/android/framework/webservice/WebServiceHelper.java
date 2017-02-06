@@ -95,6 +95,51 @@ public class WebServiceHelper {
 		}
 		return result;
 	}
+	public static JSONObject SyncPatient(Context ctx, Integer MRN, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "SyncPatient");
+
+		PropertyInfo propMRN = new PropertyInfo();
+		propMRN.setName("MRN");
+		propMRN.setValue(MRN);
+		propMRN.setType(Integer.class);
+
+		PropertyInfo propPatient = new PropertyInfo();
+		propPatient.setName("patientLastUpdatedDate");
+		propPatient.setValue(patientLastUpdatedDate);
+		propPatient.setType(String.class);
+
+		PropertyInfo propPhoto = new PropertyInfo();
+		propPhoto.setName("photoLastUpdatedDate");
+		propPhoto.setValue(photoLastUpdatedDate);
+		propPhoto.setType(String.class);
+
+		PropertyInfo propAppointment = new PropertyInfo();
+		propAppointment.setName("appointmentLastUpdatedDate");
+		propAppointment.setValue(appointmentLastUpdatedDate);
+		propAppointment.setType(String.class);
+
+		request.addProperty(propMRN);
+		request.addProperty(propPatient);
+		request.addProperty(propPhoto);
+		request.addProperty(propAppointment);
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/SyncPatient", envelope);
+			result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public static JSONObject ChangePassword(Context ctx, Integer MRN, String oldPassword, String newPassword){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 

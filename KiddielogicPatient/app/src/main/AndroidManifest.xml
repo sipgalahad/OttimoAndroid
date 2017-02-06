@@ -55,19 +55,8 @@
             android:name=".ManageAccountActivity"
             android:label="@string/title_activity_manage_account"
             android:noHistory="true"></activity>
-        <service android:name=".SchedulerEventService" android:process=":hascode_process"></service>
-        <service android:name=".SchedulerEventLoadDataService" android:process=":hascode_process"></service>
-
-        <receiver android:name=".SchedulerEventReceiver" android:process=":hascode_process"></receiver>
-        <receiver android:name=".SchedulerSetupReceiver" android:process=":hascode_process">
-            <intent-filter >
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".SchedulerEventLoadDataReceiver" android:process=":hascode_process"></receiver>
-        <receiver android:name=".SchedulerSetupLoadDataReceiver" android:process=":hascode_process">
+        <service android:name=".AlarmSyncDataService" ></service>
+        <receiver android:name=".AlarmSyncDataAutoStart">
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -78,8 +67,21 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <service android:name=".AlarmNotificationService" ></service>
+        <receiver android:name=".AlarmNotificationAutoStart">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+            </intent-filter>
+        </receiver>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
 </manifest>

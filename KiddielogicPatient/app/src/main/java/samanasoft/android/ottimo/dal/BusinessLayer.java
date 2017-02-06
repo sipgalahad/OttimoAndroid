@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import samanasoft.android.framework.DaoBase;
 import samanasoft.android.framework.DateTime;

@@ -23,10 +23,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
         if (wifi.isAvailable() || mobile.isAvailable()) {
-            String filterExpression = String.format("LastSyncDateTime < '%1$s 00:00:00'", DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB));
+            String filterExpression = String.format("LastSyncDateTime < '%1$s 00:00:00' OR LastSyncAppointmentDateTime < '%1$s 00:00:00'", DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB));
             List<Patient> lstPatient = BusinessLayer.getPatientList(context, filterExpression);
             if(lstPatient.size() > 0){
-                Intent eventService = new Intent(context, SchedulerEventLoadDataService.class);
+                Intent eventService = new Intent(context, AlarmSyncDataService.class);
                 context.startService(eventService);
             }
 

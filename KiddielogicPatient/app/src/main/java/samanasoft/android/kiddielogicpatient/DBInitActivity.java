@@ -7,12 +7,12 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
 import samanasoft.android.framework.DbConfiguration;
 import samanasoft.android.ottimo.common.Constant;
-import samanasoft.android.ottimo.common.Methods;
 import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import java.util.List;
@@ -41,6 +41,16 @@ public class DBInitActivity extends Activity {
         String dbName = "OttimoPatient.db";
         int dbVersion = Integer.valueOf("1");
         DbConfiguration.initDB(this, dbName, dbVersion, isCreateDb);
+
+        //if(isCreateDb)
+        {
+            AlarmNotificationHelper alarm = new AlarmNotificationHelper();
+            alarm.setAlarm(this);
+            AlarmSyncDataHelper alarm2 = new AlarmSyncDataHelper();
+            alarm2.setAlarm(this);
+        }
+        Intent intentSyncData = new Intent(this, AlarmSyncDataService.class);
+        startService(intentSyncData);
 
         if(isOnline(this)) {
             List<Patient> lstPatient = BusinessLayer.getPatientList(this, "");
