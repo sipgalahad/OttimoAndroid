@@ -1,19 +1,29 @@
 package samanasoft.android.kiddielogicpatient;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.CalendarContract;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 
 import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.Helper;
 import samanasoft.android.framework.webservice.WebServiceHelper;
 import samanasoft.android.ottimo.dal.DataLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
@@ -43,7 +53,13 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
+
+import android.provider.CalendarContract.Events;
 
 
 import samanasoft.android.framework.webservice.WebServiceResponse;
@@ -152,7 +168,12 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(medicalNo, password);
+
+            String androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            String deviceName = android.os.Build.MODEL;
+            String myVersion = android.os.Build.VERSION.RELEASE; // e.g. myVersion := "1.6"
+            int sdkVersion = android.os.Build.VERSION.SDK_INT; // e.g. sdkVersion := 8;
+            mAuthTask = new UserLoginTask(medicalNo, password, androidID, deviceName, myVersion, sdkVersion, Constant.AppVersion);
             mAuthTask.execute((Void) null);
         }
     }
@@ -206,19 +227,28 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mMedicalNo;
         private final String mPassword;
+        private final String mDeviceID;
+        private final String mDeviceName;
+        private final String mAndroidVersion;
+        private final Integer mSDKVersion;
+        private final String mAppVersion;
 
-        UserLoginTask(String medicalNo, String password) {
+        UserLoginTask(String medicalNo, String password, String deviceID, String deviceName, String androidVersion, Integer sdkVersion, String appVersion) {
             mMedicalNo = medicalNo;
             mPassword = password;
+            mDeviceID = deviceID;
+            mDeviceName = deviceName;
+            mAndroidVersion = androidVersion;
+            mSDKVersion = sdkVersion;
+            mAppVersion = appVersion;
         }
 
         @Override
         protected WebServiceResponsePatient doInBackground(Void... params) {
             try {
-                WebServiceResponsePatient result = Login(getBaseContext(), mMedicalNo, mPassword);
+                WebServiceResponsePatient result = Login(getBaseContext(), mMedicalNo, mPassword, mDeviceID, mDeviceName, mAndroidVersion, mSDKVersion, mAppVersion);
                 return result;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Toast.makeText(getBaseContext(), "Get Patient Failed", Toast.LENGTH_SHORT).show();
             }
             return null;
@@ -227,12 +257,11 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final WebServiceResponsePatient result) {
             mAuthTask = null;
-            if(result == null){
+            if (result == null) {
                 Toast.makeText(getBaseContext(), "Login Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                 showProgress(false);
                 mPasswordView.requestFocus();
-            }
-            else {
+            } else {
                 Patient entity = null;
                 if (result.returnObjPatient != null) {
                     @SuppressWarnings("unchecked")
@@ -258,6 +287,8 @@ public class LoginActivity extends AppCompatActivity {
                         List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObjAppointment;
                         for (DataLayer.Appointment entity2 : lstAppointment) {
                             BusinessLayer.insertAppointment(getBaseContext(), entity2);
+                            Helper.insertAppointmentToEventCalender(getBaseContext(), entity2);
+
                         }
                         Log.d("img", result.returnObjImg);
                         if(!result.returnObjImg.equals("")) {
@@ -386,10 +417,10 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
         }
     }
-    public WebServiceResponsePatient Login(Context context, String medicalNo, String password){
+    public WebServiceResponsePatient Login(Context context, String medicalNo, String password, String deviceID, String deviceName, String androidVersion, Integer sdkVersion, String appVersion){
         WebServiceResponsePatient result = new WebServiceResponsePatient();
         try {
-            JSONObject response = WebServiceHelper.Login(context, medicalNo, password);
+            JSONObject response = WebServiceHelper.Login(context, medicalNo, password, deviceID, deviceName, androidVersion, sdkVersion, appVersion);
 
             JSONArray returnObjAppointment = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAppointment");
             JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");

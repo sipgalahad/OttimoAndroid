@@ -12,6 +12,7 @@ import android.util.Log;
 
 import samanasoft.android.framework.DaoBase;
 import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.DbConfiguration;
 import samanasoft.android.framework.DbHelper;
 import samanasoft.android.framework.webservice.WebServiceHelper;
 import samanasoft.android.framework.webservice.WebServiceResponse;
@@ -23,6 +24,51 @@ import samanasoft.android.ottimo.dal.DataLayer.Setting;
 import samanasoft.android.ottimo.dal.DataLayer.SettingDao;
 
 public class BusinessLayer {
+    //region AppointmentCalendarEvent
+    public static DataLayer.AppointmentCalendarEvent getAppointmentCalendarEvent(Context context, int AppointmentID, long CalendarEventID)
+    {
+        return new DataLayer.AppointmentCalendarEventDao(context).get(AppointmentID, CalendarEventID);
+    }
+    public static int insertAppointmentCalendarEvent(Context context, DataLayer.AppointmentCalendarEvent record)
+    {
+        return new DataLayer.AppointmentCalendarEventDao(context).insert(record);
+    }
+    public static int updateAppointmentCalendarEvent(Context context, DataLayer.AppointmentCalendarEvent record)
+    {
+        return new DataLayer.AppointmentCalendarEventDao(context).update(record);
+    }
+    public static int deleteAppointmentCalendarEvent(Context context, int AppointmentID, long CalendarEventID)
+    {
+        return new DataLayer.AppointmentCalendarEventDao(context).delete(AppointmentID, CalendarEventID);
+    }
+    public static List<DataLayer.AppointmentCalendarEvent> getAppointmentCalendarEventList(Context context, String filterExpression){
+        List<DataLayer.AppointmentCalendarEvent> result = new ArrayList<DataLayer.AppointmentCalendarEvent>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(DataLayer.AppointmentCalendarEvent.class);
+            String query = helper.select(filterExpression);
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add((DataLayer.AppointmentCalendarEvent)helper.dataReaderToObject(reader, new DataLayer.AppointmentCalendarEvent()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    //endregion
     //region Appointment
     public static DataLayer.Appointment getAppointment(Context context, int AppointmentID)
     {
@@ -269,12 +315,14 @@ public class BusinessLayer {
     //region vAppointment
     public static List<DataLayer.vAppointment> getvAppointmentList(Context context, String filterExpression){
         List<DataLayer.vAppointment> result = new ArrayList<DataLayer.vAppointment>();
+        Log.d("DB Name", DbConfiguration.DATABASE_NAME);
         DaoBase daoBase = new DaoBase(context);
         try
         {
             DbHelper helper = new DbHelper(DataLayer.vAppointment.class);
             String query = helper.select(filterExpression);
             Cursor reader = daoBase.getDataReader(query);
+            Log.d("test Reader", "Reader : " + reader.getCount());
             if(reader.moveToFirst()){
                 do {
                     result.add((DataLayer.vAppointment)helper.dataReaderToObject(reader, new DataLayer.vAppointment()));

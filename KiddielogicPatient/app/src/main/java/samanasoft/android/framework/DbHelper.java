@@ -298,7 +298,7 @@ public class DbHelper{
     	sqlInsert.append("INSERT INTO ").append(tableName);
     	sqlInsert.append(" (").append(fieldName).append(")");
     	sqlInsert.append(" VALUES (").append(fieldValue).append(")");
-    	
+
     	return sqlInsert.toString();
     }
 	

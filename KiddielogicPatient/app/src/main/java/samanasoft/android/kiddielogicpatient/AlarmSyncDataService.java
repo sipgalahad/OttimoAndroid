@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.Helper;
 import samanasoft.android.framework.webservice.WebServiceHelper;
 import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.dal.BusinessLayer;
@@ -101,13 +102,18 @@ public class AlarmSyncDataService extends Service {
                     for (Appointment entity : lstAppointment) {
                         Appointment oldData = BusinessLayer.getAppointment(context, entity.AppointmentID);
                         if (oldData == null) {
-                            if (entity.GCAppointmentStatus != Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus != Constant.AppointmentStatus.VOID)
+                            if (entity.GCAppointmentStatus != Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus != Constant.AppointmentStatus.VOID) {
                                 BusinessLayer.insertAppointment(context, entity);
+                                Helper.insertAppointmentToEventCalender(getBaseContext(), entity);
+                            }
                         } else {
-                            if (entity.GCAppointmentStatus == Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus == Constant.AppointmentStatus.VOID)
+                            if (entity.GCAppointmentStatus == Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus == Constant.AppointmentStatus.VOID) {
                                 BusinessLayer.deleteAppointment(context, entity.AppointmentID);
-                            else
+                                Helper.deleteAppointmentFromEventCalender(getBaseContext(), entity);
+                            }
+                            else {
                                 BusinessLayer.updateAppointment(context, entity);
+                            }
                         }
                     }
                 }

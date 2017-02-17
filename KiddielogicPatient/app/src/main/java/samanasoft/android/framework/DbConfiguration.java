@@ -5,12 +5,10 @@ import samanasoft.android.framework.DbSetting.OpenDataHelper;
 import android.content.Context;
 
 public class DbConfiguration {
-	public static String DATABASE_NAME = "";
+	public static String DATABASE_NAME = "OttimoPatient.db";
 	public static String DATABASE_PATH = "";
 	public static int DATABASE_VERSION = 1;
-	public static void initDB(Context context, String dbName, int dbVersion, boolean isCreateDb){		
-		DATABASE_NAME = dbName;
-		DATABASE_VERSION = dbVersion;
+	public static void initDB(Context context, boolean isCreateDb){
 		//DATABASE_PATH = "/data/data/" + context.getPackageName() + "/databases/";
         if(android.os.Build.VERSION.SDK_INT >= 4.2)
             DATABASE_PATH = context.getApplicationInfo().dataDir + "/databases/";

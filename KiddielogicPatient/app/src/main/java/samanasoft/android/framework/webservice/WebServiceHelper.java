@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +26,7 @@ import samanasoft.android.ottimo.common.Constant;
 
 public class WebServiceHelper {
 	private static final String NAMESPACE = "http://tempuri.org/";
-    private static final String URL = samanasoft.android.framework.Constant.Url.APP_URL + "/BridgingServer/Program/Mobile/MobileService.asmx";
+    private static final String URL = samanasoft.android.framework.Constant.Url.BRIDGING_SERVER;
     //private static String URL = "";
     private static final String SOAP_ACTION = "http://tempuri.org/GetMobileListObject";     
     private static final String METHOD_NAME = "GetMobileListObject";
@@ -62,24 +63,19 @@ public class WebServiceHelper {
         }
         return result;
 	}
-	public static JSONObject Login(Context ctx, String medicalNo, String password){
+	public static JSONObject Login(Context ctx, String medicalNo, String password, String deviceID, String deviceName, String androidVersion, Integer sdkVersion, String appVersion){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
 		SoapObject request = new SoapObject(NAMESPACE, "Login");
 
-		PropertyInfo propMedicalNo = new PropertyInfo();
-		propMedicalNo.setName("medicalNo");
-		propMedicalNo.setValue(medicalNo);
-		propMedicalNo.setType(String.class);
-
-		PropertyInfo propPassword = new PropertyInfo();
-		propPassword.setName("password");
-		propPassword.setValue(password);
-		propPassword.setType(String.class);
-
-		request.addProperty(propMedicalNo);
-		request.addProperty(propPassword);
+		request.addProperty(createPropertyInfo("medicalNo", medicalNo, String.class));
+		request.addProperty(createPropertyInfo("password", password, String.class));
+		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
+		request.addProperty(createPropertyInfo("deviceName", deviceName, String.class));
+		request.addProperty(createPropertyInfo("androidVersion", androidVersion, String.class));
+		request.addProperty(createPropertyInfo("sdkVersion", sdkVersion, Integer.class));
+		request.addProperty(createPropertyInfo("appVersion", appVersion, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -94,6 +90,14 @@ public class WebServiceHelper {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private static PropertyInfo createPropertyInfo(String name, Object value, Class type){
+		PropertyInfo prop = new PropertyInfo();
+		prop.setName(name);
+		prop.setValue(value);
+		prop.setType(type);
+		return prop;
 	}
 	public static JSONObject SyncPatient(Context ctx, Integer MRN, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
@@ -172,6 +176,24 @@ public class WebServiceHelper {
 
 		try {
 			androidHttpTransport.call("http://tempuri.org/ChangePassword", envelope);
+			result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public static JSONObject GetAndroidAppVersion(Context ctx){
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "GetAndroidAppVersion");
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/GetAndroidAppVersion", envelope);
 			result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;

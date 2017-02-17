@@ -100,6 +100,47 @@ public class DataLayer{
         }
     }
     //endregion
+    //region AppointmentCalendarEvent
+    @Table(Name = "AppointmentCalendarEvent")
+    public static class AppointmentCalendarEvent{
+        @Column(DataType = DataType.INT, Name = "AppointmentID", IsPrimaryKey = Bool.TRUE)
+        public int AppointmentID;
+
+        @Column(DataType = DataType.INT, Name = "CalendarEventID")
+        public Long CalendarEventID;
+    }
+    public static class AppointmentCalendarEventDao{
+        private DbHelper helper;
+        private DaoBase daoBase;
+        private final String p_AppointmentID = "@p_AppointmentID";
+        private final String p_CalendarEventID = "@p_CalendarEventID";
+
+        public AppointmentCalendarEventDao(Context context){
+            this.helper = new DbHelper(Appointment.class);
+            this.daoBase = new DaoBase(context);
+        }
+        public AppointmentCalendarEvent get(int AppointmentID, long CalendarEventID){
+            String query = helper.getRecord();
+            query = query.replace(p_AppointmentID, Integer.toString(AppointmentID));
+            query = query.replace(p_CalendarEventID, Long.toString(CalendarEventID));
+            Cursor row = daoBase.getDataRow(query);
+            return (row == null) ? null : (AppointmentCalendarEvent)helper.dataRowToObject(row, new Appointment());
+        }
+        public int insert(AppointmentCalendarEvent record){
+            String query = helper.insert(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int update(AppointmentCalendarEvent record){
+            String query = helper.update(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int delete(int AppointmentID, long CalendarEventID){
+            AppointmentCalendarEvent record = get(AppointmentID, CalendarEventID);
+            String query = helper.delete(record);
+            return daoBase.executeNonQuery(query);
+        }
+    }
+    //endregion
     //region Patient
     @Table(Name = "Patient")
     public static class Patient{

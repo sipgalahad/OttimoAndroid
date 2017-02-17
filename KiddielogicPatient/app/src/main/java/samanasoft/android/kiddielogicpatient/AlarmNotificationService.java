@@ -27,8 +27,10 @@ public class AlarmNotificationService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        String filterExpression = String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB));
+        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, filterExpression);
         Log.d("Test", "Total Appointment : " + lstAppointment.size());
+        Log.d("Test", "Filter : " + filterExpression);
         if(lstAppointment.size() > 0) {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)

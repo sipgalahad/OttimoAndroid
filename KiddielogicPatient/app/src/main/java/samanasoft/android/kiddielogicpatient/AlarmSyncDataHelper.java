@@ -13,7 +13,7 @@ import samanasoft.android.ottimo.common.Convert;
 public class AlarmSyncDataHelper {
     public static boolean isAlarmExist(Context context){
         Intent i = new Intent(context, AlarmSyncDataService.class); // explicit intent
-        return (PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_NO_CREATE) != null);
+        return (PendingIntent.getService(context, 0, i, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
     public void setAlarm(Context context)
@@ -42,10 +42,10 @@ public class AlarmSyncDataHelper {
             //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, now.getTimeInMillis(), AlarmManager.INTERVAL_DAY, intentExecuted);
             //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
             //        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, intentExecuted);
-            if(mToday > mCalendar)
-                calendar.add(Calendar.DATE, 1);
+            //if(mToday > mCalendar)
+                //calendar.add(Calendar.DATE, 1);
 
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_HALF_DAY, contentIntent);
             //int delay = 10;
             //Calendar now = Calendar.getInstance();

@@ -46,6 +46,11 @@
             android:screenOrientation="portrait"
             android:noHistory="true"></activity>
         <activity
+            android:name=".UpdateApplicationActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:noHistory="true"></activity>
+        <activity
             android:name=".ChangePasswordActivity"
             android:noHistory="true"
             android:label="@string/app_name"
@@ -56,7 +61,8 @@
             android:label="@string/title_activity_manage_account"
             android:noHistory="true"></activity>
         <service android:name=".AlarmSyncDataService" ></service>
-        <receiver android:name=".AlarmSyncDataAutoStart">
+        <service android:name=".AlarmNotificationService" ></service>
+        <receiver android:name=".AlarmAutoStart">
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -67,21 +73,15 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".AlarmNotificationService" ></service>
-        <receiver android:name=".AlarmNotificationAutoStart">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-            </intent-filter>
-        </receiver>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
-
+    <uses-sdk android:minSdkVersion="14" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 
 </manifest>

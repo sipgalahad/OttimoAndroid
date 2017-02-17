@@ -22,6 +22,7 @@ import java.util.List;
 
 import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.Helper;
 import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Appointment;
@@ -216,6 +217,7 @@ public class AppointmentActivity extends BaseMainActivity {
             else if(result.returnObj != null){
                 List<Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", MRN));
                 for (Appointment entity : lstOldAppointment) {
+                    Helper.deleteAppointmentFromEventCalender(getBaseContext(), entity);
                     BusinessLayer.deleteAppointment(getBaseContext(), entity.AppointmentID);
                 }
 
@@ -223,6 +225,7 @@ public class AppointmentActivity extends BaseMainActivity {
                 List<Appointment> lstAppointment = (List<Appointment>) result.returnObj;
                 for (Appointment entity : lstAppointment) {
                     BusinessLayer.insertAppointment(getBaseContext(), entity);
+                    Helper.insertAppointmentToEventCalender(getBaseContext(), entity);
                 }
                 fillListAppointment(lstAppointment);
                 setMessageCenterCounter();

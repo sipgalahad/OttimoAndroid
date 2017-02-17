@@ -134,7 +134,7 @@ public class MessageCenterActivity extends BaseMainActivity {
                 @Override
                 public void onClick(View view) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:+6289678500944"));
+                    callIntent.setData(Uri.parse("tel:+62216452121"));
                     if (ActivityCompat.checkSelfPermission(MessageCenterActivity.this,
                             Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         return;
@@ -232,6 +232,10 @@ public class MessageCenterActivity extends BaseMainActivity {
         @Override
         protected void onPostExecute(final WebServiceResponse result) {
             mAuthTask = null;
+            Appointment entity = BusinessLayer.getAppointment(getBaseContext(), mAppointment.AppointmentID);
+            entity.GCAppointmentStatus = mGCAppointmentStatus;
+            BusinessLayer.updateAppointment(getBaseContext(), entity);
+
             showProgress(false);
             fillListAppointment();
         }
