@@ -471,6 +471,8 @@ public class DbHelper{
 		else{
 			if(colAttribute.DataType() == DataType.INT)
     			value = row.getInt(ctr);
+			else if(colAttribute.DataType() == DataType.LONG)
+				value = row.getLong(ctr);
     		else
     			value = row.getString(ctr);
 			field.set(obj, value);

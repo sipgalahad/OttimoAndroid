@@ -17,19 +17,19 @@ public class AlarmNotificationHelper
 {
     public static boolean isAlarmExist(Context context){
         Intent i = new Intent(context, AlarmNotificationService.class); // explicit intent
-        return (PendingIntent.getService(context, 0, i, PendingIntent.FLAG_NO_CREATE) != null);
+        return (PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
     public void setAlarm(Context context)
     {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent notificationIntent = new Intent(context, AlarmNotificationService.class);
-        PendingIntent contentIntent = PendingIntent.getService(context, 0, notificationIntent,
+        PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(contentIntent);
 
         //SharedPreferences prefs = context.getSharedPreferences(Constant.SharedPreference.NAME, context.MODE_PRIVATE);
-        String value = "09:00";
+        String value = "08:00";
         Log.d("test", "Value : " + value);
         if (value != "") {
             String[] temp = value.split(":");

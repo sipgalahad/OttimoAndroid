@@ -78,6 +78,10 @@ public class DBInitActivity extends Activity {
         Intent intentSyncData = new Intent(this, AlarmSyncDataService.class);
         startService(intentSyncData);
 
+        //buat test notifikasi
+        //Intent notificationService = new Intent(this, AlarmNotificationService.class);
+        //startService(notificationService);
+
         if (!isOnline(this))
             Toast.makeText(this, "Anda tidak terhubung dengan internet", Toast.LENGTH_SHORT).show();
         CheckVersionTask mAuthTask = new CheckVersionTask();

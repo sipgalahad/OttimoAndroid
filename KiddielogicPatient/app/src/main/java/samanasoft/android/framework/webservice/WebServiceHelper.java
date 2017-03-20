@@ -91,6 +91,29 @@ public class WebServiceHelper {
 		}
 		return result;
 	}
+	public static JSONObject RequestPassword(Context ctx, String medicalNo, String emailAddress){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "RequestPassword");
+
+		request.addProperty(createPropertyInfo("medicalNo", medicalNo, String.class));
+		request.addProperty(createPropertyInfo("emailAddress", emailAddress, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/RequestPassword", envelope);
+			result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	private static PropertyInfo createPropertyInfo(String name, Object value, Class type){
 		PropertyInfo prop = new PropertyInfo();

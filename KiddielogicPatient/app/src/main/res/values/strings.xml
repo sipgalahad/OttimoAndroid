@@ -14,12 +14,15 @@
     <string name="prompt_new_password">New Password</string>
     <string name="prompt_confirm_new_password">Confirm New Password</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_email">Email Address</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="action_commit">Commit</string>
     <string name="action_save">Save</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_invalid_confirm_password">Password Tidak Sama</string>
     <string name="error_incorrect_password">No RM atau password tidak cocok</string>
+    <string name="error_incorrect_medicalno_email">No RM dan Email tidak cocok</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."

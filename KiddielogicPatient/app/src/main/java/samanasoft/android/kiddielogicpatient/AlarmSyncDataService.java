@@ -1,5 +1,6 @@
 package samanasoft.android.kiddielogicpatient;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -31,22 +32,15 @@ import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import samanasoft.android.ottimo.dal.DataLayer.Appointment;
 import samanasoft.android.framework.Constant;
 
-public class AlarmSyncDataService extends Service {
-    private static final String APP_TAG = "com.hascode.android.scheduler";
+public class AlarmSyncDataService extends BroadcastReceiver {
     @Override
-    public IBinder onBind(final Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        if(isOnline(this)) {
-            List<Patient> lstEntity = BusinessLayer.getPatientList(this, "");
+    public void onReceive(Context context, Intent intent) {
+        if(isOnline(context)) {
+            List<Patient> lstEntity = BusinessLayer.getPatientList(context, "");
             for (Patient entity : lstEntity) {
-                (new GetPatientTask(this, entity)).execute();
+                (new GetPatientTask(context, entity)).execute();
             }
         }
-        return Service.START_NOT_STICKY;
     }
 
     private class GetPatientTask extends AsyncTask<String, Double, WebServiceResponsePatient> {
@@ -96,30 +90,31 @@ public class AlarmSyncDataService extends Service {
                 if (!lstAppointmentID.equals("")) {
                     List<Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(context, String.format("AppointmentID IN (%1$s)", lstAppointmentID));
                     for (Appointment entity : lstOldAppointment) {
+                        Helper.deleteAppointmentFromEventCalender(context, entity);
                         BusinessLayer.deleteAppointment(context, entity.AppointmentID);
                     }
 
                     for (Appointment entity : lstAppointment) {
-                        Appointment oldData = BusinessLayer.getAppointment(context, entity.AppointmentID);
-                        if (oldData == null) {
-                            if (entity.GCAppointmentStatus != Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus != Constant.AppointmentStatus.VOID) {
-                                BusinessLayer.insertAppointment(context, entity);
-                                Helper.insertAppointmentToEventCalender(getBaseContext(), entity);
-                            }
-                        } else {
-                            if (entity.GCAppointmentStatus == Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus == Constant.AppointmentStatus.VOID) {
-                                BusinessLayer.deleteAppointment(context, entity.AppointmentID);
-                                Helper.deleteAppointmentFromEventCalender(getBaseContext(), entity);
-                            }
-                            else {
-                                BusinessLayer.updateAppointment(context, entity);
-                            }
-                        }
+                        //Appointment oldData = BusinessLayer.getAppointment(context, entity.AppointmentID);
+                        ///if (oldData == null) {
+                        //if (entity.GCAppointmentStatus != Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus != Constant.AppointmentStatus.VOID) {
+                        BusinessLayer.insertAppointment(context, entity);
+                        Helper.insertAppointmentToEventCalender(context, entity);
+                        //}
+                        //} else {
+                        //    if (entity.GCAppointmentStatus == Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus == Constant.AppointmentStatus.VOID) {
+                        //        BusinessLayer.deleteAppointment(context, entity.AppointmentID);
+                        //        Helper.deleteAppointmentFromEventCalender(getBaseContext(), entity);
+                        //    }
+                        //   else {
+                        //        BusinessLayer.updateAppointment(context, entity);
+                        //    }
+                        //}
                     }
                 }
             }
             if(!result.returnObjImg.equals("")) {
-                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                ContextWrapper cw = new ContextWrapper(context);
                 File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
                 File mypath = new File(directory, entity.MedicalNo + ".jpg");
 

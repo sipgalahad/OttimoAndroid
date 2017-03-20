@@ -46,6 +46,11 @@
             android:screenOrientation="portrait"
             android:noHistory="true"></activity>
         <activity
+            android:name=".RequestPasswordActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:noHistory="true"></activity>
+        <activity
             android:name=".UpdateApplicationActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -60,8 +65,8 @@
             android:name=".ManageAccountActivity"
             android:label="@string/title_activity_manage_account"
             android:noHistory="true"></activity>
-        <service android:name=".AlarmSyncDataService" ></service>
-        <service android:name=".AlarmNotificationService" ></service>
+        <receiver android:name=".AlarmSyncDataService" ></receiver>
+        <receiver android:name=".AlarmNotificationService" ></receiver>
         <receiver android:name=".AlarmAutoStart">
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

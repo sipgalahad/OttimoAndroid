@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -120,7 +121,7 @@ public class Helper {
         endTime.set(entity.StartDate.Year, entity.StartDate.Month - 1, entity.StartDate.Day, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
         endMillis = endTime.getTimeInMillis();
 
-        //List<String> lstCalendarID = getCalendar(getBaseContext());
+        //List<String> lstCalendarID = getCalendar(ctx);
         //for(String calID : lstCalendarID) {
         ContentResolver cr = ctx.getContentResolver();
         ContentValues values = new ContentValues();
@@ -128,6 +129,7 @@ public class Helper {
         values.put(CalendarContract.Events.DTEND, endMillis);
         values.put(CalendarContract.Events.TITLE, "Visit Ke KiddieCare Centre");
         values.put(CalendarContract.Events.DESCRIPTION, entity.VisitTypeName + " ke " + entity.ParamedicName + " (Harap Konfirmasi / Cancel Melalui Aplikasi Kiddielogic Sehari Sebelumnya)");
+            //values.put(CalendarContract.Events.CALENDAR_ID, calID);
         values.put(CalendarContract.Events.CALENDAR_ID, 1);
 
         values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC/GMT +7:00");
@@ -138,16 +140,50 @@ public class Helper {
         entityEvent.AppointmentID = entity.AppointmentID;
         entityEvent.CalendarEventID = Long.parseLong(uri.getLastPathSegment());
         BusinessLayer.insertAppointmentCalendarEvent(ctx, entityEvent);
+        //}
 
-        DateTime dt = DateTime.now();
-        int diffHour = dt.Hour - startHour;
-        int diffMinute = dt.Minute - startMinute;
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(Calendar.DAY_OF_MONTH,entity.StartDate.Day);
+        startDate.set(Calendar.MONTH,entity.StartDate.Month - 1); // 0-11 so 1 less
+        startDate.set(Calendar.YEAR, entity.StartDate.Year);
+
+        Calendar reminderDate = Calendar.getInstance();
+        reminderDate.set(Calendar.DAY_OF_MONTH,entity.ReminderDate.Day);
+        reminderDate.set(Calendar.MONTH,entity.ReminderDate.Month - 1); // 0-11 so 1 less
+        reminderDate.set(Calendar.YEAR, entity.ReminderDate.Year);
+
+        long diffDays = startDate.getTimeInMillis() - reminderDate.getTimeInMillis();
+        long days = diffDays / (24 * 60 * 60 * 1000);
+        int diffHour = startHour - 8;
+        int diffMinute = startMinute - 0;
         int diff = (diffHour * 60) + diffMinute;
-        setReminder(cr, entityEvent.CalendarEventID, 1440 + diff);
+        setReminder(cr, entityEvent.CalendarEventID, (1440 * days) + diff);
+    }
+
+    private static List<String> getCalendar(Context c) {
+        List<String> lstCal = new ArrayList<>();
+        String projection[] = {"_id", "calendar_displayName"};
+        Uri calendars;
+        calendars = Uri.parse("content://com.android.calendar/calendars");
+
+        ContentResolver contentResolver = c.getContentResolver();
+        Cursor managedCursor = contentResolver.query(calendars, projection, null, null, null);
+
+        if (managedCursor.moveToFirst()){
+            String calID;
+            int idCol = managedCursor.getColumnIndex(projection[0]);
+            do {
+                calID = managedCursor.getString(idCol);
+                lstCal.add(calID);
+            } while(managedCursor.moveToNext());
+            managedCursor.close();
+        }
+        return lstCal;
+
     }
 
     // routine to add reminders with the event
-    public static void setReminder(ContentResolver cr, long eventID, int timeBefore) {
+    public static void setReminder(ContentResolver cr, long eventID, long timeBefore) {
         try {
             ContentValues values = new ContentValues();
             values.put(CalendarContract.Reminders.MINUTES, timeBefore);

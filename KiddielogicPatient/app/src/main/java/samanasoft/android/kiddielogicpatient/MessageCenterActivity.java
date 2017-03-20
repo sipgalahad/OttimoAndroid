@@ -54,7 +54,7 @@ public class MessageCenterActivity extends BaseMainActivity {
 
     private AppointmentInformationAdapter adapter;
     private void fillListAppointment(){
-        List<vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        List<vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND ReminderDate LIKE '%2$s%%'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB)));
         adapter = new AppointmentInformationAdapter(getBaseContext(), lstAppointment);
         lvwAppointment.setAdapter(adapter);
     }
@@ -109,7 +109,7 @@ public class MessageCenterActivity extends BaseMainActivity {
             //holder.txtAppointmentInformationVisitTypeName.setText(entity.VisitTypeName);
 
             String message = "Mengingatkan {PatientName} terjadwal {VisitTypeName} ke {ParamedicName} tgl {StartDate} Jam {cfStartTime} di KiddieCare. Jika setuju tekan tombol 'Confirm', jika tdk dijwb dianggap batal";
-            message = message.replace("{PatientName}", entity.FullName)
+                message = message.replace("{PatientName}", entity.FullName)
                     .replace("{StartDate}", entity.StartDate.toString(Constant.FormatString.DATE_FORMAT))
                     .replace("{StartTime}", entity.StartTime)
                     .replace("{EndTime}", entity.EndTime)
@@ -117,19 +117,30 @@ public class MessageCenterActivity extends BaseMainActivity {
                     .replace("{ParamedicName}", entity.ParamedicName)
                     .replace("{VisitTypeName}", entity.VisitTypeName)
                     .replace("{ServiceUnitName}", entity.ServiceUnitName);
+            if(entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.CONFIRMED))
+                message += " (Confirmed)";
+            else if(entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.CANCELLED))
+                message += " (Cancelled)";
             holder.txtAppointmentInformationMessage.setText(message);
-            holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    updateAppointment(entity, Constant.AppointmentStatus.CONFIRMED);
-                }
-            });
-            holder.btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    updateAppointment(entity, Constant.AppointmentStatus.CANCELLED);
-                }
-            });
+
+            if(entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.OPEN) || entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.SEND_CONFIRMATION)){
+                holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updateAppointment(entity, Constant.AppointmentStatus.CONFIRMED);
+                    }
+                });
+                holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updateAppointment(entity, Constant.AppointmentStatus.CANCELLED);
+                    }
+                });
+            }
+            else {
+                holder.btnConfirm.setVisibility(View.INVISIBLE);
+                holder.btnCancel.setVisibility(View.INVISIBLE);
+            }
             holder.btnCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -144,7 +155,6 @@ public class MessageCenterActivity extends BaseMainActivity {
             });
 
             return convertView;
-
         }
 
     }

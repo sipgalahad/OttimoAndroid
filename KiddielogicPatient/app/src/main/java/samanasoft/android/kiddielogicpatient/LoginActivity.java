@@ -94,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView tvRequestPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mMedicalNoView = (AutoCompleteTextView) findViewById(R.id.txtMedicalNo);
         mPasswordView = (EditText) findViewById(R.id.txtPassword);
+        tvRequestPassword = (TextView) findViewById(R.id.tvRequestPassword);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -110,6 +112,14 @@ public class LoginActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+        tvRequestPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), RequestPasswordActivity.class);
+                i.putExtra("medicalNo", mMedicalNoView.getText().toString());
+                startActivity(i);
             }
         });
 

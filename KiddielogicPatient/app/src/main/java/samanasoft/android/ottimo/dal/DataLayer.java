@@ -43,6 +43,9 @@ public class DataLayer{
         @Column(DataType = DataType.DATETIME, Name = "StartDate")
         public DateTime StartDate;
 
+        @Column(DataType = DataType.DATETIME, Name = "ReminderDate")
+        public DateTime ReminderDate;
+
         @Column(DataType = DataType.DATETIME, Name = "EndDate")
         public DateTime EndDate;
 
@@ -106,7 +109,7 @@ public class DataLayer{
         @Column(DataType = DataType.INT, Name = "AppointmentID", IsPrimaryKey = Bool.TRUE)
         public int AppointmentID;
 
-        @Column(DataType = DataType.INT, Name = "CalendarEventID")
+        @Column(DataType = DataType.LONG, Name = "CalendarEventID")
         public Long CalendarEventID;
     }
     public static class AppointmentCalendarEventDao{
@@ -116,7 +119,7 @@ public class DataLayer{
         private final String p_CalendarEventID = "@p_CalendarEventID";
 
         public AppointmentCalendarEventDao(Context context){
-            this.helper = new DbHelper(Appointment.class);
+            this.helper = new DbHelper(AppointmentCalendarEvent.class);
             this.daoBase = new DaoBase(context);
         }
         public AppointmentCalendarEvent get(int AppointmentID, long CalendarEventID){
@@ -124,7 +127,7 @@ public class DataLayer{
             query = query.replace(p_AppointmentID, Integer.toString(AppointmentID));
             query = query.replace(p_CalendarEventID, Long.toString(CalendarEventID));
             Cursor row = daoBase.getDataRow(query);
-            return (row == null) ? null : (AppointmentCalendarEvent)helper.dataRowToObject(row, new Appointment());
+            return (row == null) ? null : (AppointmentCalendarEvent)helper.dataRowToObject(row, new AppointmentCalendarEvent());
         }
         public int insert(AppointmentCalendarEvent record){
             String query = helper.insert(record);
@@ -346,6 +349,9 @@ public class DataLayer{
 
         @Column(DataType = DataType.DATETIME, Name = "StartDate")
         public DateTime StartDate;
+
+        @Column(DataType = DataType.DATETIME, Name = "ReminderDate")
+        public DateTime ReminderDate;
 
         @Column(DataType = DataType.DATETIME, Name = "EndDate")
         public DateTime EndDate;
