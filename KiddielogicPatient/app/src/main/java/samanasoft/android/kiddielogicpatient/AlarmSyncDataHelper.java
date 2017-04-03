@@ -13,14 +13,14 @@ import samanasoft.android.ottimo.common.Convert;
 public class AlarmSyncDataHelper {
     public static boolean isAlarmExist(Context context){
         Intent i = new Intent(context, AlarmSyncDataService.class); // explicit intent
-        return (PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_NO_CREATE) != null);
+        return (PendingIntent.getBroadcast(context, 2, i, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
     public void setAlarm(Context context)
     {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent notificationIntent = new Intent(context, AlarmSyncDataService.class);
-        PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent,
+        PendingIntent contentIntent = PendingIntent.getBroadcast(context, 2, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(contentIntent);
 

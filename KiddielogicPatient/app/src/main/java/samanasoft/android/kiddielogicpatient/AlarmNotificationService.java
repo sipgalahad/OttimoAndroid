@@ -36,7 +36,7 @@ public class AlarmNotificationService extends BroadcastReceiver {
             PendingIntent resultPendingIntent =
                     PendingIntent.getActivity(
                             context,
-                            0,
+                            3,
                             resultIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );

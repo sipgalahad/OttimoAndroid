@@ -12,6 +12,7 @@ public class Constant {
         public static final String BRIDGING_SERVER = "http://114.199.103.10:8080/KiddielogicTest/BridgingServer/Program/Mobile/MobileService.asmx";
         //public static final String BRIDGING_SERVER = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
     }
+    public static final String APP_TOKEN = "40BD001563085FC35165329EA1FF5C5ECBDBBEEF";
 	public static class FormatString
     {
         public static final String DATE_FORMAT = "dd-MMM-yyyy";

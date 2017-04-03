@@ -61,6 +61,11 @@ public class DBInitActivity extends Activity {
         //DbConfiguration.initDB(this, dbName, dbVersion, isCreateDb);
         DbConfiguration.initDB(this, isCreateDb);
 
+        if (AlarmNotificationHelper.isAlarmExist(this))
+            Toast.makeText(this, "Alarm Exists", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, "Alarm Doesn't Exists", Toast.LENGTH_LONG).show();
+
         if (!AlarmNotificationHelper.isAlarmExist(this)) {
             AlarmNotificationHelper alarm = new AlarmNotificationHelper();
             alarm.setAlarm(this);
@@ -70,7 +75,14 @@ public class DBInitActivity extends Activity {
             alarm2.setAlarm(this);
         }
 
+        /*List<String> lstCalendarID = getCalendar(this);
+        //String calID = lstCalendarID.get(0);
+        String lstCal = "";
+        for(String calID : lstCalendarID) {
+            lstCal += calID + " | ";
 
+        }
+        Toast.makeText(this, "Cal ID : " + lstCal, Toast.LENGTH_SHORT).show();*/
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(001);
@@ -86,6 +98,33 @@ public class DBInitActivity extends Activity {
             Toast.makeText(this, "Anda tidak terhubung dengan internet", Toast.LENGTH_SHORT).show();
         CheckVersionTask mAuthTask = new CheckVersionTask();
         mAuthTask.execute((Void) null);
+
+    }
+
+    private static List<String> getCalendar(Context c) {
+        List<String> lstCal = new ArrayList<>();
+        String projection[] = {"_id", "calendar_displayName"};
+        Uri calendars = Uri.parse("content://com.android.calendar/calendars");
+
+        ContentResolver contentResolver = c.getContentResolver();
+        //Cursor managedCursor = contentResolver.query(calendars, projection, null, null, null);
+
+        Cursor managedCursor = c.getContentResolver().query(calendars, projection, CalendarContract.Calendars.VISIBLE + " = 1 AND "  + CalendarContract.Calendars.IS_PRIMARY + "=1", null, CalendarContract.Calendars._ID + " ASC");
+        if(managedCursor.getCount() <= 0){
+            managedCursor = c.getContentResolver().query(calendars, projection, CalendarContract.Calendars.VISIBLE + " = 1", null, CalendarContract.Calendars._ID + " ASC");
+        }
+
+        if (managedCursor.moveToFirst()){
+            String calID;
+            int idCol = managedCursor.getColumnIndex(projection[0]);
+            int nameCol = managedCursor.getColumnIndex(projection[1]);
+            do {
+                calID = managedCursor.getString(idCol) + " ; " + managedCursor.getString(nameCol);
+                lstCal.add(calID);
+            } while(managedCursor.moveToNext());
+            managedCursor.close();
+        }
+        return lstCal;
 
     }
     public class CheckVersionTask extends AsyncTask<Void, Void, JSONObject> {
@@ -111,7 +150,7 @@ public class DBInitActivity extends Activity {
                 Toast.makeText(getBaseContext(), "Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
             } else if (result != null) {
                 String version = result.optString("Version");
-                if(version.equals("1.1")) {
+                if(version.equals(samanasoft.android.framework.Constant.AppVersion)) {
                     List<Patient> lstPatient = BusinessLayer.getPatientList(getBaseContext(), "");
                     if (lstPatient.size() == 1) {
                         Intent i = new Intent(getBaseContext(), MainActivity.class);

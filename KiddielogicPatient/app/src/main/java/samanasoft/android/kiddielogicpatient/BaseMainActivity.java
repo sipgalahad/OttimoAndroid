@@ -94,6 +94,23 @@ public class BaseMainActivity extends AppCompatActivity
             sColored.setSpan(new ForegroundColorSpan(Color.WHITE), s.length() - (counter.length() + 2), s.length(), 0);
             element.setTitle(sColored);
         }
+        lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND ReminderDate >= '%2$s'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        appointmentCount = lstAppointment.size();
+        if(appointmentCount > 0) {
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            Menu menuNav = navigationView.getMenu();
+            MenuItem element = menuNav.findItem(R.id.nav_appointment);
+            String before = element.getTitle().toString();
+
+            String counter = Integer.toString(appointmentCount);
+            String s = before + "   " + counter + " ";
+            SpannableString sColored = new SpannableString(s);
+
+            sColored.setSpan(new BackgroundColorSpan(Color.RED), s.length() - (counter.length() + 2), s.length(), 0);
+            sColored.setSpan(new ForegroundColorSpan(Color.WHITE), s.length() - (counter.length() + 2), s.length(), 0);
+            element.setTitle(sColored);
+        }
 
     }
 

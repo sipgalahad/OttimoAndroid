@@ -17,14 +17,14 @@ public class AlarmNotificationHelper
 {
     public static boolean isAlarmExist(Context context){
         Intent i = new Intent(context, AlarmNotificationService.class); // explicit intent
-        return (PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_NO_CREATE) != null);
+        return (PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
     public void setAlarm(Context context)
     {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent notificationIntent = new Intent(context, AlarmNotificationService.class);
-        PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent,
+        PendingIntent contentIntent = PendingIntent.getBroadcast(context, 1, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(contentIntent);
 
@@ -46,8 +46,8 @@ public class AlarmNotificationHelper
             //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, now.getTimeInMillis(), AlarmManager.INTERVAL_DAY, intentExecuted);
             //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
             //        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, intentExecuted);
-            //if(mToday > mCalendar)
-                //calendar.add(Calendar.DATE, -1);
+            if(mToday > mCalendar)
+                calendar.add(Calendar.DATE, 1);
 
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, contentIntent);

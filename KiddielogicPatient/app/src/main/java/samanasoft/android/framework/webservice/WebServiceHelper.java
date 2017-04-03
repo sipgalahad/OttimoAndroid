@@ -34,7 +34,7 @@ public class WebServiceHelper {
         //URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-    	SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME); 
+    	SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
 		PropertyInfo propMethodName = new PropertyInfo();         
 		propMethodName.setName("methodName");         
@@ -44,8 +44,9 @@ public class WebServiceHelper {
     	PropertyInfo propFilterExpression = new PropertyInfo();         
     	propFilterExpression.setName("filterExpression");         
     	propFilterExpression.setValue(filterExpression);         
-    	propFilterExpression.setType(String.class);        
+    	propFilterExpression.setType(String.class);
 
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
         request.addProperty(propMethodName);
         request.addProperty(propFilterExpression);
 
@@ -69,6 +70,7 @@ public class WebServiceHelper {
 		JSONObject result = null;
 		SoapObject request = new SoapObject(NAMESPACE, "Login");
 
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 		request.addProperty(createPropertyInfo("medicalNo", medicalNo, String.class));
 		request.addProperty(createPropertyInfo("password", password, String.class));
 		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
@@ -97,6 +99,7 @@ public class WebServiceHelper {
 		JSONObject result = null;
 		SoapObject request = new SoapObject(NAMESPACE, "RequestPassword");
 
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 		request.addProperty(createPropertyInfo("medicalNo", medicalNo, String.class));
 		request.addProperty(createPropertyInfo("emailAddress", emailAddress, String.class));
 
@@ -148,6 +151,7 @@ public class WebServiceHelper {
 		propAppointment.setValue(appointmentLastUpdatedDate);
 		propAppointment.setType(String.class);
 
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 		request.addProperty(propMRN);
 		request.addProperty(propPatient);
 		request.addProperty(propPhoto);
@@ -188,6 +192,7 @@ public class WebServiceHelper {
 		propNewPassword.setValue(newPassword);
 		propNewPassword.setType(String.class);
 
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 		request.addProperty(propMRN);
 		request.addProperty(propOldPassword);
 		request.addProperty(propNewPassword);
@@ -209,6 +214,8 @@ public class WebServiceHelper {
 	public static JSONObject GetAndroidAppVersion(Context ctx){
 		JSONObject result = null;
 		SoapObject request = new SoapObject(NAMESPACE, "GetAndroidAppVersion");
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -241,6 +248,7 @@ public class WebServiceHelper {
 		propFilterExpression.setValue(GCAppointmentStatus);
 		propFilterExpression.setType(String.class);
 
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 		request.addProperty(propMethodName);
 		request.addProperty(propFilterExpression);
 

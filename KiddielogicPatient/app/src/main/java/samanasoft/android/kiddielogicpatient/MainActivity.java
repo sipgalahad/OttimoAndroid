@@ -40,10 +40,5 @@ public class MainActivity extends BaseMainActivity {
         // Create imageDir
         CircularImageView img = (CircularImageView) findViewById(R.id.imgPatientProfile);
         img.setImageBitmap(loadImageFromStorage(entity));
-
-        if(AlarmNotificationHelper.isAlarmExist(this))
-            Toast.makeText(this, "Alarm Exists", Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(this, "Alarm Doesn't Exists", Toast.LENGTH_LONG).show();
     }
 }
