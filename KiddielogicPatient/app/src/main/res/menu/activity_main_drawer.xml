@@ -26,6 +26,10 @@
                 android:id="@+id/nav_manage_account"
                 android:icon="@drawable/ic_menu_manage_account"
                 android:title="Manage Account" />
+            <item
+                android:id="@+id/nav_error_feedback"
+                android:icon="@drawable/ic_menu_feedback"
+                android:title="Error Feedback" />
         </menu>
     </item>
 

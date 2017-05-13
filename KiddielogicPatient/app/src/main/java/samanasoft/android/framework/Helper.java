@@ -10,14 +10,18 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer;
 
@@ -109,7 +113,8 @@ public class Helper {
     }
 
     public static void insertAppointmentToEventCalender(Context ctx, DataLayer.Appointment entity){
-        //try {
+        Integer MRN = entity.MRN;
+        try {
             long startMillis = 0;
             long endMillis = 0;
             Calendar beginTime = Calendar.getInstance();
@@ -148,7 +153,6 @@ public class Helper {
                 Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
                 //Uri uri = cr.insert(Uri.parse("content://com.android.calendar/events"), values);
             }*/
-
             Uri calendars = Uri.parse("content://com.android.calendar/events");
             //Uri calendars = Uri.parse("content://com.android.calendar/calendars");
             //Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
@@ -175,10 +179,50 @@ public class Helper {
             int diffMinute = startMinute - 0;
             int diff = (diffHour * 60) + diffMinute;
             setReminder(cr, entityEvent.CalendarEventID, (1440 * days) + diff);
-        //}
-        //catch (Exception ex){
+        }
+        catch (Exception ex){
+            String stackTrace = ex.getStackTrace().toString();
+            String message = ex.getMessage();
+            String deviceID = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
+            new InsertErrorLog(ctx, MRN, deviceID, message, stackTrace).execute((Void) null);
+            ex.printStackTrace();
+        }
+    }
+    public static class InsertErrorLog extends AsyncTask<Void, Void, WebServiceResponse> {
 
-        //}
+        private final Integer MRN;
+        private final String deviceID;
+        private final String errorMessage;
+        private final String stackTrace;
+        private final Context ctx;
+
+        InsertErrorLog(Context mCtx, Integer mrn, String mDeviceID, String mErrorMessage, String mStackTrace) {
+            MRN = mrn;
+            deviceID = mDeviceID;
+            errorMessage = mErrorMessage;
+            stackTrace = mStackTrace;
+            ctx = mCtx;
+        }
+
+        @Override
+        protected WebServiceResponse doInBackground(Void... params) {
+            try {
+                WebServiceResponse result = BusinessLayer.insertErrorLog(ctx, MRN, deviceID, errorMessage, stackTrace);
+                return result;
+            }
+            catch (Exception ex) {
+                Toast.makeText(ctx, "Insert Error Log", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final WebServiceResponse result) {
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
     }
 
     private static List<String> getCalendar(Context c) {

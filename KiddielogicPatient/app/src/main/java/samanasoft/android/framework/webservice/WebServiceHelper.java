@@ -64,7 +64,7 @@ public class WebServiceHelper {
         }
         return result;
 	}
-	public static JSONObject Login(Context ctx, String medicalNo, String password, String deviceID, String deviceName, String androidVersion, Integer sdkVersion, String appVersion){
+	public static JSONObject Login(Context ctx, String medicalNo, String password, String deviceID, String deviceName, String manufacturerName, String androidVersion, Integer sdkVersion, String appVersion, String FCMToken){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
@@ -75,9 +75,11 @@ public class WebServiceHelper {
 		request.addProperty(createPropertyInfo("password", password, String.class));
 		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
 		request.addProperty(createPropertyInfo("deviceName", deviceName, String.class));
+		request.addProperty(createPropertyInfo("manufacturerName", manufacturerName, String.class));
 		request.addProperty(createPropertyInfo("androidVersion", androidVersion, String.class));
 		request.addProperty(createPropertyInfo("sdkVersion", sdkVersion, Integer.class));
 		request.addProperty(createPropertyInfo("appVersion", appVersion, String.class));
+		request.addProperty(createPropertyInfo("FCMToken", FCMToken, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -259,6 +261,83 @@ public class WebServiceHelper {
 
 		try {
 			androidHttpTransport.call("http://tempuri.org/PostAppointmentAnswer", envelope);
+			//result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static JSONObject InsertErrorLog(Context ctx, Integer MRN, String deviceID, String errorMessage, String stackTrace){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "InsertErrorLog");
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("MRN", MRN, Integer.class));
+		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
+		request.addProperty(createPropertyInfo("errorMessage", errorMessage, String.class));
+		request.addProperty(createPropertyInfo("stackTrace", stackTrace, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/InsertErrorLog", envelope);
+			//result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static JSONObject InsertErrorFeedback(Context ctx, String deviceID, String errorMessage){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "InsertErrorFeedback");
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
+		request.addProperty(createPropertyInfo("errorMessage", errorMessage, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/InsertErrorFeedback", envelope);
+			//result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static JSONObject UpdateDeviceFCMToken(Context ctx, String deviceID, String newFCMToken){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "UpdateDeviceFCMToken");
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
+		request.addProperty(createPropertyInfo("newFCMToken", newFCMToken, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/UpdateDeviceFCMToken", envelope);
 			//result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;

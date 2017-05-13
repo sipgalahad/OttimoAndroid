@@ -1,0 +1,113 @@
+package samanasoft.android.kiddielogicpatientalarm;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
+
+import samanasoft.android.ottimo.common.Constant;
+
+/**
+ * Created by DEV_ARI on 5/8/2017.
+ */
+public class FCMMessagingService extends FirebaseMessagingService {
+
+    private static final String TAG = "FCMMessagingService";
+    String type = "";
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        //Displaying data in log
+        //It is optional
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+
+        //Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        if(remoteMessage.getData().size() > 0) {
+            Map<String, String> lstData = remoteMessage.getData();
+            type = lstData.get("type").toString();
+            /*Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Test : " + type, Toast.LENGTH_SHORT).show();
+                }
+            });*/
+            Log.d(TAG, "Type: " + type);
+            if (type.equals("AppReminder")) {
+                String message = lstData.get("message").toString();
+                sendNotification(message);
+            } else if (type.equals("NewAppsVersion")) {
+                String version = lstData.get("AppsVersion").toString();
+                SharedPreferences prefs = getSharedPreferences(Constant.SharedPreference.NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(Constant.SharedPreference.SERVER_APPS_VERSION, version);
+                editor.commit();
+            } else if (type.equals("SyncApp")) {
+                Intent intentSyncData = new Intent(getApplicationContext(), AlarmSyncDataService.class);
+                startService(intentSyncData);
+            }
+        }
+    }
+
+    //This method is only generating push notification
+    //It is same as we did in earlier posts
+    private void sendNotification(String messageBody) {
+        /*Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Firebase Push Notification")
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0, notificationBuilder.build());
+*/
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle("Appointment Reminder")
+                        .setContentText(messageBody);
+        Intent resultIntent = new Intent(this, NotificationOpenerActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        3,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, notification);
+    }
+}

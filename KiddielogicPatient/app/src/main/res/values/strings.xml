@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kiddielogic</string>
+    <string name="app_name">KiddieLogic</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,12 +10,14 @@
 
     <!-- Strings related to login -->
     <string name="prompt_medical_no">No RM</string>
+    <string name="prompt_message">Message</string>
     <string name="prompt_old_password">Old Password</string>
     <string name="prompt_new_password">New Password</string>
     <string name="prompt_confirm_new_password">Confirm New Password</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_email">Email Address</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="action_send">Send</string>
     <string name="action_commit">Commit</string>
     <string name="action_save">Save</string>
     <string name="error_invalid_email">This email address is invalid</string>

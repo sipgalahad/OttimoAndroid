@@ -354,6 +354,36 @@ public class BusinessLayer {
         }
         return result;
     }
+    public static WebServiceResponse insertErrorLog(Context context, Integer MRN, String deviceID, String errorMessage, String stackTrace){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.InsertErrorLog(context, MRN, deviceID, errorMessage, stackTrace);
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static WebServiceResponse insertErrorFeedback(Context context, String deviceID, String errorMessage){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.InsertErrorFeedback(context, deviceID, errorMessage);
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static WebServiceResponse updateDeviceFCMToken(Context context, String deviceID, String newFCMToken){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.UpdateDeviceFCMToken(context, deviceID, newFCMToken);
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
     public static WebServiceResponse ChangePassword(Context context, Integer MRN, String oldPassword, String newPassword){
         WebServiceResponse result = new WebServiceResponse();
         try {

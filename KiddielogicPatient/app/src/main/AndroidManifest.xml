@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="samanasoft.android.kiddielogicpatient">
+    package="samanasoft.android.kiddielogicpatientalarm">
+
+    <uses-sdk android:minSdkVersion="14" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,25 +30,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:noHistory="true"
+            android:name="samanasoft.android.kiddielogicpatientalarm.MainActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.AppointmentActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.MessageCenterActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="samanasoft.android.kiddielogicpatientalarm.MessageCenterActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
-            android:name=".AppointmentActivity"
-            android:noHistory="true"
+            android:name="samanasoft.android.kiddielogicpatientalarm.ErrorFeedbackActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".MessageCenterActivity"
             android:noHistory="true"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DBInitActivity"
+            android:name="samanasoft.android.kiddielogicpatientalarm.DBInitActivity"
             android:label="@string/app_name"
             android:noHistory="true">
             <intent-filter>
@@ -41,53 +63,93 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="samanasoft.android.kiddielogicpatientalarm.NotificationOpenerActivity"
+            android:label="@string/app_name"
+            android:noHistory="true">
+        </activity>
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.LoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait"
-            android:noHistory="true"></activity>
-        <activity
-            android:name=".RequestPasswordActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:noHistory="true"></activity>
-        <activity
-            android:name=".UpdateApplicationActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:noHistory="true"></activity>
-        <activity
-            android:name=".ChangePasswordActivity"
             android:noHistory="true"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">></activity>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".ManageAccountActivity"
+            android:name="samanasoft.android.kiddielogicpatientalarm.RequestPasswordActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.UpdateApplicationActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.ChangePasswordActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.ManageAccountActivity"
             android:label="@string/title_activity_manage_account"
-            android:noHistory="true"></activity>
-        <receiver android:name=".AlarmSyncDataService" ></receiver>
-        <receiver android:name=".AlarmNotificationService" ></receiver>
-        <receiver android:name=".AlarmAutoStart">
-            <intent-filter >
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
+            android:noHistory="true" />
+
+        <service android:name="samanasoft.android.kiddielogicpatientalarm.AlarmSyncDataService" />
+        <service
+            android:name="samanasoft.android.kiddielogicpatientalarm.AlarmStartService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action
+                    android:name="samanasoft.android.kiddielogicpatientalarm.AlarmStartService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".FCMMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".FCMInstanceIDService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name="samanasoft.android.kiddielogicpatientalarm.WakeupBroadcast"/>
+        <receiver android:name="samanasoft.android.kiddielogicpatientalarm.AlarmNotificationService">
+            <intent-filter>
+                <action android:name="samanasoft.android.kiddielogicpatient.intent.action.NOTIFICATION_SERVICE"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name=".NetworkChangeReceiver" android:process=":hascode_process">
-            <intent-filter >
+        <receiver android:name="samanasoft.android.kiddielogicpatientalarm.AlarmAutoStart"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="samanasoft.android.kiddielogicpatientalarm.NetworkChangeReceiver"
+            android:process=":hascode_process">
+            <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name="samanasoft.android.kiddielogicpatientalarm.RestartServiceReceiver" android:enabled="true" android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="samanasoft.android.kiddielogicpatientalarm.intent.action.RESTART_SERVICE"></action>
+            </intent-filter>
+        </receiver>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-sdk android:minSdkVersion="14" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 </manifest>

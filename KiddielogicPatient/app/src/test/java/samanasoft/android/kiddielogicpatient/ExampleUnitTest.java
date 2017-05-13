@@ -1,4 +1,4 @@
-package samanasoft.android.kiddielogicpatient;
+package samanasoft.android.kiddielogicpatientalarm;
 
 import org.junit.Test;
 
