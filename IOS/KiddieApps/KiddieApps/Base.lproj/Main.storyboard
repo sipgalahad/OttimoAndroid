@@ -290,13 +290,27 @@
                     <view key="view" contentMode="scaleToFill" id="dEk-eC-bH2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="lblName" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X7q-th-mn1">
+                                <rect key="frame" x="16" y="95" width="288" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="X7q-th-mn1" secondAttribute="trailing" id="ahj-2a-Cvk"/>
+                            <constraint firstItem="X7q-th-mn1" firstAttribute="leading" secondItem="dEk-eC-bH2" secondAttribute="leadingMargin" id="h1e-Px-Xwq"/>
+                            <constraint firstItem="X7q-th-mn1" firstAttribute="top" secondItem="kjA-sj-CUt" secondAttribute="bottom" constant="31" id="xKN-l9-A4A"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="My Personal Data" id="T7x-ip-vtA">
                         <barButtonItem key="leftBarButtonItem" image="menu" id="V80-q9-mXp"/>
                     </navigationItem>
                     <connections>
                         <outlet property="btnMenu" destination="V80-q9-mXp" id="b6O-ul-Hlz"/>
+                        <outlet property="lblName" destination="X7q-th-mn1" id="bnW-VL-CbY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h8A-bo-j25" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -441,18 +455,54 @@
         <scene sceneID="2ij-eh-DgU">
             <objects>
                 <tableViewController id="36P-cC-ppF" customClass="MyAppointmentViewController" customModule="KiddieApps" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="dSP-TB-1HK">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="95" sectionHeaderHeight="28" sectionFooterHeight="28" id="dSP-TB-1HK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="VbE-ez-KUv">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="95" id="wLB-NC-9O3" customClass="MyAppointmentViewCell" customModule="KiddieApps" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VbE-ez-KUv" id="rdL-qc-bgQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wLB-NC-9O3" id="nf1-IT-cYD">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="94.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12-Jun-2017" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W49-at-Cay">
+                                            <rect key="frame" x="8" y="10.5" width="304" height="26.5"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UGd-kb-gTI">
+                                            <rect key="frame" x="8" y="39.5" width="304" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gbJ-ah-TJD">
+                                            <rect key="frame" x="8" y="63" width="304" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="W49-at-Cay" firstAttribute="top" secondItem="nf1-IT-cYD" secondAttribute="topMargin" constant="2.5" id="6Md-4E-V30"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="UGd-kb-gTI" secondAttribute="trailing" id="AUA-yX-lah"/>
+                                        <constraint firstItem="W49-at-Cay" firstAttribute="leading" secondItem="nf1-IT-cYD" secondAttribute="leadingMargin" id="O3e-pT-Upk"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="gbJ-ah-TJD" secondAttribute="trailing" id="TB3-di-nD3"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="W49-at-Cay" secondAttribute="trailing" id="VkF-Fd-jOk"/>
+                                        <constraint firstItem="UGd-kb-gTI" firstAttribute="top" secondItem="W49-at-Cay" secondAttribute="bottom" constant="2.5" id="dTz-qz-AfR"/>
+                                        <constraint firstItem="UGd-kb-gTI" firstAttribute="leading" secondItem="nf1-IT-cYD" secondAttribute="leadingMargin" id="ehM-bG-6NU"/>
+                                        <constraint firstItem="gbJ-ah-TJD" firstAttribute="leading" secondItem="nf1-IT-cYD" secondAttribute="leadingMargin" id="iBk-Gb-Vbs"/>
+                                        <constraint firstItem="gbJ-ah-TJD" firstAttribute="top" secondItem="UGd-kb-gTI" secondAttribute="bottom" constant="2.5" id="oqq-oe-Qgk"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="lblParamedicName" destination="UGd-kb-gTI" id="Im5-eX-5jl"/>
+                                    <outlet property="lblStartDate" destination="W49-at-Cay" id="HjZ-uS-psG"/>
+                                    <outlet property="lblVisitTypeName" destination="gbJ-ah-TJD" id="Buc-3e-SRP"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -460,9 +510,7 @@
                             <outlet property="delegate" destination="36P-cC-ppF" id="Lza-I1-vbb"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem image="menu" id="KZG-6A-xuH"/>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="My Appointment" id="5hy-9q-6bu">
                         <barButtonItem key="leftBarButtonItem" image="menu" id="4tX-wO-YaC"/>
                     </navigationItem>

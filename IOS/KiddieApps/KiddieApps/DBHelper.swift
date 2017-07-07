@@ -162,8 +162,13 @@ public class DBHelper{
             result += String(describing: record.value(forKey: colAttribute.FieldName) as! NSNumber);
         }
         else if(colAttribute.FieldType == "Optional<DateTime>"){
-            let value = record.value(forKey: colAttribute.FieldName) as! DateTime;
-            result += "'" + value.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB) + "'";
+            if(record.value(forKey: colAttribute.FieldName) != nil){
+                let value = record.value(forKey: colAttribute.FieldName) as! DateTime;
+                result += "'" + value.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB) + "'";
+            }
+            else{
+                result += "'1900-01-01 00:00:00'";
+            }
         }
         else if(colAttribute.FieldType == "Optional<Bool>"){
             let value = record.value(forKey: colAttribute.FieldName) as! Bool;
@@ -171,7 +176,12 @@ public class DBHelper{
             result += "'" + sValue + "'";
         }
         else{
-            result += "'" + (record.value(forKey: colAttribute.FieldName) as! String) + "'";
+            if(record.value(forKey: colAttribute.FieldName) != nil){
+                result += "'" + (record.value(forKey: colAttribute.FieldName) as! String) + "'";
+            }
+            else{
+                result += "''";
+            }
         }
         return result;
     }
@@ -188,7 +198,14 @@ public class DBHelper{
     public func dataRowToObject(row:FMResultSet?, obj:BaseClass) -> BaseClass?{
         let lstProp = obj.propertyNames();
         for colAttribute in lstProp {
-            obj.setValue(row?.string(forColumn: colAttribute.FieldName), forKey: colAttribute.FieldName)
+            if(colAttribute.FieldType == "Optional<DateTime>"){
+                let temp:String = (row?.string(forColumn: colAttribute.FieldName))!;
+                let dt:DateTime = DateTime(sValue: temp);
+                obj.setValue(dt, forKey: colAttribute.FieldName)
+            }
+            else{
+                obj.setValue(row?.string(forColumn: colAttribute.FieldName), forKey: colAttribute.FieldName)
+            }
         }
         return obj;
     }

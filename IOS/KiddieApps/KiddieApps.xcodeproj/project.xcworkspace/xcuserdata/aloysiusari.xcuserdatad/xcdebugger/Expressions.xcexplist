@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "static WebServiceHelper.JSONObjectToObject(row : [String : AnyObject], obj : BaseClass) -&gt; BaseClass:WebServiceHelper.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebServiceHelper.(login(medicalNo : String, password : String, deviceID : String, deviceName : String, OSVersion : String, appVersion : String, FCMToken : String, completionHandler : (String) -&gt; ()) -&gt; ()).(closure #1):WebServiceHelper.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebServiceHelper.getListObject(methodName : String, filterExpression : String, completionHandler : (String) -&gt; ()) -&gt; ():WebServiceHelper.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DBHelper.dataListRowToObject(row : FMResultSet?, obj : BaseClass) -&gt; BaseClass?:DBHelper.swift">
+      </ContextState>
+      <ContextState
+         contextName = "main:AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static BusinessLayerWebService.(getAppointmentList(filterExpression : String, completionHandler : (WebServiceResponse) -&gt; ()) -&gt; ()).(closure #1):BusinessLayerWebService.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PatientDao.get(MRN : Int) -&gt; Patient?:DataLayer.swift">
+      </ContextState>
+      <ContextState
+         contextName = "LoginViewController.(onBtnSignInTapped(Any) -&gt; ()).(closure #1):LoginViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DBHelper.getSqlText(colAttribute : ClassProperties, record : BaseClass) -&gt; String:DBHelper.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

@@ -9,11 +9,72 @@
 import Foundation
 
 public class Patient : BaseClass{
+    var MRN:NSNumber?;
     var MedicalNo:String?;
-    
-    
+    var FullName:String?;
+    var PreferredName:String?;
+    var CityOfBirth:String?;
+    var DateOfBirth:DateTime?;
+    var GCSex:String?;
+    var Sex:String?;
+    var Gender:String?;
+    var BloodType:String?;
+    var BloodRhesus:String?;
+    var EmailAddress:String?;
+    var EmailAddress2:String?;
+    var MobilePhoneNo1:String?;
+    var MobilePhoneNo2:String?;
+    var LastSyncDateTime:DateTime?;
+    var LastSyncAppointmentDateTime:DateTime?;
+    public func getMobilePhoneNoDisplay() -> String{
+        if (self.MobilePhoneNo2 != ""){
+            return MobilePhoneNo1! + " / " + MobilePhoneNo2!;
+        }
+        return MobilePhoneNo1!;
+    }
     override func getPrimaryKey() -> [String]{
-        return ["MedicalNo"];
+        return ["MRN"];
+    }
+}
+public class PatientDao{
+    private var helper:DBHelper;
+    private let p_MRN = "@p_MRN";
+    
+    public init() {
+        helper = DBHelper();
+    }
+    public func get(MRN:Int) -> Patient?{
+        sharedInstance.database!.open()
+        var query = helper.getRecord(tableName: "Patient", lstPrimaryKey: Patient().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_MRN, with: String(MRN));
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        let result = helper.dataListRowToObject(row: row, obj: Patient()) as! Patient?;
+        sharedInstance.database!.close()
+        return result;
+    }
+    public func insert(record:Patient) -> Bool{
+        let query = helper.insert(tableName: "Patient", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func update(record:Patient) -> Bool{
+        let query = helper.update(tableName: "Patient", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func delete(MRN:Int) -> Bool{
+        var query = helper.getRecord(tableName: "Patient", lstPrimaryKey: Patient().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_MRN, with: String(MRN));
+        return DaoBase.getInstance().executeNonQuery(query: query);
+    }
+}
+
+
+public class Variable{
+    var Code:String;
+    var Value:String;
+    
+    public init (Code:String, Value:String){
+        self.Code = Code;
+        self.Value = Value;
     }
 }
 

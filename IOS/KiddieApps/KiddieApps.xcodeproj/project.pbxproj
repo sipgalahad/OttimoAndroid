@@ -31,6 +31,7 @@
 		F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */; };
 		F3DB17F01F03F7C6005D9DF8 /* MyAppointmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */; };
 		F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */; };
+		F3DB17F41F0FED0D005D9DF8 /* MyAppointmentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17F31F0FED0D005D9DF8 /* MyAppointmentViewCell.swift */; };
 		F3EA7C641EF984C100A0AAA3 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C591EF984C100A0AAA3 /* FMDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F3EA7C651EF984C100A0AAA3 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C5B1EF984C100A0AAA3 /* FMDatabaseAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F3EA7C661EF984C100A0AAA3 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C5D1EF984C100A0AAA3 /* FMDatabasePool.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -94,6 +95,7 @@
 		F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppointmentViewController.swift; sourceTree = "<group>"; };
 		F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		F3DB17F31F0FED0D005D9DF8 /* MyAppointmentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppointmentViewCell.swift; sourceTree = "<group>"; };
 		F3EA7C531EF9801D00A0AAA3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		F3EA7C571EF984C000A0AAA3 /* KiddieApps-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KiddieApps-Bridging-Header.h"; sourceTree = "<group>"; };
 		F3EA7C581EF984C100A0AAA3 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = fmdb/FMDatabase.h; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
 				F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */,
 				F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */,
+				F3DB17F31F0FED0D005D9DF8 /* MyAppointmentViewCell.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 			files = (
 				F3EA7C7A1EF9A6AC00A0AAA3 /* LoginViewController.swift in Sources */,
 				F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */,
+				F3DB17F41F0FED0D005D9DF8 /* MyAppointmentViewCell.swift in Sources */,
 				F3DB17E21F0374F2005D9DF8 /* WebServiceResponse.swift in Sources */,
 				F3D4CCCE1EFA5862009E8FC9 /* Helper.swift in Sources */,
 				F3EA7C671EF984C100A0AAA3 /* FMDatabaseQueue.m in Sources */,

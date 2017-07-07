@@ -48,6 +48,46 @@ public class BusinessLayer{
         //}
         return result;
     }
+    
+    // MARK: Patient
+    public static func getPatient(MRN:Int) -> Patient?
+    {
+        return PatientDao().get(MRN: MRN);
+    }
+    public static func insertPatient(record:Patient) -> Bool
+    {
+        return PatientDao().insert(record: record);
+    }
+    public static func updatePatient(record:Patient) -> Bool
+    {
+        return PatientDao().update(record: record);
+    }
+    public static func deletePatient(MRN:Int) -> Bool
+    {
+        return PatientDao().delete(MRN: MRN);
+    }
+    public static func getPatientList(filterExpression:String) -> [Patient]{
+        var result:Array<Patient> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "Patient", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        if (row != nil) {
+            while (row.next()) {
+                result.append(helper.dataRowToObject(row: row, obj: Patient()) as! Patient);
+            }
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
 
     // MARK: Setting
     public static func getSetting(settingCode:String) -> Setting?

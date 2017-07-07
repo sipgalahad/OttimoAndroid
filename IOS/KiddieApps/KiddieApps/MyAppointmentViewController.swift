@@ -11,6 +11,7 @@ import UIKit
 class MyAppointmentViewController: UITableViewController {
 
     @IBOutlet weak var btnMenu: UIBarButtonItem!
+    var lstAppointment:[Appointment] = [];
     override func viewDidLoad() {
         super.viewDidLoad()
         if revealViewController() != nil {
@@ -19,6 +20,7 @@ class MyAppointmentViewController: UITableViewController {
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
+        lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "");
         // Do any additional setup after loading the view.
     }
 
@@ -29,40 +31,24 @@ class MyAppointmentViewController: UITableViewController {
         
     // MARK: - Table view data source
     
-    /*override func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // Return the number of sections.
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
-        return 3
-    }*/
+        return lstAppointment.count;
+    }
     
-    /*override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NewsTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MyAppointmentViewCell
         
-        // Configure the cell...
-        if indexPath.row == 0 {
-            cell.postImageView.image = UIImage(named: "watchkit-intro")
-            cell.postTitleLabel.text = "WatchKit Introduction: Building a Simple Guess Game"
-            cell.authorLabel.text = "Simon Ng"
-            cell.authorImageView.image = UIImage(named: "author")
-            
-        } else if indexPath.row == 1 {
-            cell.postImageView.image = UIImage(named: "custom-segue-featured-1024")
-            cell.postTitleLabel.text = "Building a Chat App in Swift Using Multipeer Connectivity Framework"
-            cell.authorLabel.text = "Gabriel Theodoropoulos"
-            cell.authorImageView.image = UIImage(named: "appcoda-300")
-            
-        } else {
-            cell.postImageView.image = UIImage(named: "webkit-featured")
-            cell.postTitleLabel.text = "A Beginner’s Guide to Animated Custom Segues in iOS 8"
-            cell.authorLabel.text = "Gabriel Theodoropoulos"
-            cell.authorImageView.image = UIImage(named: "appcoda-300")
-            
-        }
-        
+        let appointment:Appointment = lstAppointment[indexPath.row];
+        cell.lblStartDate.text = appointment.StartDate!.toString(format: "dd-MMM-yyyy");
+        //cell.lblStartDate.text = "A";
+        cell.lblParamedicName.text = appointment.ParamedicName;
+        cell.lblVisitTypeName.text = appointment.VisitTypeName;
         return cell
-    }*/
+    }
 }

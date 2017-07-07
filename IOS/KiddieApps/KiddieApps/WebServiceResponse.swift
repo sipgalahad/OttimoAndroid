@@ -12,3 +12,10 @@ public class WebServiceResponse{
     public var timeStamp:DateTime = DateTime();
     public var returnObj:Array<BaseClass> = [];
 }
+
+public class WebServiceResponsePatient{
+    public var timeStamp:DateTime = DateTime();
+    public var returnObjPatient:Array<Patient> = [];
+    public var returnObjAppointment:Array<Appointment> = [];
+    public var returnObjImg:String = "";
+}

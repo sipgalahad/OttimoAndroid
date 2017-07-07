@@ -11,6 +11,7 @@ import UIKit
 class ProfileViewController: UIViewController {
 
     @IBOutlet weak var btnMenu: UIBarButtonItem!
+    @IBOutlet weak var lblName: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         if revealViewController() != nil {
@@ -19,6 +20,10 @@ class ProfileViewController: UIViewController {
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
 
+        let MRN = UserDefaults.standard.object(forKey: "MRN") as? Int;
+        
+        let entity:Patient = BusinessLayer.getPatient(MRN: MRN!)!;
+        lblName.text = entity.FullName;
         // Do any additional setup after loading the view.
     }
 

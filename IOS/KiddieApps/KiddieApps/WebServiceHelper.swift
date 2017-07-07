@@ -12,10 +12,30 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
     var currentElement:String = "";
     var jsonResult:String = "";
     
+    public func generateSOAPXMLFile(functionName:String, lstParameter:[Variable]) -> String{
+        var result = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+            "<soap:Body>" +
+            "<\(functionName) xmlns=\"http://tempuri.org/\">";
+        
+        for param in lstParameter{
+            result += "<\(String(describing: param.Code))>\(String(describing: param.Value))</\(String(describing: param.Code))>";
+        }
+        result += "</\(functionName)>" +
+            "</soap:Body>" +
+        "</soap:Envelope>";
+        return result;
+    }
+    
     public func getListObject(methodName:String, filterExpression:String, completionHandler: @escaping (_ result:String) -> Void){
         let appToken:String = Constant.APP_TOKEN;
         
-        let soapMessage = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "methodName", Value : methodName));
+        lstParameter.append(Variable(Code : "filterExpression", Value : "<![CDATA[\(filterExpression)]]>"));
+        
+        /*let soapMessage = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
             "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
             "<soap:Body>" +
             "<GetMobileListObject xmlns=\"http://tempuri.org/\">" +
@@ -24,15 +44,8 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
             "<filterExpression><![CDATA[\(filterExpression)]]></filterExpression>" +
             "</GetMobileListObject>" +
             "</soap:Body>" +
-        "</soap:Envelope>";
-        /*let soapMessage = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
-         "<soap:Body>" +
-         "<GetAndroidAppVersion2 xmlns=\"http://tempuri.org/\">" +
-         "<appToken>\(appToken)</appToken>" +
-         "</GetAndroidAppVersion2>" +
-         "</soap:Body>" +
-         "</soap:Envelope>";*/
+        "</soap:Envelope>";*/
+        let soapMessage = generateSOAPXMLFile(functionName: "GetMobileListObject", lstParameter: lstParameter);
         
         let urlString:String = Constant.Url.BRIDGING_SERVER;
         if let url = NSURL(string: urlString) {
@@ -59,6 +72,58 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         
     }
     
+    private func addXMLElement (elementName:String, value:String) -> String{
+        return "<" + elementName + ">" + value + "</" + elementName + ">";
+    }
+    
+    public func login(medicalNo:String, password:String, deviceID:String, deviceName:String, OSVersion:String, appVersion:String, FCMToken:String, completionHandler: @escaping (_ result:String) -> Void){
+        let appToken:String = Constant.APP_TOKEN;
+        
+        var data:String = "<REQUEST><DATA>";
+        data += addXMLElement(elementName: "MEDICAL_NO", value: medicalNo);
+        data += addXMLElement(elementName: "PASSWORD", value: password);
+        data += addXMLElement(elementName: "DEVICE_ID", value: deviceID);
+        data += addXMLElement(elementName: "DEVICE_NAME", value: deviceName);
+        data += addXMLElement(elementName: "MANUFACTURER_NAME", value: "IPhone");
+        data += addXMLElement(elementName: "OS_TYPE", value: Constant.OS_TYPE);
+        data += addXMLElement(elementName: "OS_VERSION", value: OSVersion);
+        data += addXMLElement(elementName: "SDK_VERSION", value: "1");
+        data += addXMLElement(elementName: "APP_VERSION", value: appVersion);
+        data += addXMLElement(elementName: "FCM_TOKEN", value: FCMToken);
+        data += "</DATA></REQUEST>";
+
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
+        
+        let soapMessage = generateSOAPXMLFile(functionName: "Login2", lstParameter: lstParameter);
+        
+        let urlString:String = Constant.Url.BRIDGING_SERVER;
+        if let url = NSURL(string: urlString) {
+            let theRequest = NSMutableURLRequest(url: url as URL)
+            theRequest.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            theRequest.addValue((soapMessage), forHTTPHeaderField: "Content-Length")
+            theRequest.httpMethod = "POST"
+            theRequest.httpBody = soapMessage.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            URLSession.shared.dataTask(with: theRequest as URLRequest) { (data, response, error) in
+                if error == nil {
+                    if let data = data, let _ = String(data: data, encoding: String.Encoding.utf8) {
+                        let xmlParser = XMLParser(data: data)
+                        xmlParser.delegate = self as XMLParserDelegate;
+                        xmlParser.shouldResolveExternalEntities = true
+                        
+                        xmlParser.parse()
+                        completionHandler(self.jsonResult);
+                    }
+                } else {
+                    //self.txtMedicalNo.text = error.debugDescription;
+                }
+                }.resume()
+        }
+        
+    }
+
+    
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         currentElement=elementName;    }
     
@@ -66,7 +131,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         currentElement="";    }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" ){
+        if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" || currentElement == "Login2Result" ){
             jsonResult = string;
         }
     }
@@ -99,34 +164,38 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
 */
         let lstProp = obj.propertyNames();
         for colAttribute in lstProp {
-            if(colAttribute.FieldType == "Optional<NSNumber>"){
-                obj.setValue(row[colAttribute.FieldName] as! NSNumber!, forKey: colAttribute.FieldName)
+            if(row[colAttribute.FieldName] != nil){
+                if(colAttribute.FieldType == "Optional<NSNumber>"){
+                    obj.setValue(row[colAttribute.FieldName] as! NSNumber!, forKey: colAttribute.FieldName)
+                }
+                else if(colAttribute.FieldType == "Optional<DateTime>"){
+                    obj.setValue(JSONDateToDateTime(jsonDate: (row[colAttribute.FieldName] as! NSString!) as String), forKey: colAttribute.FieldName)
+                }
+                else if(colAttribute.FieldType == "Optional<Bool>"){
+                    obj.setValue(row[colAttribute.FieldName] as! Bool!, forKey: colAttribute.FieldName)
+                }
+                else{
+                    obj.setValue(row[colAttribute.FieldName] as! NSString!, forKey: colAttribute.FieldName)
+                }
             }
-            else if(colAttribute.FieldType == "Optional<DateTime>"){
-                obj.setValue(JSONDateToDateTime(jsonDate: (row[colAttribute.FieldName] as! NSString!) as String), forKey: colAttribute.FieldName)
-            }
-            else if(colAttribute.FieldType == "Optional<Bool>"){
-                obj.setValue(row[colAttribute.FieldName] as! Bool!, forKey: colAttribute.FieldName)
-            }
-            else{
-                obj.setValue(row[colAttribute.FieldName] as! NSString!, forKey: colAttribute.FieldName)
-            }
-
         }
         return obj;
 
     }
     
     public static func JSONDateToDateTime(jsonDate:String) -> DateTime{
-        let theDate = Date(jsonDate: jsonDate)
-        let dt:DateTime = DateTime();
-        dt.Year = Int((theDate?.toString(dateFormat: "yyyy"))!)!;
-        dt.Month = Int((theDate?.toString(dateFormat: "MM"))!)!;
-        dt.Day = Int((theDate?.toString(dateFormat: "dd"))!)!;
-        dt.Hour = Int((theDate?.toString(dateFormat: "HH"))!)!;
-        dt.Minute = Int((theDate?.toString(dateFormat: "mm"))!)!;
-        dt.Second = Int((theDate?.toString(dateFormat: "ss"))!)!;
-        return dt;
+        if(jsonDate != ""){
+            let theDate = Date(jsonDate: jsonDate)
+            let dt:DateTime = DateTime();
+            dt.Year = Int((theDate?.toString(dateFormat: "yyyy"))!)!;
+            dt.Month = Int((theDate?.toString(dateFormat: "MM"))!)!;
+            dt.Day = Int((theDate?.toString(dateFormat: "dd"))!)!;
+            dt.Hour = Int((theDate?.toString(dateFormat: "HH"))!)!;
+            dt.Minute = Int((theDate?.toString(dateFormat: "mm"))!)!;
+            dt.Second = Int((theDate?.toString(dateFormat: "ss"))!)!;
+            return dt;
+        }
+        return DateTime();
     }
 }
 

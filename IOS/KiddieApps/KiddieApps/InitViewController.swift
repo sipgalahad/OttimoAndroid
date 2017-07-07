@@ -24,11 +24,11 @@ class InitViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         Util.copyFile(fileName: "OttimoPatient.db");
         //ModelManager.getInstance().insertSetting();
-        let entity:Setting = Setting();
-        entity.SettingCode = "A";
-        entity.SettingName = "B";
-        entity.SettingValue = "C";
-        BusinessLayer.insertSetting(record: entity);
+        //let entity:Setting = Setting();
+        //entity.SettingCode = "A";
+        //entity.SettingName = "B";
+        //entity.SettingValue = "C";
+        //BusinessLayer.insertSetting(record: entity);
         self.performSegue(withIdentifier: "loginView", sender: self)
     }
 

@@ -31,7 +31,7 @@ class LoginViewController: UIViewController {
         //txtMedicalNo.text = setting.value(forKey: "SettingCode") as! String;
         //let patient:Patient = Patient();
         //patient.MedicalNo = "1";
-        sharedInstance.database!.open()
+        /*sharedInstance.database!.open()
         let resultSet: FMResultSet! = sharedInstance.database!.executeQuery("SELECT * FROM Setting", withArgumentsIn: [])
         //let marrStudentInfo : NSMutableArray = NSMutableArray()
         if (resultSet != nil) {
@@ -47,26 +47,26 @@ class LoginViewController: UIViewController {
                 //setting.SettingValue = resultSet.string(forColumn: "SettingValue");
             }
         }
-        sharedInstance.database!.close()
-        let en = BusinessLayer.getSetting(settingCode: "A");
-        txtMedicalNo.text = en?.SettingValue;
+        sharedInstance.database!.close()*/
+        //let en = BusinessLayer.getSetting(settingCode: "A");
+        //txtMedicalNo.text = en?.SettingValue;
         
-        var lstSetting = BusinessLayer.getSettingList(filterExpression: "");
-        txtMedicalNo.text = lstSetting[0].SettingCode;
+        //var lstSetting = BusinessLayer.getSettingList(filterExpression: "");
+        //txtMedicalNo.text = lstSetting[0].SettingCode;
         //var query = DBHelper().getRecord(tableName: "Setting", lstPrimaryKey: Setting().getPrimaryKey());
         //txtMedicalNo.text = query;
         //txtMedicalNo.text = update(record: setting);
         
-        BusinessLayerWebService.getAppointmentList(filterExpression: "AppointmentID < 3000", completionHandler: { (result) -> Void in
+        /*BusinessLayerWebService.getAppointmentList(filterExpression: "AppointmentID < 3000", completionHandler: { (result) -> Void in
             //self.txtMedicalNo.text = result;
             self.txtMedicalNo.text = (result.returnObj[0] as! Appointment).ServiceUnitName;
-            self.performSegue(withIdentifier: "mainView", sender: self)
+            //self.performSegue(withIdentifier: "mainView", sender: self)
             
             //let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
             
             //let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController")
             //self.present(nextViewController, animated:true, completion:nil)
-        });
+        });*/
         
         /*WebServiceHelper().getListObject(methodName: "GetvMobileAppointmentPerPatientList", filterExpression: "AppointmentID < 1000", completionHandler: { (result) -> Void in
             //self.txtMedicalNo.text = result;
@@ -110,9 +110,74 @@ class LoginViewController: UIViewController {
             }
         } catch {
             print(error.localizedDescription)
-        }*/
-
+         }*/
+        //self.performSegue(withIdentifier: "mainView", sender: self)
+        
+        /*let query = "INSERT INTO Patient (MRN,MedicalNo,FullName,PreferredName,CityOfBirth,DateOfBirth,GCSex,Sex,Gender,BloodType,BloodRhesus,EmailAddress,EmailAddress2,MobilePhone1,MobilePhone2,LastSyncDateTime,LastSyncAppointmentDateTime) VALUES (22008,'01-00022181','Aloysius Lie','Aloysius','Jakarta','2011-10-09 00:00:00','0003^M','Laki-Laki','Laki-Laki','B','','lai.miria@yahoo.com','','','','1900-01-01 00:00:00','1900-01-01 00:00:00')";
+        var entity:Patient = Patient();
+        entity.MRN = 22008;
+        entity.MedicalNo = "01-00022181";
+        entity.FullName = "Aloysius Lie";
+        entity.PreferredName = "Aloysius";
+        entity.CityOfBirth = "Jakarta";
+        entity.DateOfBirth = DateTime(year: 2011, month: 10, day: 9, hour: 0, minute: 0, second: 0);
+        entity.GCSex = "0003^M";
+        entity.Sex = "Laki-Laki";
+        entity.Gender = "Laki-Laki";
+        entity.BloodType = "B";
+        entity.BloodRhesus = "";
+        entity.EmailAddress = "";
+        entity.EmailAddress2 = "";*/
+        
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+        let OSVersion = UIDevice.current.systemVersion;
+        let deviceName = UIDevice.current.modelName;
+        
+        login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: "1", FCMToken: "1", completionHandler: { (result) -> Void in
+            if(result.returnObjPatient.count > 0){
+                for patient in result.returnObjPatient{
+                    BusinessLayer.insertPatient(record: patient);
+                }
+                for app in result.returnObjAppointment{
+                    BusinessLayer.insertAppointment(record: app);
+                }
+                
+                UserDefaults.standard.set(result.returnObjPatient[0].MRN, forKey:"MRN");
+                UserDefaults.standard.synchronize();
+                DispatchQueue.main.async() {
+                    self.performSegue(withIdentifier: "mainView", sender: self);
+                }
+            }
+            else{
+                
+            }
+        });
     }
+    
+    public func login(medicalNo:String, password: String, deviceID: String, deviceName: String, OSVersion: String, appVersion: String, FCMToken: String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
+        WebServiceHelper().login(medicalNo: medicalNo, password: password, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: appVersion, FCMToken: FCMToken, completionHandler: { (result) -> Void in
+            //self.txtMedicalNo.text = result;
+            let retval:WebServiceResponsePatient = WebServiceResponsePatient();
+            
+            let dict = WebServiceHelper.convertToDictionary(text: result)
+            retval.timeStamp = WebServiceHelper.JSONDateToDateTime(jsonDate: dict?["Timestamp"] as! String);
+            retval.returnObjImg = dict?["ReturnObjImage"] as! String;
+            let objAppointment = dict?["ReturnObjAppointment"] as! NSArray
+            for tmp in objAppointment{
+                let entity:Appointment = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Appointment()) as! Appointment
+                retval.returnObjAppointment.append(entity);
+            }
+            
+            let objPatient = dict?["ReturnObjPatient"] as! NSArray
+            for tmp in objPatient{
+                let entity:Patient = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Patient()) as! Patient
+                retval.returnObjPatient.append(entity);
+            }
+
+            completionHandler(retval);
+        });
+    }
+
     
     func displayMyAlertMessage(userMessage:String){
         let myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
