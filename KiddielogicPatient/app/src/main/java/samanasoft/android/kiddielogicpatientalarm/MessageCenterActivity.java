@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
 import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.dal.BusinessLayer;
+import samanasoft.android.ottimo.dal.DataLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Appointment;
 import samanasoft.android.ottimo.dal.DataLayer.vAppointment;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
@@ -56,7 +58,7 @@ public class MessageCenterActivity extends BaseMainActivity {
 
     private AppointmentInformationAdapter adapter;
     private void fillListAppointment(){
-        List<vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND ReminderDate LIKE '%2$s%%'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s%%' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '%3$s' AND StartDate >= '%2$s%%')", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.SEND_CONFIRMATION));
         adapter = new AppointmentInformationAdapter(getBaseContext(), lstAppointment);
         lvwAppointment.setAdapter(adapter);
     }
@@ -125,23 +127,28 @@ public class MessageCenterActivity extends BaseMainActivity {
                 message += " (Cancelled)";
             holder.txtAppointmentInformationMessage.setText(message);
 
-            if(entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.OPEN) || entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.SEND_CONFIRMATION)){
-                holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        updateAppointment(entity, Constant.AppointmentStatus.CONFIRMED);
-                    }
-                });
-                holder.btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        updateAppointment(entity, Constant.AppointmentStatus.CANCELLED);
-                    }
-                });
-            }
-            else {
+            if(entity.ReminderDate.toString(Constant.FormatString.DATE_TIME_FORMAT_DB).compareTo(DateTime.now().toString(Constant.FormatString.DATE_TIME_FORMAT_DB)) < 0){
                 holder.btnConfirm.setVisibility(View.INVISIBLE);
                 holder.btnCancel.setVisibility(View.INVISIBLE);
+            }
+            else {
+                if (entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.OPEN) || entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.SEND_CONFIRMATION)) {
+                    holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            updateAppointment(entity, Constant.AppointmentStatus.CONFIRMED);
+                        }
+                    });
+                    holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            updateAppointment(entity, Constant.AppointmentStatus.CANCELLED);
+                        }
+                    });
+                } else {
+                    holder.btnConfirm.setVisibility(View.INVISIBLE);
+                    holder.btnCancel.setVisibility(View.INVISIBLE);
+                }
             }
             holder.btnCall.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,7 +183,8 @@ public class MessageCenterActivity extends BaseMainActivity {
             return;
         }
         showProgress(true);
-        mAuthTask = new UpdateAppointmentTask(entity, GCAppointmentStatus);
+        String deviceID = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        mAuthTask = new UpdateAppointmentTask(entity, deviceID, GCAppointmentStatus);
         mAuthTask.execute((Void) null);
     }
     /**
@@ -223,16 +231,18 @@ public class MessageCenterActivity extends BaseMainActivity {
 
         private final vAppointment mAppointment;
         private final String mGCAppointmentStatus;
+        private final String mDeviceID;
 
-        UpdateAppointmentTask(vAppointment entity, String GCAppointmentStatus) {
+        UpdateAppointmentTask(vAppointment entity, String deviceID, String GCAppointmentStatus) {
             mAppointment = entity;
+            mDeviceID = deviceID;
             mGCAppointmentStatus = GCAppointmentStatus;
         }
 
         @Override
         protected WebServiceResponse doInBackground(Void... params) {
             try {
-                WebServiceResponse result = BusinessLayer.postAppointmentAnswer(getBaseContext(), mAppointment.AppointmentID, mGCAppointmentStatus);
+                WebServiceResponse result = BusinessLayer.postAppointmentAnswer(getBaseContext(), mAppointment.AppointmentID, mDeviceID, mGCAppointmentStatus);
                 return result;
             }
             catch (Exception ex) {
@@ -247,6 +257,8 @@ public class MessageCenterActivity extends BaseMainActivity {
             Appointment entity = BusinessLayer.getAppointment(getBaseContext(), mAppointment.AppointmentID);
             entity.GCAppointmentStatus = mGCAppointmentStatus;
             BusinessLayer.updateAppointment(getBaseContext(), entity);
+
+            //Toast.makeText(getBaseContext(), "Harap datang sesuai jam kelompok", Toast.LENGTH_SHORT).show();
 
             showProgress(false);
             fillListAppointment();

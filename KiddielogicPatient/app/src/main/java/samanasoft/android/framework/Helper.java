@@ -7,7 +7,9 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,6 +19,10 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -86,7 +92,7 @@ public class Helper {
             values.put(CalendarContract.Events.DTSTART, startMillis);
             values.put(CalendarContract.Events.DTEND, endMillis);
             values.put(CalendarContract.Events.TITLE, "Visit Ke KiddieCare Centre");
-            values.put(CalendarContract.Events.DESCRIPTION, entity.VisitTypeName + " ke " + entity.ParamedicName + " (Harap Konfirmasi / Cancel Melalui Aplikasi Kiddielogic Sehari Sebelumnya)");
+            values.put(CalendarContract.Events.DESCRIPTION, entity.VisitTypeName + " ke " + entity.ParamedicName + " (Harap Konfirmasi / Cancel Melalui Aplikasi KiddieApps Paling Lambat Sehari Sebelumnya)");
             values.put(CalendarContract.Events.CALENDAR_ID, 1);
 
             values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC/GMT +7:00");
@@ -94,11 +100,11 @@ public class Helper {
             Uri updateUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.CalendarEventID);
             ctx.getContentResolver().update(updateUri, values, null, null);
 
-            DateTime dt = DateTime.now();
-            int diffHour = dt.Hour - startHour;
-            int diffMinute = dt.Minute - startMinute;
-            int diff = (diffHour * 60) + diffMinute;
-            setReminder(cr, event.CalendarEventID, 1440 + diff);
+            //DateTime dt = DateTime.now();
+            //int diffHour = dt.Hour - startHour;
+            //int diffMinute = dt.Minute - startMinute;
+            //int diff = (diffHour * 60) + diffMinute;
+            //setReminder(cr, event.CalendarEventID, 1440 + diff);
         }
     }
     public static void deleteAppointmentFromEventCalender(Context ctx, DataLayer.Appointment entity) {
@@ -168,7 +174,7 @@ public class Helper {
             startDate.set(Calendar.MONTH, entity.StartDate.Month - 1); // 0-11 so 1 less
             startDate.set(Calendar.YEAR, entity.StartDate.Year);
 
-            Calendar reminderDate = Calendar.getInstance();
+            /*Calendar reminderDate = Calendar.getInstance();
             reminderDate.set(Calendar.DAY_OF_MONTH, entity.ReminderDate.Day);
             reminderDate.set(Calendar.MONTH, entity.ReminderDate.Month - 1); // 0-11 so 1 less
             reminderDate.set(Calendar.YEAR, entity.ReminderDate.Year);
@@ -178,7 +184,7 @@ public class Helper {
             int diffHour = startHour - 8;
             int diffMinute = startMinute - 0;
             int diff = (diffHour * 60) + diffMinute;
-            setReminder(cr, entityEvent.CalendarEventID, (1440 * days) + diff);
+            setReminder(cr, entityEvent.CalendarEventID, (1440 * days) + diff);*/
         }
         catch (Exception ex){
             String stackTrace = ex.getStackTrace().toString();
@@ -186,6 +192,47 @@ public class Helper {
             String deviceID = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
             new InsertErrorLog(ctx, MRN, deviceID, message, stackTrace).execute((Void) null);
             ex.printStackTrace();
+        }
+    }
+
+    public static void CopyReadAssets(Context context)
+    {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        File file = new File(context.getFilesDir(), "app_help.pdf");
+        try
+        {
+            in = assetManager.open("app_help.pdf");
+            out = context.openFileOutput(file.getName(), Context.MODE_WORLD_READABLE);
+
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e)
+        {
+            Log.e("tag", e.getMessage());
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(
+                Uri.parse("file://" + context.getFilesDir() + "/app_help.pdf"),
+                "application/pdf");
+
+        context.startActivity(intent);
+    }
+
+    private static void copyFile(InputStream in, OutputStream out) throws IOException
+    {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1)
+        {
+            out.write(buffer, 0, read);
         }
     }
     public static class InsertErrorLog extends AsyncTask<Void, Void, WebServiceResponse> {
@@ -196,7 +243,7 @@ public class Helper {
         private final String stackTrace;
         private final Context ctx;
 
-        InsertErrorLog(Context mCtx, Integer mrn, String mDeviceID, String mErrorMessage, String mStackTrace) {
+        public InsertErrorLog(Context mCtx, Integer mrn, String mDeviceID, String mErrorMessage, String mStackTrace) {
             MRN = mrn;
             deviceID = mDeviceID;
             errorMessage = mErrorMessage;

@@ -36,19 +36,9 @@ public class WebServiceHelper {
 		JSONObject result = null;
     	SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-		PropertyInfo propMethodName = new PropertyInfo();         
-		propMethodName.setName("methodName");         
-		propMethodName.setValue(methodName);         
-		propMethodName.setType(String.class);                     
-    	
-    	PropertyInfo propFilterExpression = new PropertyInfo();         
-    	propFilterExpression.setName("filterExpression");         
-    	propFilterExpression.setValue(filterExpression);         
-    	propFilterExpression.setType(String.class);
-
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-        request.addProperty(propMethodName);
-        request.addProperty(propFilterExpression);
+		request.addProperty(createPropertyInfo("methodName", methodName, String.class));
+		request.addProperty(createPropertyInfo("filterExpression", filterExpression, String.class));
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);         
     	envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)         
@@ -68,18 +58,23 @@ public class WebServiceHelper {
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "Login");
+		SoapObject request = new SoapObject(NAMESPACE, "Login2");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("MEDICAL_NO", medicalNo);
+		data += addXMLElement("PASSWORD", password);
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("DEVICE_NAME", deviceName);
+		data += addXMLElement("MANUFACTURER_NAME", manufacturerName);
+		data += addXMLElement("ANDROID_VERSION", androidVersion);
+		data += addXMLElement("SDK_VERSION", sdkVersion.toString());
+		data += addXMLElement("APP_VERSION", appVersion);
+		data += addXMLElement("FCM_TOKEN", FCMToken);
+		data += "</DATA></REQUEST>";
+		Log.d("testrequest", data);
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(createPropertyInfo("medicalNo", medicalNo, String.class));
-		request.addProperty(createPropertyInfo("password", password, String.class));
-		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
-		request.addProperty(createPropertyInfo("deviceName", deviceName, String.class));
-		request.addProperty(createPropertyInfo("manufacturerName", manufacturerName, String.class));
-		request.addProperty(createPropertyInfo("androidVersion", androidVersion, String.class));
-		request.addProperty(createPropertyInfo("sdkVersion", sdkVersion, Integer.class));
-		request.addProperty(createPropertyInfo("appVersion", appVersion, String.class));
-		request.addProperty(createPropertyInfo("FCMToken", FCMToken, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -87,7 +82,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/Login", envelope);
+			androidHttpTransport.call("http://tempuri.org/Login2", envelope);
 			result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -99,11 +94,15 @@ public class WebServiceHelper {
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "RequestPassword");
+		SoapObject request = new SoapObject(NAMESPACE, "RequestPassword2");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("MEDICAL_NO", medicalNo);
+		data += addXMLElement("EMAIL_ADDRESS", emailAddress);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(createPropertyInfo("medicalNo", medicalNo, String.class));
-		request.addProperty(createPropertyInfo("emailAddress", emailAddress, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -111,13 +110,17 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/RequestPassword", envelope);
+			androidHttpTransport.call("http://tempuri.org/RequestPassword2", envelope);
 			result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private static String addXMLElement(String elementName, String value){
+		return "<" + elementName + ">" + value + "</" + elementName + ">";
 	}
 
 	private static PropertyInfo createPropertyInfo(String name, Object value, Class type){
@@ -127,37 +130,22 @@ public class WebServiceHelper {
 		prop.setType(type);
 		return prop;
 	}
-	public static JSONObject SyncPatient(Context ctx, Integer MRN, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
+	public static JSONObject SyncPatient(Context ctx, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "SyncPatient");
+		SoapObject request = new SoapObject(NAMESPACE, "SyncPatient2");
 
-		PropertyInfo propMRN = new PropertyInfo();
-		propMRN.setName("MRN");
-		propMRN.setValue(MRN);
-		propMRN.setType(Integer.class);
-
-		PropertyInfo propPatient = new PropertyInfo();
-		propPatient.setName("patientLastUpdatedDate");
-		propPatient.setValue(patientLastUpdatedDate);
-		propPatient.setType(String.class);
-
-		PropertyInfo propPhoto = new PropertyInfo();
-		propPhoto.setName("photoLastUpdatedDate");
-		propPhoto.setValue(photoLastUpdatedDate);
-		propPhoto.setType(String.class);
-
-		PropertyInfo propAppointment = new PropertyInfo();
-		propAppointment.setName("appointmentLastUpdatedDate");
-		propAppointment.setValue(appointmentLastUpdatedDate);
-		propAppointment.setType(String.class);
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("MRN", MRN.toString());
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("PATIENT_LASTUPDATEDDATE", patientLastUpdatedDate);
+		data += addXMLElement("PHOTO_LASTUPDATEDDATE", photoLastUpdatedDate);
+		data += addXMLElement("APPOINTMENT_LASTUPDATEDDATE", appointmentLastUpdatedDate);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(propMRN);
-		request.addProperty(propPatient);
-		request.addProperty(propPhoto);
-		request.addProperty(propAppointment);
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -165,7 +153,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/SyncPatient", envelope);
+			androidHttpTransport.call("http://tempuri.org/SyncPatient2", envelope);
 			result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -177,27 +165,16 @@ public class WebServiceHelper {
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "ChangePassword");
+		SoapObject request = new SoapObject(NAMESPACE, "ChangePassword2");
 
-		PropertyInfo propMRN = new PropertyInfo();
-		propMRN.setName("MRN");
-		propMRN.setValue(MRN);
-		propMRN.setType(Integer.class);
-
-		PropertyInfo propOldPassword = new PropertyInfo();
-		propOldPassword.setName("oldPassword");
-		propOldPassword.setValue(oldPassword);
-		propOldPassword.setType(String.class);
-
-		PropertyInfo propNewPassword = new PropertyInfo();
-		propNewPassword.setName("newPassword");
-		propNewPassword.setValue(newPassword);
-		propNewPassword.setType(String.class);
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("MRN", MRN.toString());
+		data += addXMLElement("OLD_PASSWORD", oldPassword);
+		data += addXMLElement("NEW_PASSWORD", newPassword);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(propMRN);
-		request.addProperty(propOldPassword);
-		request.addProperty(propNewPassword);
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -205,7 +182,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/ChangePassword", envelope);
+			androidHttpTransport.call("http://tempuri.org/ChangePassword2", envelope);
 			result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -215,7 +192,7 @@ public class WebServiceHelper {
 	}
 	public static JSONObject GetAndroidAppVersion(Context ctx){
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "GetAndroidAppVersion");
+		SoapObject request = new SoapObject(NAMESPACE, "GetAndroidAppVersion2");
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
 
@@ -225,7 +202,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/GetAndroidAppVersion", envelope);
+			androidHttpTransport.call("http://tempuri.org/GetAndroidAppVersion2", envelope);
 			result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -234,25 +211,20 @@ public class WebServiceHelper {
 		return result;
 	}
 
-	public static JSONObject PostAppointmentAnswer(Context ctx, Integer appointmentID, String GCAppointmentStatus){
+	public static JSONObject PostAppointmentAnswer(Context ctx, Integer appointmentID, String deviceID, String GCAppointmentStatus){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "PostAppointmentAnswer");
+		SoapObject request = new SoapObject(NAMESPACE, "PostAppointmentAnswer2");
 
-		PropertyInfo propMethodName = new PropertyInfo();
-		propMethodName.setName("appointmentID");
-		propMethodName.setValue(appointmentID);
-		propMethodName.setType(Integer.class);
-
-		PropertyInfo propFilterExpression = new PropertyInfo();
-		propFilterExpression.setName("GCAppointmentStatus");
-		propFilterExpression.setValue(GCAppointmentStatus);
-		propFilterExpression.setType(String.class);
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("APPOINTMENT_ID", appointmentID.toString());
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("GC_APPOINTMENT_STATUS", GCAppointmentStatus);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(propMethodName);
-		request.addProperty(propFilterExpression);
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -260,7 +232,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/PostAppointmentAnswer", envelope);
+			androidHttpTransport.call("http://tempuri.org/PostAppointmentAnswer2", envelope);
 			//result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -273,13 +245,17 @@ public class WebServiceHelper {
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "InsertErrorLog");
+		SoapObject request = new SoapObject(NAMESPACE, "InsertErrorLog2");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("MRN", MRN.toString());
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("ERROR_MESSAGE", errorMessage);
+		data += addXMLElement("STACK_TRACE", stackTrace);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(createPropertyInfo("MRN", MRN, Integer.class));
-		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
-		request.addProperty(createPropertyInfo("errorMessage", errorMessage, String.class));
-		request.addProperty(createPropertyInfo("stackTrace", stackTrace, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -287,7 +263,37 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/InsertErrorLog", envelope);
+			androidHttpTransport.call("http://tempuri.org/InsertErrorLog2", envelope);
+			//result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static JSONObject InsertPatientMobileAppointmentStatusLog(Context ctx, String deviceID, Integer appointmentID, String GCAppointmentStatus){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "InsertPatientMobileAppointmentStatusLog2");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("APPOINTMENT_ID", appointmentID.toString());
+		data += addXMLElement("GC_APPOINTMENT_STATUS", GCAppointmentStatus);
+		data += "</DATA></REQUEST>";
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/InsertPatientMobileAppointmentStatusLog2", envelope);
 			//result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -300,11 +306,15 @@ public class WebServiceHelper {
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "InsertErrorFeedback");
+		SoapObject request = new SoapObject(NAMESPACE, "InsertErrorFeedback2");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("ERROR_MESSAGE", errorMessage);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
-		request.addProperty(createPropertyInfo("errorMessage", errorMessage, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -312,7 +322,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/InsertErrorFeedback", envelope);
+			androidHttpTransport.call("http://tempuri.org/InsertErrorFeedback2", envelope);
 			//result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;
@@ -325,11 +335,15 @@ public class WebServiceHelper {
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
-		SoapObject request = new SoapObject(NAMESPACE, "UpdateDeviceFCMToken");
+		SoapObject request = new SoapObject(NAMESPACE, "UpdateDeviceFCMToken2");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += addXMLElement("NEW_FCM_TOKEN", newFCMToken);
+		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
-		request.addProperty(createPropertyInfo("deviceID", deviceID, String.class));
-		request.addProperty(createPropertyInfo("newFCMToken", newFCMToken, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
@@ -337,7 +351,7 @@ public class WebServiceHelper {
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
 		try {
-			androidHttpTransport.call("http://tempuri.org/UpdateDeviceFCMToken", envelope);
+			androidHttpTransport.call("http://tempuri.org/UpdateDeviceFCMToken2", envelope);
 			//result = new JSONObject((String)envelope.getResponse());
 		} catch (Exception e) {
 			result = null;

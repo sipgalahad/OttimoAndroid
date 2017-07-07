@@ -344,10 +344,20 @@ public class BusinessLayer {
     }
     //endregion
 
-    public static WebServiceResponse postAppointmentAnswer(Context context, Integer appointmentID, String GCAppointmentStatus){
+    public static WebServiceResponse insertPatientMobileAppointmentStatusLog(Context context, String deviceID, Integer appointmentID, String GCAppointmentStatus){
         WebServiceResponse result = new WebServiceResponse();
         try {
-            JSONObject response = WebServiceHelper.PostAppointmentAnswer(context, appointmentID, GCAppointmentStatus);
+            JSONObject response = WebServiceHelper.InsertPatientMobileAppointmentStatusLog(context, deviceID, appointmentID, GCAppointmentStatus);
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static WebServiceResponse postAppointmentAnswer(Context context, Integer appointmentID, String deviceID, String GCAppointmentStatus){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.PostAppointmentAnswer(context, appointmentID, deviceID, GCAppointmentStatus);
         } catch (Exception e) {
             result = null;
             e.printStackTrace();

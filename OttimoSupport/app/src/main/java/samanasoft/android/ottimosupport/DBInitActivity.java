@@ -33,12 +33,13 @@ public class DBInitActivity extends Activity {
             editor.putString(Constant.SharedPreference.DB_CONF, "1");
             editor.putString(Constant.SharedPreference.APPOINTMENT_REMINDER_TIME, "12:00");
             //editor.putString(Constant.SharedPreference.APPOINTMENT_REMINDER_MESSAGE, "Mengingatkan {PreferredName} terjadwal {VisitTypeName} ke {ParamedicName} tgl {StartDate} Jam {cfStartTime} di KiddieCare. Jika setuju jawab 'KCC_YA', jika tidak menjawab kami anggap batal");
-            editor.putString(Constant.SharedPreference.WEB_SERVICE_URL, "http://192.168.0.100/research/Ottimov2.0/ControlPanel/Libs/Service/MethodService.asmx");
+            //editor.putString(Constant.SharedPreference.WEB_SERVICE_URL, "http://192.168.0.100/research/Ottimov2.0/ControlPanel/Libs/Service/MethodService.asmx");
+
             //editor.putString(Constant.SharedPreference.WEB_SERVICE_URL, "http://10.18.18.252/kiddielogic/ControlPanel/Libs/Service/MethodService.asmx");
 
             //Miranti
-            //editor.putString(Constant.SharedPreference.WEB_SERVICE_URL, "http://192.168.1.103/ottimo/ControlPanel/Libs/Service/MethodService.asmx");
-            editor.putString(Constant.SharedPreference.APPOINTMENT_REMINDER_MESSAGE, "Mengingatkan {PreferredName} terjadwal {VisitTypeName} ke {ParamedicName} tgl {StartDate} Jam {cfStartTime} di Miranti. Jika setuju jawab 'ya', jika tidak menjawab kami anggap batal");
+            editor.putString(Constant.SharedPreference.WEB_SERVICE_URL, "http://192.168.1.103/ottimo/ControlPanel/Libs/Service/MethodService.asmx");
+            editor.putString(Constant.SharedPreference.APPOINTMENT_REMINDER_MESSAGE, "Mengingatkan {PreferredName} terjadwal {VisitTypeName} ke {ParamedicName} tgl {StartDate} Jam {cfStartTime} di Puspita. Jika setuju jawab 'ya', jika tidak menjawab kami anggap batal");
             editor.commit();
             isCreateDb = true;
         }

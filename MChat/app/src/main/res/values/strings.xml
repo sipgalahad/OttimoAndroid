@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">MChat</string>
-    <string name="title_section1">Favourites</string>
-    <string name="title_section2">Chats</string>
-    <string name="title_section3">Contacts</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-</resources>

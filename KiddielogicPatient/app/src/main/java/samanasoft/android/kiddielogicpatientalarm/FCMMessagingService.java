@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,7 +22,10 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
+import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.common.Constant;
+import samanasoft.android.ottimo.dal.BusinessLayer;
+import samanasoft.android.ottimo.dal.DataLayer;
 
 /**
  * Created by DEV_ARI on 5/8/2017.
@@ -29,6 +34,8 @@ public class FCMMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCMMessagingService";
     String type = "";
+    String deviceID = "";
+    Integer appointmentID = 0;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Displaying data in log
@@ -48,7 +55,21 @@ public class FCMMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Type: " + type);
             if (type.equals("AppReminder")) {
                 String message = lstData.get("message").toString();
+                appointmentID = Integer.parseInt(lstData.get("appointmentID"));
+                DataLayer.Appointment entityAppointment = BusinessLayer.getAppointment(getBaseContext(), appointmentID);
+                entityAppointment.GCAppointmentStatus = samanasoft.android.framework.Constant.AppointmentStatus.SEND_CONFIRMATION;
+                BusinessLayer.updateAppointment(getBaseContext(), entityAppointment);
                 sendNotification(message);
+
+                deviceID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SendMessageTask(deviceID, appointmentID, samanasoft.android.framework.Constant.AppointmentStatus.SEND_CONFIRMATION).execute((Void) null);
+                    }
+                });
+
             } else if (type.equals("NewAppsVersion")) {
                 String version = lstData.get("AppsVersion").toString();
                 SharedPreferences prefs = getSharedPreferences(Constant.SharedPreference.NAME, MODE_PRIVATE);
@@ -59,6 +80,39 @@ public class FCMMessagingService extends FirebaseMessagingService {
                 Intent intentSyncData = new Intent(getApplicationContext(), AlarmSyncDataService.class);
                 startService(intentSyncData);
             }
+        }
+    }
+    public class SendMessageTask extends AsyncTask<Void, Void, WebServiceResponse> {
+        private final String mDeviceID;
+        private final Integer mAppointmentID;
+        private final String mGCAppointmentStatus;
+
+        SendMessageTask(String deviceID, Integer appointmentID, String GCAppointmentStatus) {
+            mDeviceID = deviceID;
+            mAppointmentID = appointmentID;
+            mGCAppointmentStatus = GCAppointmentStatus;
+        }
+
+        @Override
+        protected WebServiceResponse doInBackground(Void... params) {
+            try {
+                WebServiceResponse result = BusinessLayer.insertPatientMobileAppointmentStatusLog(getApplicationContext(), mDeviceID, mAppointmentID, mGCAppointmentStatus);
+                return result;
+            } catch (Exception ex) {
+                Toast.makeText(getBaseContext(), "Kirim Status Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final WebServiceResponse result) {
+            if (result == null)
+                Toast.makeText(getBaseContext(), "Kirim Status Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onCancelled() {
+
         }
     }
 

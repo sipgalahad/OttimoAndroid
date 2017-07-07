@@ -44,23 +44,6 @@ public class MainActivity extends BaseMainActivity {
         // Create imageDir
         CircularImageView img = (CircularImageView) findViewById(R.id.imgPatientProfile);
         img.setImageBitmap(loadImageFromStorage(entity));
-
-        if(!isMyServiceRunning(AlarmStartService.class)) {
-            startService(new Intent(getApplicationContext(), AlarmStartService.class));
-            Toast.makeText(this, "Service Stop Working", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("isMyServiceRunning?", true+"");
-                return true;
-            }
-        }
-        Log.i ("isMyServiceRunning?", false+"");
-        return false;
     }
 
     /*@Override

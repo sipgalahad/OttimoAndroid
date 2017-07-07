@@ -57,15 +57,24 @@ public class DBInitActivity extends Activity {
             editor.putString(Constant.SharedPreference.DB_CONF, "1");
             editor.commit();
             isCreateDb = true;
+
+            if(!isMyServiceRunning(AlarmStartService.class))
+                startService(new Intent(getApplicationContext(), AlarmStartService.class));
+
+        }
+        else {
+            if(!isMyServiceRunning(AlarmStartService.class)) {
+                startService(new Intent(getApplicationContext(), AlarmStartService.class));
+                Toast.makeText(this, "Service Stop Working", Toast.LENGTH_LONG).show();
+            }
+            if (!AlarmSyncDataHelper.isAlarmExist(getApplicationContext()))
+                Toast.makeText(this, "Alarm Stop Working", Toast.LENGTH_LONG).show();
         }
 
         //String dbName = "OttimoPatient.db";
         //int dbVersion = Integer.valueOf("1");
         //DbConfiguration.initDB(this, dbName, dbVersion, isCreateDb);
         DbConfiguration.initDB(this, isCreateDb);
-
-        if (!AlarmSyncDataHelper.isAlarmExist(getApplicationContext()))
-            Toast.makeText(this, "Alarm Stop Working", Toast.LENGTH_LONG).show();
 
         //TimerService mTimerService = new TimerService(getApplicationContext());
         //Intent mServiceIntent = new Intent(getApplicationContext(), mTimerService.getClass());
@@ -82,11 +91,6 @@ public class DBInitActivity extends Activity {
         if (!AlarmSyncDataHelper.isAlarmExist(getApplicationContext())) {
             AlarmSyncDataHelper alarm2 = new AlarmSyncDataHelper();
             alarm2.setAlarm(getApplicationContext());
-        }
-
-        if (!WakeupAlarm.isAlarmExist(getApplicationContext())) {
-            WakeupAlarm alarm = new WakeupAlarm();
-            alarm.setAlarm(getApplicationContext());
         }
 
         /*List<String> lstCalendarID = getCalendar(this);
@@ -128,6 +132,7 @@ public class DBInitActivity extends Activity {
                 startActivity(i);
             } else {
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                i.putExtra("isinit", true);
                 startActivity(i);
             }
         }
@@ -136,6 +141,18 @@ public class DBInitActivity extends Activity {
             startActivity(i);
         }
 
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
     }
 
     private static List<String> getCalendar(Context c) {

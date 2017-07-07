@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.Helper;
 import samanasoft.android.ottimo.control.CircularImageView;
 import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer;
@@ -43,6 +45,7 @@ public class BaseMainActivity extends AppCompatActivity
 
         Intent myIntent = getIntent();
         MRN = myIntent.getIntExtra("mrn", 0);
+        Log.d("test", "MRN Login = " + MRN);
         boolean isGotoMessageCenter = myIntent.getBooleanExtra("isGotoMessageCenter", false);
         if(isGotoMessageCenter) {
             Intent i = new Intent(getBaseContext(), MessageCenterActivity.class);
@@ -80,7 +83,7 @@ public class BaseMainActivity extends AppCompatActivity
     }
 
     protected void setMessageCenterCounter(){
-        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND ReminderDate LIKE '%2$s%%'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s%%' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '%3$s' AND StartDate >= '%2$s%%')", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.SEND_CONFIRMATION));
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         int appointmentCount = lstAppointment.size();
         if(appointmentCount > 0) {
@@ -97,7 +100,7 @@ public class BaseMainActivity extends AppCompatActivity
             sColored.setSpan(new ForegroundColorSpan(Color.WHITE), s.length() - (counter.length() + 2), s.length(), 0);
             element.setTitle(sColored);
         }
-        lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND ReminderDate >= '%2$s'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB)));
+        lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND StartDate >= '%2$s' AND MRN = '%3$s'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), MRN));
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         appointmentCount = lstAppointment.size();
         if(appointmentCount > 0) {
@@ -169,7 +172,8 @@ public class BaseMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_personal_data) {
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            //i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            //i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             i.putExtra("mrn", MRN);
             startActivity(i);
 
@@ -181,8 +185,10 @@ public class BaseMainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage_account) {
             Intent i = new Intent(getBaseContext(), ManageAccountActivity.class);
-            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(i);
+            finish();
 
         } else if (id == R.id.nav_message_center) {
             Intent i = new Intent(getBaseContext(), MessageCenterActivity.class);
@@ -194,6 +200,8 @@ public class BaseMainActivity extends AppCompatActivity
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             i.putExtra("mrn", MRN);
             startActivity(i);
+        } else if (id == R.id.nav_user_help) {
+            Helper.CopyReadAssets(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

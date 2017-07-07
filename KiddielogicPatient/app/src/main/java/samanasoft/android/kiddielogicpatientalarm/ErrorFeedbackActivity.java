@@ -181,7 +181,7 @@ public class ErrorFeedbackActivity extends BaseMainActivity {
                 WebServiceResponse result = BusinessLayer.insertErrorFeedback(getApplicationContext(), mDeviceID, mErrorMessage);
                 return result;
             } catch (Exception ex) {
-                Toast.makeText(getBaseContext(), "Get Patient Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Kirim Error Feedback Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
             }
             return null;
         }

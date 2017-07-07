@@ -1,0 +1,745 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3222F261EF9664C00ED204D /* DataLayer.swift */; };
+		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
+		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
+		F3B189091EF241F8002A9C0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3B189071EF241F8002A9C0B /* Main.storyboard */; };
+		F3B1890B1EF241F8002A9C0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3B1890A1EF241F8002A9C0B /* Assets.xcassets */; };
+		F3B1890E1EF241F8002A9C0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3B1890C1EF241F8002A9C0B /* LaunchScreen.storyboard */; };
+		F3B189191EF241F8002A9C0B /* KiddieAppsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189181EF241F8002A9C0B /* KiddieAppsTests.swift */; };
+		F3B189241EF241F8002A9C0B /* KiddieAppsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189231EF241F8002A9C0B /* KiddieAppsUITests.swift */; };
+		F3B189361EF923E3002A9C0B /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189351EF923E3002A9C0B /* InitViewController.swift */; };
+		F3D4CCCA1EFA44F5009E8FC9 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D4CCC91EFA44F5009E8FC9 /* DateTime.swift */; };
+		F3D4CCCC1EFA4F55009E8FC9 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D4CCCB1EFA4F55009E8FC9 /* Constant.swift */; };
+		F3D4CCCE1EFA5862009E8FC9 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D4CCCD1EFA5862009E8FC9 /* Helper.swift */; };
+		F3D4CCD21EFA5A6D009E8FC9 /* BaseClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D4CCD11EFA5A6D009E8FC9 /* BaseClass.swift */; };
+		F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D4CCD31EFA64C6009E8FC9 /* DaoBase.swift */; };
+		F3D4CCD61EFA6F0D009E8FC9 /* BusinessLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D4CCD51EFA6F0D009E8FC9 /* BusinessLayer.swift */; };
+		F3DB17DD1F02C200005D9DF8 /* WebServiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17DC1F02C200005D9DF8 /* WebServiceHelper.swift */; };
+		F3DB17E01F037496005D9DF8 /* BusinessLayerWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17DF1F037496005D9DF8 /* BusinessLayerWebService.swift */; };
+		F3DB17E21F0374F2005D9DF8 /* WebServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17E11F0374F2005D9DF8 /* WebServiceResponse.swift */; };
+		F3DB17E61F039555005D9DF8 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17E51F039555005D9DF8 /* SWRevealViewController.m */; };
+		F3DB17E81F03D5C5005D9DF8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3DB17E71F03D5C5005D9DF8 /* Images.xcassets */; };
+		F3DB17EA1F03E09C005D9DF8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */; };
+		F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */; };
+		F3DB17F01F03F7C6005D9DF8 /* MyAppointmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */; };
+		F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */; };
+		F3EA7C641EF984C100A0AAA3 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C591EF984C100A0AAA3 /* FMDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F3EA7C651EF984C100A0AAA3 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C5B1EF984C100A0AAA3 /* FMDatabaseAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F3EA7C661EF984C100A0AAA3 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C5D1EF984C100A0AAA3 /* FMDatabasePool.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F3EA7C671EF984C100A0AAA3 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C5F1EF984C100A0AAA3 /* FMDatabaseQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F3EA7C681EF984C100A0AAA3 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C621EF984C100A0AAA3 /* FMResultSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F3EA7C691EF984C100A0AAA3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3EA7C631EF984C100A0AAA3 /* Info.plist */; };
+		F3EA7C6A1EF9855500A0AAA3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F3EA7C531EF9801D00A0AAA3 /* libsqlite3.tbd */; };
+		F3EA7C731EF98EC200A0AAA3 /* OttimoPatient.db in Resources */ = {isa = PBXBuildFile; fileRef = F3EA7C721EF98EC200A0AAA3 /* OttimoPatient.db */; };
+		F3EA7C751EF991AC00A0AAA3 /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C741EF991AC00A0AAA3 /* DBHelper.swift */; };
+		F3EA7C771EF9A10000A0AAA3 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C761EF9A10000A0AAA3 /* ModelManager.swift */; };
+		F3EA7C7A1EF9A6AC00A0AAA3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F3B189151EF241F8002A9C0B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3B188F81EF241F8002A9C0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3B188FF1EF241F8002A9C0B;
+			remoteInfo = KiddieApps;
+		};
+		F3B189201EF241F8002A9C0B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3B188F81EF241F8002A9C0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3B188FF1EF241F8002A9C0B;
+			remoteInfo = KiddieApps;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F3222F251EF9632000ED204D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
+		F3222F261EF9664C00ED204D /* DataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLayer.swift; sourceTree = "<group>"; };
+		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3B189031EF241F8002A9C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F3B189051EF241F8002A9C0B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F3B189081EF241F8002A9C0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F3B1890A1EF241F8002A9C0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F3B1890D1EF241F8002A9C0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F3B1890F1EF241F8002A9C0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3B189141EF241F8002A9C0B /* KiddieAppsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KiddieAppsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3B189181EF241F8002A9C0B /* KiddieAppsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KiddieAppsTests.swift; sourceTree = "<group>"; };
+		F3B1891A1EF241F8002A9C0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3B1891F1EF241F8002A9C0B /* KiddieAppsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KiddieAppsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3B189231EF241F8002A9C0B /* KiddieAppsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KiddieAppsUITests.swift; sourceTree = "<group>"; };
+		F3B189251EF241F8002A9C0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3B189351EF923E3002A9C0B /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
+		F3D4CCC91EFA44F5009E8FC9 /* DateTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
+		F3D4CCCB1EFA4F55009E8FC9 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		F3D4CCCD1EFA5862009E8FC9 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		F3D4CCD11EFA5A6D009E8FC9 /* BaseClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseClass.swift; sourceTree = "<group>"; };
+		F3D4CCD31EFA64C6009E8FC9 /* DaoBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaoBase.swift; sourceTree = "<group>"; };
+		F3D4CCD51EFA6F0D009E8FC9 /* BusinessLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessLayer.swift; sourceTree = "<group>"; };
+		F3DB17DC1F02C200005D9DF8 /* WebServiceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServiceHelper.swift; sourceTree = "<group>"; };
+		F3DB17DF1F037496005D9DF8 /* BusinessLayerWebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessLayerWebService.swift; sourceTree = "<group>"; };
+		F3DB17E11F0374F2005D9DF8 /* WebServiceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServiceResponse.swift; sourceTree = "<group>"; };
+		F3DB17E41F039555005D9DF8 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = SWRevealViewController/SWRevealViewController.h; sourceTree = "<group>"; };
+		F3DB17E51F039555005D9DF8 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWRevealViewController.m; path = SWRevealViewController/SWRevealViewController.m; sourceTree = "<group>"; };
+		F3DB17E71F03D5C5005D9DF8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppointmentViewController.swift; sourceTree = "<group>"; };
+		F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		F3EA7C531EF9801D00A0AAA3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		F3EA7C571EF984C000A0AAA3 /* KiddieApps-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KiddieApps-Bridging-Header.h"; sourceTree = "<group>"; };
+		F3EA7C581EF984C100A0AAA3 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = fmdb/FMDatabase.h; sourceTree = "<group>"; };
+		F3EA7C591EF984C100A0AAA3 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = fmdb/FMDatabase.m; sourceTree = "<group>"; };
+		F3EA7C5A1EF984C100A0AAA3 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = fmdb/FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		F3EA7C5B1EF984C100A0AAA3 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = fmdb/FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		F3EA7C5C1EF984C100A0AAA3 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabasePool.h; path = fmdb/FMDatabasePool.h; sourceTree = "<group>"; };
+		F3EA7C5D1EF984C100A0AAA3 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = fmdb/FMDatabasePool.m; sourceTree = "<group>"; };
+		F3EA7C5E1EF984C100A0AAA3 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
+		F3EA7C5F1EF984C100A0AAA3 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = fmdb/FMDatabaseQueue.m; sourceTree = "<group>"; };
+		F3EA7C601EF984C100A0AAA3 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDB.h; path = fmdb/FMDB.h; sourceTree = "<group>"; };
+		F3EA7C611EF984C100A0AAA3 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = fmdb/FMResultSet.h; sourceTree = "<group>"; };
+		F3EA7C621EF984C100A0AAA3 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = fmdb/FMResultSet.m; sourceTree = "<group>"; };
+		F3EA7C631EF984C100A0AAA3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = fmdb/Info.plist; sourceTree = "<group>"; };
+		F3EA7C6B1EF9865200A0AAA3 /* KiddieApps-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KiddieApps-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		F3EA7C721EF98EC200A0AAA3 /* OttimoPatient.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = OttimoPatient.db; path = Asset/OttimoPatient.db; sourceTree = "<group>"; };
+		F3EA7C741EF991AC00A0AAA3 /* DBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
+		F3EA7C761EF9A10000A0AAA3 /* ModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
+		F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F3B188FD1EF241F8002A9C0B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3EA7C6A1EF9855500A0AAA3 /* libsqlite3.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3B189111EF241F8002A9C0B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3B1891C1EF241F8002A9C0B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F3222F281EF9665300ED204D /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				F3DB17DE1F02C2BB005D9DF8 /* WebService */,
+				F3EA7C741EF991AC00A0AAA3 /* DBHelper.swift */,
+				F3EA7C761EF9A10000A0AAA3 /* ModelManager.swift */,
+				F3D4CCC91EFA44F5009E8FC9 /* DateTime.swift */,
+				F3D4CCCB1EFA4F55009E8FC9 /* Constant.swift */,
+				F3D4CCCD1EFA5862009E8FC9 /* Helper.swift */,
+				F3D4CCD11EFA5A6D009E8FC9 /* BaseClass.swift */,
+				F3D4CCD31EFA64C6009E8FC9 /* DaoBase.swift */,
+			);
+			name = Framework;
+			sourceTree = "<group>";
+		};
+		F3B188F71EF241F8002A9C0B = {
+			isa = PBXGroup;
+			children = (
+				F3B189021EF241F8002A9C0B /* KiddieApps */,
+				F3B189171EF241F8002A9C0B /* KiddieAppsTests */,
+				F3B189221EF241F8002A9C0B /* KiddieAppsUITests */,
+				F3B189011EF241F8002A9C0B /* Products */,
+				F3EA7C501EF97F1800A0AAA3 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F3B189011EF241F8002A9C0B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3B189001EF241F8002A9C0B /* KiddieApps.app */,
+				F3B189141EF241F8002A9C0B /* KiddieAppsTests.xctest */,
+				F3B1891F1EF241F8002A9C0B /* KiddieAppsUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F3B189021EF241F8002A9C0B /* KiddieApps */ = {
+			isa = PBXGroup;
+			children = (
+				F3D4CCD01EFA5A43009E8FC9 /* DAL */,
+				F3D4CCCF1EFA5A30009E8FC9 /* CommonUtility */,
+				F3EA7C781EF9A31500A0AAA3 /* ViewController */,
+				F3EA7C711EF98EB400A0AAA3 /* Assets */,
+				F3B189031EF241F8002A9C0B /* AppDelegate.swift */,
+				F3B189071EF241F8002A9C0B /* Main.storyboard */,
+				F3B1890A1EF241F8002A9C0B /* Assets.xcassets */,
+				F3B1890C1EF241F8002A9C0B /* LaunchScreen.storyboard */,
+				F3B1890F1EF241F8002A9C0B /* Info.plist */,
+				F3222F251EF9632000ED204D /* MyPlayground.playground */,
+				F3DB17E71F03D5C5005D9DF8 /* Images.xcassets */,
+			);
+			path = KiddieApps;
+			sourceTree = "<group>";
+		};
+		F3B189171EF241F8002A9C0B /* KiddieAppsTests */ = {
+			isa = PBXGroup;
+			children = (
+				F3B189181EF241F8002A9C0B /* KiddieAppsTests.swift */,
+				F3B1891A1EF241F8002A9C0B /* Info.plist */,
+			);
+			path = KiddieAppsTests;
+			sourceTree = "<group>";
+		};
+		F3B189221EF241F8002A9C0B /* KiddieAppsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F3B189231EF241F8002A9C0B /* KiddieAppsUITests.swift */,
+				F3B189251EF241F8002A9C0B /* Info.plist */,
+			);
+			path = KiddieAppsUITests;
+			sourceTree = "<group>";
+		};
+		F3D4CCCF1EFA5A30009E8FC9 /* CommonUtility */ = {
+			isa = PBXGroup;
+			children = (
+				F3DB17E31F039543005D9DF8 /* SWRevealViewController */,
+				F3EA7C561EF984AE00A0AAA3 /* FMDB */,
+				F3222F281EF9665300ED204D /* Framework */,
+			);
+			name = CommonUtility;
+			sourceTree = "<group>";
+		};
+		F3D4CCD01EFA5A43009E8FC9 /* DAL */ = {
+			isa = PBXGroup;
+			children = (
+				F3222F261EF9664C00ED204D /* DataLayer.swift */,
+				F3D4CCD51EFA6F0D009E8FC9 /* BusinessLayer.swift */,
+				F3DB17DF1F037496005D9DF8 /* BusinessLayerWebService.swift */,
+			);
+			name = DAL;
+			sourceTree = "<group>";
+		};
+		F3DB17DE1F02C2BB005D9DF8 /* WebService */ = {
+			isa = PBXGroup;
+			children = (
+				F3DB17DC1F02C200005D9DF8 /* WebServiceHelper.swift */,
+				F3DB17E11F0374F2005D9DF8 /* WebServiceResponse.swift */,
+			);
+			name = WebService;
+			sourceTree = "<group>";
+		};
+		F3DB17E31F039543005D9DF8 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F3DB17E41F039555005D9DF8 /* SWRevealViewController.h */,
+				F3DB17E51F039555005D9DF8 /* SWRevealViewController.m */,
+			);
+			name = SWRevealViewController;
+			sourceTree = "<group>";
+		};
+		F3EA7C501EF97F1800A0AAA3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F3EA7C531EF9801D00A0AAA3 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F3EA7C561EF984AE00A0AAA3 /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				F3EA7C6B1EF9865200A0AAA3 /* KiddieApps-Bridging-Header.h */,
+				F3EA7C581EF984C100A0AAA3 /* FMDatabase.h */,
+				F3EA7C591EF984C100A0AAA3 /* FMDatabase.m */,
+				F3EA7C5A1EF984C100A0AAA3 /* FMDatabaseAdditions.h */,
+				F3EA7C5B1EF984C100A0AAA3 /* FMDatabaseAdditions.m */,
+				F3EA7C5C1EF984C100A0AAA3 /* FMDatabasePool.h */,
+				F3EA7C5D1EF984C100A0AAA3 /* FMDatabasePool.m */,
+				F3EA7C5E1EF984C100A0AAA3 /* FMDatabaseQueue.h */,
+				F3EA7C5F1EF984C100A0AAA3 /* FMDatabaseQueue.m */,
+				F3EA7C601EF984C100A0AAA3 /* FMDB.h */,
+				F3EA7C611EF984C100A0AAA3 /* FMResultSet.h */,
+				F3EA7C621EF984C100A0AAA3 /* FMResultSet.m */,
+				F3EA7C631EF984C100A0AAA3 /* Info.plist */,
+				F3EA7C571EF984C000A0AAA3 /* KiddieApps-Bridging-Header.h */,
+			);
+			name = FMDB;
+			sourceTree = "<group>";
+		};
+		F3EA7C711EF98EB400A0AAA3 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F3EA7C721EF98EC200A0AAA3 /* OttimoPatient.db */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		F3EA7C781EF9A31500A0AAA3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F3B189051EF241F8002A9C0B /* ViewController.swift */,
+				F3B189351EF923E3002A9C0B /* InitViewController.swift */,
+				F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */,
+				F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */,
+				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
+				F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */,
+				F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F3B188FF1EF241F8002A9C0B /* KiddieApps */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3B189281EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieApps" */;
+			buildPhases = (
+				F3B188FC1EF241F8002A9C0B /* Sources */,
+				F3B188FD1EF241F8002A9C0B /* Frameworks */,
+				F3B188FE1EF241F8002A9C0B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KiddieApps;
+			productName = KiddieApps;
+			productReference = F3B189001EF241F8002A9C0B /* KiddieApps.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F3B189131EF241F8002A9C0B /* KiddieAppsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3B1892B1EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieAppsTests" */;
+			buildPhases = (
+				F3B189101EF241F8002A9C0B /* Sources */,
+				F3B189111EF241F8002A9C0B /* Frameworks */,
+				F3B189121EF241F8002A9C0B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F3B189161EF241F8002A9C0B /* PBXTargetDependency */,
+			);
+			name = KiddieAppsTests;
+			productName = KiddieAppsTests;
+			productReference = F3B189141EF241F8002A9C0B /* KiddieAppsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F3B1891E1EF241F8002A9C0B /* KiddieAppsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3B1892E1EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieAppsUITests" */;
+			buildPhases = (
+				F3B1891B1EF241F8002A9C0B /* Sources */,
+				F3B1891C1EF241F8002A9C0B /* Frameworks */,
+				F3B1891D1EF241F8002A9C0B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F3B189211EF241F8002A9C0B /* PBXTargetDependency */,
+			);
+			name = KiddieAppsUITests;
+			productName = KiddieAppsUITests;
+			productReference = F3B1891F1EF241F8002A9C0B /* KiddieAppsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F3B188F81EF241F8002A9C0B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Samanasoft;
+				TargetAttributes = {
+					F3B188FF1EF241F8002A9C0B = {
+						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
+					};
+					F3B189131EF241F8002A9C0B = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F3B188FF1EF241F8002A9C0B;
+					};
+					F3B1891E1EF241F8002A9C0B = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F3B188FF1EF241F8002A9C0B;
+					};
+				};
+			};
+			buildConfigurationList = F3B188FB1EF241F8002A9C0B /* Build configuration list for PBXProject "KiddieApps" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F3B188F71EF241F8002A9C0B;
+			productRefGroup = F3B189011EF241F8002A9C0B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F3B188FF1EF241F8002A9C0B /* KiddieApps */,
+				F3B189131EF241F8002A9C0B /* KiddieAppsTests */,
+				F3B1891E1EF241F8002A9C0B /* KiddieAppsUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F3B188FE1EF241F8002A9C0B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3EA7C691EF984C100A0AAA3 /* Info.plist in Resources */,
+				F3B1890E1EF241F8002A9C0B /* LaunchScreen.storyboard in Resources */,
+				F3B1890B1EF241F8002A9C0B /* Assets.xcassets in Resources */,
+				F3DB17E81F03D5C5005D9DF8 /* Images.xcassets in Resources */,
+				F3EA7C731EF98EC200A0AAA3 /* OttimoPatient.db in Resources */,
+				F3B189091EF241F8002A9C0B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3B189121EF241F8002A9C0B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3B1891D1EF241F8002A9C0B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F3B188FC1EF241F8002A9C0B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3EA7C7A1EF9A6AC00A0AAA3 /* LoginViewController.swift in Sources */,
+				F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */,
+				F3DB17E21F0374F2005D9DF8 /* WebServiceResponse.swift in Sources */,
+				F3D4CCCE1EFA5862009E8FC9 /* Helper.swift in Sources */,
+				F3EA7C671EF984C100A0AAA3 /* FMDatabaseQueue.m in Sources */,
+				F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */,
+				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
+				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
+				F3DB17F01F03F7C6005D9DF8 /* MyAppointmentViewController.swift in Sources */,
+				F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */,
+				F3EA7C641EF984C100A0AAA3 /* FMDatabase.m in Sources */,
+				F3EA7C661EF984C100A0AAA3 /* FMDatabasePool.m in Sources */,
+				F3D4CCCC1EFA4F55009E8FC9 /* Constant.swift in Sources */,
+				F3EA7C681EF984C100A0AAA3 /* FMResultSet.m in Sources */,
+				F3EA7C771EF9A10000A0AAA3 /* ModelManager.swift in Sources */,
+				F3D4CCD21EFA5A6D009E8FC9 /* BaseClass.swift in Sources */,
+				F3EA7C751EF991AC00A0AAA3 /* DBHelper.swift in Sources */,
+				F3DB17EA1F03E09C005D9DF8 /* ProfileViewController.swift in Sources */,
+				F3D4CCCA1EFA44F5009E8FC9 /* DateTime.swift in Sources */,
+				F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */,
+				F3B189361EF923E3002A9C0B /* InitViewController.swift in Sources */,
+				F3DB17E01F037496005D9DF8 /* BusinessLayerWebService.swift in Sources */,
+				F3EA7C651EF984C100A0AAA3 /* FMDatabaseAdditions.m in Sources */,
+				F3DB17E61F039555005D9DF8 /* SWRevealViewController.m in Sources */,
+				F3D4CCD61EFA6F0D009E8FC9 /* BusinessLayer.swift in Sources */,
+				F3DB17DD1F02C200005D9DF8 /* WebServiceHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3B189101EF241F8002A9C0B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3B189191EF241F8002A9C0B /* KiddieAppsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3B1891B1EF241F8002A9C0B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3B189241EF241F8002A9C0B /* KiddieAppsUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F3B189161EF241F8002A9C0B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3B188FF1EF241F8002A9C0B /* KiddieApps */;
+			targetProxy = F3B189151EF241F8002A9C0B /* PBXContainerItemProxy */;
+		};
+		F3B189211EF241F8002A9C0B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3B188FF1EF241F8002A9C0B /* KiddieApps */;
+			targetProxy = F3B189201EF241F8002A9C0B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F3B189071EF241F8002A9C0B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3B189081EF241F8002A9C0B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F3B1890C1EF241F8002A9C0B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3B1890D1EF241F8002A9C0B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F3B189261EF241F8002A9C0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F3B189271EF241F8002A9C0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F3B189291EF241F8002A9C0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = KiddieApps/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieApps;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "KiddieApps/KiddieApps-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		F3B1892A1EF241F8002A9C0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = KiddieApps/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieApps;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "KiddieApps/KiddieApps-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		F3B1892C1EF241F8002A9C0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = KiddieAppsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieAppsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KiddieApps.app/KiddieApps";
+			};
+			name = Debug;
+		};
+		F3B1892D1EF241F8002A9C0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = KiddieAppsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieAppsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KiddieApps.app/KiddieApps";
+			};
+			name = Release;
+		};
+		F3B1892F1EF241F8002A9C0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = KiddieAppsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieAppsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = KiddieApps;
+			};
+			name = Debug;
+		};
+		F3B189301EF241F8002A9C0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = KiddieAppsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieAppsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = KiddieApps;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F3B188FB1EF241F8002A9C0B /* Build configuration list for PBXProject "KiddieApps" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3B189261EF241F8002A9C0B /* Debug */,
+				F3B189271EF241F8002A9C0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3B189281EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieApps" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3B189291EF241F8002A9C0B /* Debug */,
+				F3B1892A1EF241F8002A9C0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3B1892B1EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieAppsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3B1892C1EF241F8002A9C0B /* Debug */,
+				F3B1892D1EF241F8002A9C0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3B1892E1EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieAppsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3B1892F1EF241F8002A9C0B /* Debug */,
+				F3B189301EF241F8002A9C0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F3B188F81EF241F8002A9C0B /* Project object */;
+}

@@ -41,7 +41,8 @@ public class AppointmentActivity extends BaseMainActivity {
         lvwAppointment.setDividerHeight(0);
 
         mProgressView = findViewById(R.id.login_progress);
-        List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", entity.MRN));
+        //List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", entity.MRN));
+        List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND StartDate >= '%2$s' AND MRN = '%3$s' ORDER BY StartDate", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), entity.MRN));
         fillListAppointment(lstAppointment);
     }
 

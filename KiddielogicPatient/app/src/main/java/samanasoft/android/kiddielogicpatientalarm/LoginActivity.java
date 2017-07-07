@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
@@ -44,11 +46,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.support.v4.app.Fragment;
 
 import samanasoft.android.ottimo.dal.BusinessLayer;
 
@@ -82,11 +85,13 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvRequestPassword;
+    private Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ctx = this;
         // Set up the login form.
         mMedicalNoView = (AutoCompleteTextView) findViewById(R.id.txtMedicalNo);
         mPasswordView = (EditText) findViewById(R.id.txtPassword);
@@ -120,6 +125,11 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        //boolean isInit = getIntent().getBooleanExtra("isinit", false);
+        //if(isInit)
+        //    Helper.CopyReadAssets(this);
+
     }
 
     /**
@@ -322,9 +332,11 @@ public class LoginActivity extends AppCompatActivity {
                     //mAuthTask3 = new DownloadImageTask(entity);
                     //mAuthTask3.execute(String.format("%2$s/data/Patient/%1$s/%1$s.jpg", entity.MedicalNo, Constant.Url.APP_DATA_URL));
                     Intent i = new Intent(getBaseContext(), MainActivity.class);
+                    Log.d("test", "MRN = " +  entity.MRN);
                     i.putExtra("mrn", entity.MRN);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    //i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    //i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(i);
 
                 } else {
