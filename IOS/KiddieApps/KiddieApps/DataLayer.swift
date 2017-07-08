@@ -32,6 +32,13 @@ public class Patient : BaseClass{
         }
         return MobilePhoneNo1!;
     }
+    public func getEmailAddressDisplay() -> String{
+        if (self.EmailAddress2 != ""){
+            return EmailAddress! + " / " + EmailAddress2!;
+        }
+        return EmailAddress!;
+    }
+
     override func getPrimaryKey() -> [String]{
         return ["MRN"];
     }
@@ -176,4 +183,24 @@ public class SettingDao{
         return DaoBase.getInstance().executeNonQuery(query: query);
     }
 }
+
+public class vAppointment : BaseClass{
+    var AppointmentID:NSNumber?
+    var MRN:NSNumber?
+    var FullName:String?
+    var ServiceUnitName:String?
+    var QueueNo:NSNumber?
+    var StartDate:DateTime?
+    var ReminderDate:DateTime?
+    var EndDate:DateTime?
+    var StartTime:String?
+    var EndTime:String?
+    var cfStartTime:String?
+    var VisitTypeName:String?
+    var ParamedicName:String?
+    var SpecialtyName:String?
+    var GCAppointmentStatus:String?
+    var LastUpdatedDate:DateTime?
+}
+
 

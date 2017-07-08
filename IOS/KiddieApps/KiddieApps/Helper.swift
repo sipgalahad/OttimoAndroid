@@ -77,3 +77,15 @@ public extension UIDevice {
     }
     
 }
+
+
+func displayMyAlertMessage(ctrl:UIViewController, userMessage:String){
+    let myAlert = UIAlertController(title: "", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
+    
+    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil);
+    
+    myAlert.addAction(okAction);
+    
+    ctrl.present(myAlert, animated: true, completion: nil);
+}
+

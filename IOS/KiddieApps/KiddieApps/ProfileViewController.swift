@@ -9,9 +9,15 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-
     @IBOutlet weak var btnMenu: UIBarButtonItem!
-    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var imgProfile: UIImageView!
+    @IBOutlet weak var lblMedicalNo: UILabel!
+    @IBOutlet weak var lblPatientName: UILabel!
+    @IBOutlet weak var lblPreferredName: UILabel!
+    @IBOutlet weak var lblCityOfBirth: UILabel!
+    @IBOutlet weak var lblDateOfBirth: UILabel!
+    @IBOutlet weak var lblMobilePhoneNo: UILabel!
+    @IBOutlet weak var lblEmailAddress: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         if revealViewController() != nil {
@@ -23,7 +29,17 @@ class ProfileViewController: UIViewController {
         let MRN = UserDefaults.standard.object(forKey: "MRN") as? Int;
         
         let entity:Patient = BusinessLayer.getPatient(MRN: MRN!)!;
-        lblName.text = entity.FullName;
+        self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
+        self.imgProfile.clipsToBounds = true;
+        self.imgProfile.image = UIImage(named: "patient_male")!
+        
+        lblPatientName.text = entity.FullName;
+        lblMedicalNo.text = entity.MedicalNo;
+        lblPreferredName.text = entity.PreferredName;
+        lblCityOfBirth.text = entity.CityOfBirth;
+        lblDateOfBirth.text = entity.DateOfBirth!.toString(format: Constant.FormatString.DATE_FORMAT);
+        lblMobilePhoneNo.text = entity.getMobilePhoneNoDisplay();
+        lblEmailAddress.text = entity.getEmailAddressDisplay();
         // Do any additional setup after loading the view.
     }
 

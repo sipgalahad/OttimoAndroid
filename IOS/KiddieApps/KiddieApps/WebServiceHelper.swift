@@ -72,11 +72,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         
     }
     
-    private func addXMLElement (elementName:String, value:String) -> String{
-        return "<" + elementName + ">" + value + "</" + elementName + ">";
-    }
-    
-    public func login(medicalNo:String, password:String, deviceID:String, deviceName:String, OSVersion:String, appVersion:String, FCMToken:String, completionHandler: @escaping (_ result:String) -> Void){
+    public func Login(medicalNo:String, password:String, deviceID:String, deviceName:String, OSVersion:String, appVersion:String, FCMToken:String, completionHandler: @escaping (_ result:String) -> Void){
         let appToken:String = Constant.APP_TOKEN;
         
         var data:String = "<REQUEST><DATA>";
@@ -120,9 +116,167 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
                 }
                 }.resume()
         }
-        
     }
+    
+    public func ChangePassword(MRN:Int, oldPassword:String, newPassword:String, completionHandler: @escaping (_ result:String) -> Void){
+        let appToken:String = Constant.APP_TOKEN;
+        
+        var data:String = "<REQUEST><DATA>";
+        data += addXMLElement(elementName: "MRN", value: String(MRN));
+        data += addXMLElement(elementName: "OLD_PASSWORD", value: oldPassword);
+        data += addXMLElement(elementName: "NEW_PASSWORD", value: newPassword);
+        data += "</DATA></REQUEST>";
+        
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
+        
+        let soapMessage = generateSOAPXMLFile(functionName: "ChangePassword2", lstParameter: lstParameter);
+        
+        let urlString:String = Constant.Url.BRIDGING_SERVER;
+        if let url = NSURL(string: urlString) {
+            let theRequest = NSMutableURLRequest(url: url as URL)
+            theRequest.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            theRequest.addValue((soapMessage), forHTTPHeaderField: "Content-Length")
+            theRequest.httpMethod = "POST"
+            theRequest.httpBody = soapMessage.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            URLSession.shared.dataTask(with: theRequest as URLRequest) { (data, response, error) in
+                if error == nil {
+                    if let data = data, let _ = String(data: data, encoding: String.Encoding.utf8) {
+                        let xmlParser = XMLParser(data: data)
+                        xmlParser.delegate = self as XMLParserDelegate;
+                        xmlParser.shouldResolveExternalEntities = true
+                        
+                        xmlParser.parse()
+                        completionHandler(self.jsonResult);
+                    }
+                } else {
+                    //self.txtMedicalNo.text = error.debugDescription;
+                }
+                }.resume()
+        }
+    }
+    
+    public func InsertErrorFeedback(deviceID:String, errorMessage:String, completionHandler: @escaping (_ result:String) -> Void){
+        let appToken:String = Constant.APP_TOKEN;
+        
+        var data:String = "<REQUEST><DATA>";
+        data += addXMLElement(elementName: "DEVICE_ID", value: deviceID);
+        data += addXMLElement(elementName: "ERROR_MESSAGE", value: errorMessage);
+        
+        data += "</DATA></REQUEST>";
+        
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
+        
+        let soapMessage = generateSOAPXMLFile(functionName: "InsertErrorFeedback2", lstParameter: lstParameter);
+        
+        let urlString:String = Constant.Url.BRIDGING_SERVER;
+        if let url = NSURL(string: urlString) {
+            let theRequest = NSMutableURLRequest(url: url as URL)
+            theRequest.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            theRequest.addValue((soapMessage), forHTTPHeaderField: "Content-Length")
+            theRequest.httpMethod = "POST"
+            theRequest.httpBody = soapMessage.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            URLSession.shared.dataTask(with: theRequest as URLRequest) { (data, response, error) in
+                if error == nil {
+                    if let data = data, let _ = String(data: data, encoding: String.Encoding.utf8) {
+                        let xmlParser = XMLParser(data: data)
+                        xmlParser.delegate = self as XMLParserDelegate;
+                        xmlParser.shouldResolveExternalEntities = true
+                        
+                        xmlParser.parse()
+                        completionHandler(self.jsonResult);
+                    }
+                } else {
+                    //self.txtMedicalNo.text = error.debugDescription;
+                }
+                }.resume()
+        }
+    }
+    
+    public func RequestPassword(medicalNo:String, emailAddress:String, completionHandler: @escaping (_ result:String) -> Void){
+        let appToken:String = Constant.APP_TOKEN;
+        
+        var data:String = "<REQUEST><DATA>";
+        data += addXMLElement(elementName: "MEDICAL_NO", value: medicalNo);
+        data += addXMLElement(elementName: "EMAIL_ADDRESS", value: emailAddress);
+        data += "</DATA></REQUEST>";
+        
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
+        
+        let soapMessage = generateSOAPXMLFile(functionName: "RequestPassword2", lstParameter: lstParameter);
+        
+        let urlString:String = Constant.Url.BRIDGING_SERVER;
+        if let url = NSURL(string: urlString) {
+            let theRequest = NSMutableURLRequest(url: url as URL)
+            theRequest.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            theRequest.addValue((soapMessage), forHTTPHeaderField: "Content-Length")
+            theRequest.httpMethod = "POST"
+            theRequest.httpBody = soapMessage.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            URLSession.shared.dataTask(with: theRequest as URLRequest) { (data, response, error) in
+                if error == nil {
+                    if let data = data, let _ = String(data: data, encoding: String.Encoding.utf8) {
+                        let xmlParser = XMLParser(data: data)
+                        xmlParser.delegate = self as XMLParserDelegate;
+                        xmlParser.shouldResolveExternalEntities = true
+                        
+                        xmlParser.parse()
+                        completionHandler(self.jsonResult);
+                    }
+                } else {
+                    //self.txtMedicalNo.text = error.debugDescription;
+                }
+                }.resume()
+        }
+    }
+    
+    public func PostAppointmentAnswer(appointmentID:Int, deviceID:String, GCAppointmentStatus:String, completionHandler: @escaping (_ result:String) -> Void){
+        let appToken:String = Constant.APP_TOKEN;
+        
+        var data:String = "<REQUEST><DATA>";
+        data += addXMLElement(elementName: "APPOINTMENT_ID", value: String(appointmentID));
+        data += addXMLElement(elementName: "DEVICE_ID", value: deviceID);
+        data += addXMLElement(elementName: "GC_APPOINTMENT_STATUS", value: GCAppointmentStatus);
 
+        data += "</DATA></REQUEST>";
+        
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
+        
+        let soapMessage = generateSOAPXMLFile(functionName: "PostAppointmentAnswer2", lstParameter: lstParameter);
+        
+        let urlString:String = Constant.Url.BRIDGING_SERVER;
+        if let url = NSURL(string: urlString) {
+            let theRequest = NSMutableURLRequest(url: url as URL)
+            theRequest.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            theRequest.addValue((soapMessage), forHTTPHeaderField: "Content-Length")
+            theRequest.httpMethod = "POST"
+            theRequest.httpBody = soapMessage.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            URLSession.shared.dataTask(with: theRequest as URLRequest) { (data, response, error) in
+                if error == nil {
+                    if let data = data, let _ = String(data: data, encoding: String.Encoding.utf8) {
+                        let xmlParser = XMLParser(data: data)
+                        xmlParser.delegate = self as XMLParserDelegate;
+                        xmlParser.shouldResolveExternalEntities = true
+                        
+                        xmlParser.parse()
+                        completionHandler(self.jsonResult);
+                    }
+                } else {
+                    //self.txtMedicalNo.text = error.debugDescription;
+                }
+                }.resume()
+        }
+    }
+    
+    private func addXMLElement (elementName:String, value:String) -> String{
+        return "<" + elementName + ">" + value + "</" + elementName + ">";
+    }
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         currentElement=elementName;    }
@@ -131,7 +285,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         currentElement="";    }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" || currentElement == "Login2Result" ){
+        if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" || currentElement == "Login2Result" || currentElement == "ChangePassword2Result" || currentElement == "RequestPassword2Result" || currentElement == "PostAppointmentAnswer2Result" || currentElement == "InsertErrorFeedback2Result"){
             jsonResult = string;
         }
     }

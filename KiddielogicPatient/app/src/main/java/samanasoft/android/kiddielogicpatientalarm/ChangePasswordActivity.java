@@ -3,6 +3,7 @@ package samanasoft.android.kiddielogicpatientalarm;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -107,7 +108,7 @@ public class ChangePasswordActivity extends BaseMainActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class ChangePasswordTask extends AsyncTask<Void, Void, WebServiceResponse> {
+    public class ChangePasswordTask extends AsyncTask<Void, Void, String> {
 
         private final Integer mMRN;
         private final String mOldPassword;
@@ -120,9 +121,9 @@ public class ChangePasswordActivity extends BaseMainActivity {
         }
 
         @Override
-        protected WebServiceResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
-                WebServiceResponse result = BusinessLayer.ChangePassword(getBaseContext(), mMRN, mOldPassword, mNewPassword);
+                String result = BusinessLayer.ChangePassword(getBaseContext(), mMRN, mOldPassword, mNewPassword);
                 return result;
             }
             catch (Exception ex) {
@@ -132,10 +133,21 @@ public class ChangePasswordActivity extends BaseMainActivity {
         }
 
         @Override
-        protected void onPostExecute(final WebServiceResponse result) {
+        protected void onPostExecute(final String result) {
             mAuthTask = null;
-            showProgress(false);
-            Toast.makeText(getBaseContext(), "Password Berhasil Diubah", Toast.LENGTH_SHORT).show();
+            if (result == null) {
+                Toast.makeText(getBaseContext(), "Password Gagal Diubah. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            } else {
+                if(result.equals("1")) {
+                    Toast.makeText(getBaseContext(), "Password Berhasil Diubah", Toast.LENGTH_SHORT).show();
+                    showProgress(false);
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "Password Gagal Diubah. Password Lama Tidak Cocok.", Toast.LENGTH_SHORT).show();
+                    showProgress(false);
+                }
+            }
         }
 
         @Override

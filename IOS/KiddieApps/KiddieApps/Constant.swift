@@ -9,7 +9,7 @@
 import Foundation
 
 public class Constant {
-    public let AppVersion = "1.0";
+    public static let AppVersion = "1.0";
     
     public static let SHORT_MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     public static let MONTHS = [ "January", "February", "March", "April", "May", "June", "July",

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */; };
 		F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3222F261EF9664C00ED204D /* DataLayer.swift */; };
 		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
 		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
@@ -43,6 +44,9 @@
 		F3EA7C751EF991AC00A0AAA3 /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C741EF991AC00A0AAA3 /* DBHelper.swift */; };
 		F3EA7C771EF9A10000A0AAA3 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C761EF9A10000A0AAA3 /* ModelManager.swift */; };
 		F3EA7C7A1EF9A6AC00A0AAA3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */; };
+		F3EAF1361F100D51002E47D9 /* RequestPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAF1351F100D51002E47D9 /* RequestPasswordViewController.swift */; };
+		F3EAF13A1F100D89002E47D9 /* MessageCenterViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAF1391F100D89002E47D9 /* MessageCenterViewCell.swift */; };
+		F3EAF13C1F100ECC002E47D9 /* MessageCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAF13B1F100ECC002E47D9 /* MessageCenterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorFeedbackViewController.swift; sourceTree = "<group>"; };
 		F3222F251EF9632000ED204D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		F3222F261EF9664C00ED204D /* DataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLayer.swift; sourceTree = "<group>"; };
 		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +120,9 @@
 		F3EA7C741EF991AC00A0AAA3 /* DBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 		F3EA7C761EF9A10000A0AAA3 /* ModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		F3EAF1351F100D51002E47D9 /* RequestPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestPasswordViewController.swift; sourceTree = "<group>"; };
+		F3EAF1391F100D89002E47D9 /* MessageCenterViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCenterViewCell.swift; sourceTree = "<group>"; };
+		F3EAF13B1F100ECC002E47D9 /* MessageCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCenterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,14 +301,18 @@
 		F3EA7C781EF9A31500A0AAA3 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				F3B189051EF241F8002A9C0B /* ViewController.swift */,
+				F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */,
+				F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */,
 				F3B189351EF923E3002A9C0B /* InitViewController.swift */,
 				F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */,
-				F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */,
 				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
-				F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */,
-				F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */,
+				F3EAF1391F100D89002E47D9 /* MessageCenterViewCell.swift */,
+				F3EAF13B1F100ECC002E47D9 /* MessageCenterViewController.swift */,
 				F3DB17F31F0FED0D005D9DF8 /* MyAppointmentViewCell.swift */,
+				F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */,
+				F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */,
+				F3EAF1351F100D51002E47D9 /* RequestPasswordViewController.swift */,
+				F3B189051EF241F8002A9C0B /* ViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -452,6 +464,7 @@
 				F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */,
 				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
 				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
+				F3EAF1361F100D51002E47D9 /* RequestPasswordViewController.swift in Sources */,
 				F3DB17F01F03F7C6005D9DF8 /* MyAppointmentViewController.swift in Sources */,
 				F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */,
 				F3EA7C641EF984C100A0AAA3 /* FMDatabase.m in Sources */,
@@ -461,12 +474,15 @@
 				F3EA7C771EF9A10000A0AAA3 /* ModelManager.swift in Sources */,
 				F3D4CCD21EFA5A6D009E8FC9 /* BaseClass.swift in Sources */,
 				F3EA7C751EF991AC00A0AAA3 /* DBHelper.swift in Sources */,
+				F3EAF13C1F100ECC002E47D9 /* MessageCenterViewController.swift in Sources */,
 				F3DB17EA1F03E09C005D9DF8 /* ProfileViewController.swift in Sources */,
 				F3D4CCCA1EFA44F5009E8FC9 /* DateTime.swift in Sources */,
 				F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */,
+				F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */,
 				F3B189361EF923E3002A9C0B /* InitViewController.swift in Sources */,
 				F3DB17E01F037496005D9DF8 /* BusinessLayerWebService.swift in Sources */,
 				F3EA7C651EF984C100A0AAA3 /* FMDatabaseAdditions.m in Sources */,
+				F3EAF13A1F100D89002E47D9 /* MessageCenterViewCell.swift in Sources */,
 				F3DB17E61F039555005D9DF8 /* SWRevealViewController.m in Sources */,
 				F3D4CCD61EFA6F0D009E8FC9 /* BusinessLayer.swift in Sources */,
 				F3DB17DD1F02C200005D9DF8 /* WebServiceHelper.swift in Sources */,

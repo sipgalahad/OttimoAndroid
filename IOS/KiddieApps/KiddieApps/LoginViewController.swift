@@ -133,15 +133,22 @@ class LoginViewController: UIViewController {
         let OSVersion = UIDevice.current.systemVersion;
         let deviceName = UIDevice.current.modelName;
         
-        login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: "1", FCMToken: "1", completionHandler: { (result) -> Void in
+        login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: Constant.AppVersion, FCMToken: "1", completionHandler: { (result) -> Void in
             if(result.returnObjPatient.count > 0){
                 for patient in result.returnObjPatient{
+                    patient.LastSyncDateTime = DateTime.now();
+                    patient.LastSyncAppointmentDateTime = DateTime.now();
                     BusinessLayer.insertPatient(record: patient);
                 }
                 for app in result.returnObjAppointment{
                     BusinessLayer.insertAppointment(record: app);
                 }
                 
+                if(result.returnObjImg != ""){
+                    let imageData = NSData(base64Encoded: result.returnObjImg);
+                    let image = UIImage(data: imageData! as Data);
+                    self.saveImageToDocumentDirectory(image!);
+                }
                 UserDefaults.standard.set(result.returnObjPatient[0].MRN, forKey:"MRN");
                 UserDefaults.standard.synchronize();
                 DispatchQueue.main.async() {
@@ -149,13 +156,39 @@ class LoginViewController: UIViewController {
                 }
             }
             else{
-                
+                DispatchQueue.main.async() {
+                    displayMyAlertMessage(ctrl: self, userMessage: "Login Gagal. No RM tidak ditemukan / Password tidak  cocok.");
+                }
             }
         });
     }
     
+    func saveImageToDocumentDirectory(_ chosenImage: UIImage) -> String{
+        let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
+        if(!FileManager.default.fileExists(atPath: directoryPath)){
+            do {
+                try FileManager.default.createDirectory(at: NSURL.fileURL(withPath: directoryPath), withIntermediateDirectories: true, attributes: nil)
+            }
+            catch {
+                print(error);
+            }
+        }
+        let filename = "01-00022181.jpg";
+        let filepath = directoryPath.appending(filename);
+        let url = NSURL.fileURL(withPath: filepath);
+        do{
+            try UIImageJPEGRepresentation(chosenImage, 1.0)?.write(to: url, options: .atomic);
+            return String.init("/KiddieApps/\(filename)")
+        }
+        catch{
+            print(error)
+            print("file cannot be save at path \(filepath), with error : \(error)");
+            return filepath;
+        }
+    }
+    
     public func login(medicalNo:String, password: String, deviceID: String, deviceName: String, OSVersion: String, appVersion: String, FCMToken: String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
-        WebServiceHelper().login(medicalNo: medicalNo, password: password, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: appVersion, FCMToken: FCMToken, completionHandler: { (result) -> Void in
+        WebServiceHelper().Login(medicalNo: medicalNo, password: password, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: appVersion, FCMToken: FCMToken, completionHandler: { (result) -> Void in
             //self.txtMedicalNo.text = result;
             let retval:WebServiceResponsePatient = WebServiceResponsePatient();
             
@@ -176,17 +209,6 @@ class LoginViewController: UIViewController {
 
             completionHandler(retval);
         });
-    }
-
-    
-    func displayMyAlertMessage(userMessage:String){
-        let myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
-        
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil);
-        
-        myAlert.addAction(okAction);
-        
-        self.present(myAlert, animated: true, completion: nil);
     }
     
     override func viewDidLoad() {

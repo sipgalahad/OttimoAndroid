@@ -394,10 +394,12 @@ public class BusinessLayer {
         }
         return result;
     }
-    public static WebServiceResponse ChangePassword(Context context, Integer MRN, String oldPassword, String newPassword){
-        WebServiceResponse result = new WebServiceResponse();
+    public static String ChangePassword(Context context, Integer MRN, String oldPassword, String newPassword){
+        String result = "";
         try {
             JSONObject response = WebServiceHelper.ChangePassword(context, MRN, oldPassword, newPassword);
+
+            result = response.optString("Result");
         } catch (Exception e) {
             result = null;
             e.printStackTrace();

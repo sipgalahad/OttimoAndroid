@@ -128,4 +128,30 @@ public class BusinessLayer{
         //}
         return result;
     }
+    
+    
+    // MARK: vAppointment
+    public static func getvAppointmentList(filterExpression:String) -> [vAppointment]{
+        var result:Array<vAppointment> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "vAppointment", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        if (row != nil) {
+            while (row.next()) {
+                result.append(helper.dataRowToObject(row: row, obj: vAppointment()) as! vAppointment);
+            }
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+
 }
