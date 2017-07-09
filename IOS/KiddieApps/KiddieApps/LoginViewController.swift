@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: BaseViewController {
     
     @IBOutlet weak var txtMedicalNo: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
@@ -133,7 +133,12 @@ class LoginViewController: UIViewController {
         let OSVersion = UIDevice.current.systemVersion;
         let deviceName = UIDevice.current.modelName;
         
+        self.indicator.startAnimating();
         login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: Constant.AppVersion, FCMToken: "1", completionHandler: { (result) -> Void in
+            
+            DispatchQueue.main.async() {
+                self.indicator.stopAnimating();
+            }
             if(result.returnObjPatient.count > 0){
                 for patient in result.returnObjPatient{
                     patient.LastSyncDateTime = DateTime.now();

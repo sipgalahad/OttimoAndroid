@@ -8,20 +8,12 @@
 
 import UIKit
 
-class ChangePasswordViewController: UIViewController {
+class ChangePasswordViewController: BasePatientPageViewController {
     @IBOutlet weak var txtOldPassword: UITextField!
     @IBOutlet weak var txtNewPassword: UITextField!
     @IBOutlet weak var txtConfirmNewPassword: UITextField!
-    @IBOutlet weak var btnMenu: UIBarButtonItem!
     override func viewDidLoad() {
-        super.viewDidLoad()
-        if revealViewController() != nil {
-            btnMenu.target = revealViewController()
-            btnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-        
-        // Do any additional setup after loading the view.
+        super.viewDidLoad()        // Do any additional setup after loading the view.
     }
 
     @IBAction func onBtnSaveClick(_ sender: Any) {
@@ -33,18 +25,24 @@ class ChangePasswordViewController: UIViewController {
         if(newPassword != confirmNewPassword){
             displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Password Tidak Cocok.");
         }
-        changePassword(MRN: MRN!, oldPassword: oldPassword, newPassword: newPassword,  completionHandler: { (result) -> Void in
-            if(result == "1"){
+        else{
+            self.indicator.startAnimating();
+            changePassword(MRN: MRN!, oldPassword: oldPassword, newPassword: newPassword,  completionHandler: { (result) -> Void in
                 DispatchQueue.main.async() {
-                    displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Berhasil Dilakukan.");
+                    self.indicator.stopAnimating();
                 }
-            }
-            else{
-                DispatchQueue.main.async() {
-                    displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Gagal. Password Lama Tidak Cocok.");
+                if(result == "1"){
+                    DispatchQueue.main.async() {
+                        displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Berhasil Dilakukan.");
+                    }
                 }
-            }
-        });
+                else{
+                    DispatchQueue.main.async() {
+                        displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Gagal. Password Lama Tidak Cocok.");
+                    }
+                }
+            });
+        }
     }
     
     public func changePassword(MRN:Int, oldPassword: String, newPassword: String, completionHandler: @escaping (_ result:String) -> Void){

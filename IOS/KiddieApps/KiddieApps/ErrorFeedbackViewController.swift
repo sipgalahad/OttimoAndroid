@@ -8,25 +8,21 @@
 
 import UIKit
 
-class ErrorFeedbackViewController: UIViewController {
+class ErrorFeedbackViewController: BasePatientPageViewController {
 
-    @IBOutlet weak var btnMenu: UIBarButtonItem!
     @IBOutlet weak var txtMessage: UITextField!
     override func viewDidLoad() {
-        super.viewDidLoad()
-        if revealViewController() != nil {
-            btnMenu.target = revealViewController()
-            btnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-
-        // Do any additional setup after loading the view.
+        super.viewDidLoad()        // Do any additional setup after loading the view.
     }
     
     @IBAction func onBtnSaveClick(_ sender: Any) {        
         let deviceID = UIDevice.current.identifierForVendor!.uuidString;
         let message:String = txtMessage.text!;
+        self.indicator.startAnimating();
         insertErrorFeedback(deviceID: deviceID, errorMessage: message, completionHandler: { (result) -> Void in
+            DispatchQueue.main.async() {
+                self.indicator.stopAnimating();
+            }
             if(result == "1"){
                 displayMyAlertMessage(ctrl: self, userMessage: "Kirim Error Feedback Berhasil Dilakukan.");
             }

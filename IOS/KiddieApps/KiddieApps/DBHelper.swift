@@ -18,13 +18,13 @@ public class Util{
     class func copyFile(fileName: NSString) {
         let dbPath: String = getPath(fileName: fileName as String)
         let fileManager = FileManager.default;
-        if fileManager.fileExists(atPath: dbPath) {
+        /*if fileManager.fileExists(atPath: dbPath) {
             do {
                 try fileManager.removeItem(atPath: dbPath)
             } catch let error1 as NSError {
                 var error2 = error1
             }
-        }
+        }*/
         if !fileManager.fileExists(atPath: dbPath) {
             let documentsURL = Bundle.main.resourceURL
             let fromPath = documentsURL!.appendingPathComponent(fileName as String)
@@ -156,10 +156,29 @@ public class DBHelper{
         
         return sqlUpdate;
     }
+    public func delete(tableName:String, record:BaseClass) -> String?{
+        var whereExpression = "";
+        
+        let lstProp = record.propertyNames();
+        for colAttribute in lstProp {
+            if(!colAttribute.IsNullable || (colAttribute.IsNullable && record.value(forKey: colAttribute.FieldName) != nil)){
+                if(colAttribute.IsPrimaryKey){
+                    if(!whereExpression.isEmpty){
+                        whereExpression += " AND ";
+                    }
+                    whereExpression += colAttribute.FieldName + " = ";
+                    whereExpression.append(getSqlText(colAttribute: colAttribute, record: record));
+                }
+            }
+        }
+        let sqlDelete = "DELETE FROM \(tableName) WHERE \(whereExpression)";
+        
+        return sqlDelete;
+    }
     private func getSqlText(colAttribute:ClassProperties, record:BaseClass) -> String{
         var result = "";
         if(colAttribute.FieldType == "Optional<NSNumber>"){
-            result += String(describing: record.value(forKey: colAttribute.FieldName) as! NSNumber);
+            result += String(describing: record.value(forKey: colAttribute.FieldName)!);
         }
         else if(colAttribute.FieldType == "Optional<DateTime>"){
             if(record.value(forKey: colAttribute.FieldName) != nil){

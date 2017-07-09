@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */; };
+		F30730101F12835500E66E1A /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307300F1F12835500E66E1A /* BaseViewController.swift */; };
+		F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */; };
+		F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */; };
+		F30730191F1290BD00E66E1A /* ManageAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */; };
 		F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3222F261EF9664C00ED204D /* DataLayer.swift */; };
 		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
 		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
@@ -68,6 +72,10 @@
 
 /* Begin PBXFileReference section */
 		F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorFeedbackViewController.swift; sourceTree = "<group>"; };
+		F307300F1F12835500E66E1A /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePatientPageViewController.swift; sourceTree = "<group>"; };
+		F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountViewCell.swift; sourceTree = "<group>"; };
+		F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountViewController.swift; sourceTree = "<group>"; };
 		F3222F251EF9632000ED204D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		F3222F261EF9664C00ED204D /* DataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLayer.swift; sourceTree = "<group>"; };
 		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +159,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F30730131F12868A00E66E1A /* BasePage */ = {
+			isa = PBXGroup;
+			children = (
+				F307300F1F12835500E66E1A /* BaseViewController.swift */,
+				F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */,
+			);
+			name = BasePage;
+			sourceTree = "<group>";
+		};
 		F3222F281EF9665300ED204D /* Framework */ = {
 			isa = PBXGroup;
 			children = (
@@ -226,6 +243,7 @@
 		F3D4CCCF1EFA5A30009E8FC9 /* CommonUtility */ = {
 			isa = PBXGroup;
 			children = (
+				F30730131F12868A00E66E1A /* BasePage */,
 				F3DB17E31F039543005D9DF8 /* SWRevealViewController */,
 				F3EA7C561EF984AE00A0AAA3 /* FMDB */,
 				F3222F281EF9665300ED204D /* Framework */,
@@ -306,6 +324,8 @@
 				F3B189351EF923E3002A9C0B /* InitViewController.swift */,
 				F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */,
 				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
+				F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */,
+				F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */,
 				F3EAF1391F100D89002E47D9 /* MessageCenterViewCell.swift */,
 				F3EAF13B1F100ECC002E47D9 /* MessageCenterViewController.swift */,
 				F3DB17F31F0FED0D005D9DF8 /* MyAppointmentViewCell.swift */,
@@ -462,12 +482,15 @@
 				F3D4CCCE1EFA5862009E8FC9 /* Helper.swift in Sources */,
 				F3EA7C671EF984C100A0AAA3 /* FMDatabaseQueue.m in Sources */,
 				F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */,
+				F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */,
 				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
+				F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */,
 				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
 				F3EAF1361F100D51002E47D9 /* RequestPasswordViewController.swift in Sources */,
 				F3DB17F01F03F7C6005D9DF8 /* MyAppointmentViewController.swift in Sources */,
 				F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */,
 				F3EA7C641EF984C100A0AAA3 /* FMDatabase.m in Sources */,
+				F30730101F12835500E66E1A /* BaseViewController.swift in Sources */,
 				F3EA7C661EF984C100A0AAA3 /* FMDatabasePool.m in Sources */,
 				F3D4CCCC1EFA4F55009E8FC9 /* Constant.swift in Sources */,
 				F3EA7C681EF984C100A0AAA3 /* FMResultSet.m in Sources */,
@@ -483,6 +506,7 @@
 				F3DB17E01F037496005D9DF8 /* BusinessLayerWebService.swift in Sources */,
 				F3EA7C651EF984C100A0AAA3 /* FMDatabaseAdditions.m in Sources */,
 				F3EAF13A1F100D89002E47D9 /* MessageCenterViewCell.swift in Sources */,
+				F30730191F1290BD00E66E1A /* ManageAccountViewController.swift in Sources */,
 				F3DB17E61F039555005D9DF8 /* SWRevealViewController.m in Sources */,
 				F3D4CCD61EFA6F0D009E8FC9 /* BusinessLayer.swift in Sources */,
 				F3DB17DD1F02C200005D9DF8 /* WebServiceHelper.swift in Sources */,

@@ -8,8 +8,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-    @IBOutlet weak var btnMenu: UIBarButtonItem!
+class ProfileViewController: BasePatientPageViewController {
     @IBOutlet weak var imgProfile: UIImageView!
     @IBOutlet weak var lblMedicalNo: UILabel!
     @IBOutlet weak var lblPatientName: UILabel!
@@ -20,19 +19,17 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var lblEmailAddress: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        if revealViewController() != nil {
-            btnMenu.target = revealViewController()
-            btnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-
         let MRN = UserDefaults.standard.object(forKey: "MRN") as? Int;
         
         let entity:Patient = BusinessLayer.getPatient(MRN: MRN!)!;
         self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
         self.imgProfile.clipsToBounds = true;
-        self.imgProfile.image = UIImage(named: "patient_male")!
-        
+        if(entity.GCSex == Constant.Sex.MALE){
+            self.imgProfile.image = UIImage(named: "patient_male")!
+        }
+        else {
+            self.imgProfile.image = UIImage(named: "patient_female")!
+        }
         lblPatientName.text = entity.FullName;
         lblMedicalNo.text = entity.MedicalNo;
         lblPreferredName.text = entity.PreferredName;

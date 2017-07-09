@@ -68,9 +68,9 @@ public class PatientDao{
         return DaoBase.getInstance().executeNonQuery(query: query!);
     }
     public func delete(MRN:Int) -> Bool{
-        var query = helper.getRecord(tableName: "Patient", lstPrimaryKey: Patient().getPrimaryKey());
-        query = query.replacingOccurrences(of: p_MRN, with: String(MRN));
-        return DaoBase.getInstance().executeNonQuery(query: query);
+        let record = get(MRN: MRN);
+        let query = helper.delete(tableName: "Patient", record: record!);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
     }
 }
 
@@ -131,9 +131,9 @@ public class AppointmentDao{
         return DaoBase.getInstance().executeNonQuery(query: query!);
     }
     public func delete(AppointmentID:Int) -> Bool{
-        var query = helper.getRecord(tableName: "Appointment", lstPrimaryKey: Appointment().getPrimaryKey());
-        query = query.replacingOccurrences(of: p_AppointmentID, with: String(AppointmentID));
-        return DaoBase.getInstance().executeNonQuery(query: query);
+        let record = get(AppointmentID: AppointmentID);
+        let query = helper.delete(tableName: "Appointment", record: record!);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
     }
 }
 

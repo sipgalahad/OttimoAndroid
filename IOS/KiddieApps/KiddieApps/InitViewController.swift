@@ -29,7 +29,21 @@ class InitViewController: UIViewController {
         //entity.SettingName = "B";
         //entity.SettingValue = "C";
         //BusinessLayer.insertSetting(record: entity);
-        self.performSegue(withIdentifier: "loginView", sender: self)
+        DaoBase.getInstance();
+        let lstPatient:[Patient] = BusinessLayer.getPatientList(filterExpression: "");
+        if(lstPatient.count == 0){
+            self.performSegue(withIdentifier: "loginView", sender: self)
+        }
+        else if(lstPatient.count == 1){
+            let patient:Patient = lstPatient[0];
+            let MRN:Int = Int(patient.MRN!);
+            UserDefaults.standard.set(MRN, forKey:"MRN");
+            UserDefaults.standard.synchronize();
+            self.performSegue(withIdentifier: "mainViewInit", sender: self);
+        }
+        else{
+            self.performSegue(withIdentifier: "manageAccountView", sender: self)
+        }
     }
 
     /*
