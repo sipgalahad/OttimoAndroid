@@ -30,6 +30,7 @@ public class MainActivity extends BaseMainActivity {
         TextView tvNumber7 = (TextView) findViewById(R.id.tvNumber7);
         txtPatientName.setText(entity.FullName);
         txtMedicalNo1.setText(entity.MedicalNo);
+        Log.d("medicalNo", entity.MedicalNo);
         tvNumber5.setText(entity.PreferredName);
         tvNumber6.setText(entity.CityOfBirth);
         tvNumber7.setText(entity.DateOfBirth.toString(Constant.FormatString.DATE_FORMAT));

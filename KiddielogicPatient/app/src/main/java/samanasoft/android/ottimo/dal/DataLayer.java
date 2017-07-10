@@ -2,6 +2,8 @@ package samanasoft.android.ottimo.dal;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
+
 import samanasoft.android.framework.DateTime;
 import samanasoft.android.framework.DbHelper;
 import samanasoft.android.framework.DaoBase;
@@ -198,6 +200,9 @@ public class DataLayer{
         @Column(DataType = DataType.DATETIME, Name = "LastSyncAppointmentDateTime")
         public DateTime LastSyncAppointmentDateTime;
 
+        @Column(DataType = DataType.DATETIME, Name = "LastSyncVaccinationDateTime")
+        public DateTime LastSyncVaccinationDateTime;
+
         public String getMobilePhoneNoDisplay(){
             if(MobilePhoneNo2 != null && !MobilePhoneNo2.isEmpty())
                 return MobilePhoneNo1 + "/" + MobilePhoneNo2;
@@ -221,6 +226,7 @@ public class DataLayer{
         }
         public int insert(Patient record){
             String query = helper.insert(record);
+            //Log.d("query Pasien", query);
             return daoBase.executeNonQuery(query);
         }
         public int update(Patient record){
@@ -329,7 +335,85 @@ public class DataLayer{
         }
     }
     //endregion
-    //region Appointment
+    //region VaccinationShotDt
+    @Table(Name = "VaccinationShotDt")
+    public static class VaccinationShotDt{
+        @Column(DataType = DataType.INT, Name = "Type")
+        public int Type;
+
+        @Column(DataType = DataType.INT, Name = "ID")
+        public int ID;
+
+        @Column(DataType = DataType.DATETIME, Name = "VaccinationDate")
+        public DateTime VaccinationDate;
+
+        @Column(DataType = DataType.INT, Name = "MRN")
+        public int MRN;
+
+        @Column(DataType = DataType.STRING, Name = "ParamedicName")
+        public String ParamedicName;
+
+        @Column(DataType = DataType.INT, Name = "VaccinationTypeID")
+        public int VaccinationTypeID;
+
+        @Column(DataType = DataType.STRING, Name = "VaccinationTypeName")
+        public String VaccinationTypeName;
+
+        @Column(DataType = DataType.STRING, Name = "VaccinationNo")
+        public String VaccinationNo;
+
+        @Column(DataType = DataType.STRING, Name = "VaccineName")
+        public String VaccineName;
+
+        @Column(DataType = DataType.DOUBLE, Name = "Dose")
+        public Double Dose;
+
+        @Column(DataType = DataType.STRING, Name = "DoseUnit")
+        public String DoseUnit;
+    }
+    public static class VaccinationShotDtDao{
+        private DbHelper helper;
+        private DaoBase daoBase;
+        private final String p_Type = "@p_Type";
+        private final String p_ID = "@p_ID";
+
+        public VaccinationShotDtDao(Context context){
+            this.helper = new DbHelper(VaccinationShotDt.class);
+            this.daoBase = new DaoBase(context);
+        }
+        public VaccinationShotDt get(int Type, int ID){
+            String query = helper.getRecord();
+            query = query.replace(p_Type, Integer.toString(Type));
+            query = query.replace(p_ID, Integer.toString(ID));
+            Cursor row = daoBase.getDataRow(query);
+            return (row == null) ? null : (VaccinationShotDt)helper.dataRowToObject(row, new VaccinationShotDt());
+        }
+        public int insert(VaccinationShotDt record){
+            String query = helper.insert(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int update(VaccinationShotDt record){
+            String query = helper.update(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int delete(int Type, int ID){
+            VaccinationShotDt record = get(Type, ID);
+            String query = helper.delete(record);
+            return daoBase.executeNonQuery(query);
+        }
+    }
+    //endregion
+    //region vVaccinationType
+    @Table(Name = "vVaccinationType")
+    public static class vVaccinationType{
+        @Column(DataType = DataType.INT, Name = "VaccinationTypeID")
+        public int VaccinationTypeID;
+
+        @Column(DataType = DataType.STRING, Name = "VaccinationTypeName")
+        public String VaccinationTypeName;
+    }
+    //endregion
+    //region vAppointment
     @Table(Name = "vAppointment")
     public static class vAppointment{
         @Column(DataType = DataType.INT, Name = "AppointmentID", IsPrimaryKey = Bool.TRUE)

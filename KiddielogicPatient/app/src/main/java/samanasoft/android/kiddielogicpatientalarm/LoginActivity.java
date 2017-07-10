@@ -303,7 +303,17 @@ public class LoginActivity extends AppCompatActivity {
                         for (DataLayer.Appointment entity2 : lstAppointment) {
                             BusinessLayer.insertAppointment(getBaseContext(), entity2);
                             Helper.insertAppointmentToEventCalender(getBaseContext(), entity2);
+                        }
 
+                        List<DataLayer.VaccinationShotDt> lstOldVaccination = BusinessLayer.getVaccinationShotDtList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
+                        for (DataLayer.VaccinationShotDt entity2 : lstOldVaccination) {
+                            BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
+                        }
+
+                        @SuppressWarnings("unchecked")
+                        List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
+                        for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
+                            BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
                         }
                         Log.d("img", result.returnObjImg);
                         if(!result.returnObjImg.equals("")) {
@@ -443,6 +453,7 @@ public class LoginActivity extends AppCompatActivity {
 
             JSONArray returnObjAppointment = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAppointment");
             JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");
+            JSONArray returnObjVaccination = WebServiceHelper.getCustomReturnObject(response, "ReturnObjVaccination");
             String img = response.optString("ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
@@ -456,8 +467,14 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject row = (JSONObject) returnObjAppointment.get(i);
                 lst2.add((DataLayer.Appointment)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Appointment()));
             }
+            List<DataLayer.VaccinationShotDt> lst3 = new ArrayList<DataLayer.VaccinationShotDt>();
+            for (int i = 0; i < returnObjVaccination.length();++i){
+                JSONObject row = (JSONObject) returnObjVaccination.get(i);
+                lst3.add((DataLayer.VaccinationShotDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.VaccinationShotDt()));
+            }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
+            result.returnObjVaccination = lst3;
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception e) {
@@ -470,6 +487,7 @@ public class LoginActivity extends AppCompatActivity {
         public DateTime timestamp;
         public List<?> returnObjPatient;
         public List<?> returnObjAppointment;
+        public List<?> returnObjVaccination;
         public String returnObjImg;
     }
 }

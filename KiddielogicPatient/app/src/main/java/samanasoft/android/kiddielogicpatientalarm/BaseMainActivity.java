@@ -169,6 +169,11 @@ public class BaseMainActivity extends AppCompatActivity
             i.putExtra("mrn", MRN);
             startActivity(i);
             // Handle the camera action
+        } else if (id == R.id.nav_vaccination) {
+            Intent i = new Intent(getBaseContext(), VaccinationActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
         } else if (id == R.id.nav_personal_data) {
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -3,6 +3,8 @@ package samanasoft.android.framework;
 import java.lang.reflect.Field;
 
 import android.database.Cursor;
+import android.util.Log;
+
 import samanasoft.android.framework.attribute.Column;
 import samanasoft.android.framework.attribute.Table;
 import samanasoft.android.framework.attribute.EnumAttribute.Bool;
@@ -75,6 +77,7 @@ public class DbHelper{
         	Column colAttribute = (Column) field.getAnnotation(Column.class); 
         	if(field.isAnnotationPresent(Column.class)){		        			
         		try {
+					Log.d("temp", ctr + " ; " + colAttribute.Name());
         			setFieldValue(colAttribute, field, row, obj, ctr);
 	        		ctr++;
         		} catch (IllegalArgumentException e) {
@@ -151,7 +154,7 @@ public class DbHelper{
 				else
 					newFilterExpression.append(colName).append(" > ");
 				newFilterExpression.append(colName).append(" > ");
-				if(colAttribute.DataType() == DataType.INT)
+				if(colAttribute.DataType() == DataType.INT || colAttribute.DataType() == DataType.DOUBLE)
 					newFilterExpression.append(currValue);
 				else
 					newFilterExpression.append("'").append(currValue).append("'");
@@ -190,7 +193,7 @@ public class DbHelper{
 					newFilterExpression.append(colName).append(" > ");
 				else
 					newFilterExpression.append(colName).append(" < ");
-				if(colAttribute.DataType() == DataType.INT)
+				if(colAttribute.DataType() == DataType.INT || colAttribute.DataType() == DataType.DOUBLE)
 					newFilterExpression.append(currValue);
 				else
 					newFilterExpression.append("'").append(currValue).append("'");
@@ -246,7 +249,7 @@ public class DbHelper{
 					
 					String colName = colAttribute.Name();
 					whereExpression.append(colName).append(" = ");
-					if(colAttribute.DataType() == DataType.INT)
+					if(colAttribute.DataType() == DataType.INT || colAttribute.DataType() == DataType.DOUBLE)
             			whereExpression.append(fieldPrefix).append(colName);
             		else
             			whereExpression.append("'").append(fieldPrefix).append(colName).append("'");
@@ -471,6 +474,8 @@ public class DbHelper{
 		else{
 			if(colAttribute.DataType() == DataType.INT)
     			value = row.getInt(ctr);
+			else if(colAttribute.DataType() == DataType.DOUBLE)
+				value = row.getDouble(ctr);
 			else if(colAttribute.DataType() == DataType.LONG)
 				value = row.getLong(ctr);
     		else
@@ -481,7 +486,7 @@ public class DbHelper{
 	
 	private String getSqlText(Column colAttribute, Field field, Object record) throws IllegalArgumentException, IllegalAccessException{
 		StringBuilder result = new StringBuilder();
-		if(colAttribute.DataType() == DataType.INT)
+		if(colAttribute.DataType() == DataType.INT || colAttribute.DataType() == DataType.DOUBLE)
 			result.append(field.get(record));
 		else if(colAttribute.DataType() == DataType.DATETIME){
 			DateTime value = (DateTime) field.get(record);

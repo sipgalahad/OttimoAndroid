@@ -22,6 +22,8 @@ import samanasoft.android.ottimo.dal.DataLayer.MessageLog;
 import samanasoft.android.ottimo.dal.DataLayer.MessageLogDao;
 import samanasoft.android.ottimo.dal.DataLayer.Setting;
 import samanasoft.android.ottimo.dal.DataLayer.SettingDao;
+import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDt;
+import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDtDao;
 
 public class BusinessLayer {
     //region AppointmentCalendarEvent
@@ -159,10 +161,38 @@ public class BusinessLayer {
         {
             DbHelper helper = new DbHelper(Patient.class);
             String query = helper.select(filterExpression);
+            Log.d("query Pasien", query);
             Cursor reader = daoBase.getDataReader(query);
             if(reader.moveToFirst()){
                 do {
                     result.add((Patient)helper.dataReaderToObject(reader, new Patient()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    public static List<Integer> getPatientMRNList(Context context, String filterExpression){
+        List<Integer> result = new ArrayList<Integer>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(Patient.class);
+            String query = helper.selectListColumn(filterExpression, "MRN");
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add(reader.getInt(0));
                 }
                 while(reader.moveToNext());
             }
@@ -312,6 +342,103 @@ public class BusinessLayer {
 		return result;
 	}
 	//endregion
+    //region VaccinationShotDt
+    public static VaccinationShotDt getVaccinationShotDt(Context context, int Type, int ID)
+    {
+        return new VaccinationShotDtDao(context).get(Type, ID);
+    }
+    public static int insertVaccinationShotDt(Context context, VaccinationShotDt record)
+    {
+        return new VaccinationShotDtDao(context).insert(record);
+    }
+    public static int updateVaccinationShotDt(Context context, VaccinationShotDt record)
+    {
+        return new VaccinationShotDtDao(context).update(record);
+    }
+    public static int deleteVaccinationShotDt(Context context, int Type, int ID)
+    {
+        return new VaccinationShotDtDao(context).delete(Type, ID);
+    }
+    public static List<VaccinationShotDt> getVaccinationShotDtList(Context context, String filterExpression){
+        List<VaccinationShotDt> result = new ArrayList<VaccinationShotDt>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(VaccinationShotDt.class);
+            String query = helper.select(filterExpression);
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add((VaccinationShotDt)helper.dataReaderToObject(reader, new VaccinationShotDt()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    public static WebServiceResponse getWebServiceListVaccinationShotDt(Context context, String filterExpression){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.getListObject(context, "GetvMobileVaccinationShotDtList", filterExpression);
+
+            JSONArray returnObj = WebServiceHelper.getReturnObject(response);
+            DateTime timestamp = WebServiceHelper.getTimestamp(response);
+
+            List<DataLayer.VaccinationShotDt> lst = new ArrayList<DataLayer.VaccinationShotDt>();
+            for (int i = 0; i < returnObj.length();++i){
+                JSONObject row = (JSONObject) returnObj.get(i);
+                lst.add((DataLayer.VaccinationShotDt)WebServiceHelper.JSONObjectToObject(row, new VaccinationShotDt()));
+            }
+            result.returnObj = lst;
+            result.timestamp = timestamp;
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //endregion
+    //region vVaccinationType
+    public static List<DataLayer.vVaccinationType> getvVaccinationTypeList(Context context, String filterExpression){
+        List<DataLayer.vVaccinationType> result = new ArrayList<DataLayer.vVaccinationType>();
+        Log.d("DB Name", DbConfiguration.DATABASE_NAME);
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(DataLayer.vVaccinationType.class);
+            String query = helper.select(filterExpression);
+            Cursor reader = daoBase.getDataReader(query);
+            Log.d("test Reader", "Reader : " + reader.getCount());
+            if(reader.moveToFirst()){
+                do {
+                    result.add((DataLayer.vVaccinationType)helper.dataReaderToObject(reader, new DataLayer.vVaccinationType()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    //endregion
     //region vAppointment
     public static List<DataLayer.vAppointment> getvAppointmentList(Context context, String filterExpression){
         List<DataLayer.vAppointment> result = new ArrayList<DataLayer.vAppointment>();

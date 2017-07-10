@@ -161,6 +161,34 @@ public class WebServiceHelper {
 		}
 		return result;
 	}
+	public static JSONObject ReloadDataAfterUpdateApps(Context ctx, String listMRN, String deviceID){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "ReloadDataAfterUpdateApps");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("LIST_MRN", listMRN);
+		data += addXMLElement("DEVICE_ID", deviceID);
+		data += "</DATA></REQUEST>";
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/ReloadDataAfterUpdateApps", envelope);
+			result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public static JSONObject ChangePassword(Context ctx, Integer MRN, String oldPassword, String newPassword){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
@@ -417,6 +445,8 @@ public class WebServiceHelper {
 			}
 			else if(colAttribute.DataType() == DataType.INT)
 				value = row.optInt(colAttribute.Name());
+			else if(colAttribute.DataType() == DataType.DOUBLE)
+				value = row.optDouble(colAttribute.Name());
 			else
 				value = row.optString(colAttribute.Name());
 			field.set(obj, value);

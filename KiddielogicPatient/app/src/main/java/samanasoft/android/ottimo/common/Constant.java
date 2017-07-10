@@ -26,6 +26,7 @@ public class Constant {
 	public static class SharedPreference{
 		public static final String NAME = "prefOttimoSupport";
 		public static final String DB_CONF = "prefDBConf";
+		public static final String DB_VERSION = "1";
 		public static final String FCM_TOKEN = "prefFCM_TOKEN";
 		public static final String SERVER_APPS_VERSION = "prefServerAppsVersion";
 		public static final String LAST_NOTIFICATION_DATE = "lastNotificationDate";
