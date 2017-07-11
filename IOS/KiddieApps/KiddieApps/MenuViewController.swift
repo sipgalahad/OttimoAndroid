@@ -9,16 +9,19 @@
 import UIKit
 
 class MenuViewController: UITableViewController {
-    
     @IBOutlet weak var imgProfile: UIImageView!
+    @IBOutlet weak var lblPatientName: UILabel!
+    @IBOutlet weak var lblMedicalNo: UILabel!
+    @IBOutlet weak var lblAppointmentCount: UILabel!
+    @IBOutlet weak var lblMessageCenterCount: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /*let MRN = UserDefaults.standard.object(forKey: "MRN") as? Int;
+        let MRN = UserDefaults.standard.object(forKey: "MRN") as? Int;
         
         let entity:Patient = BusinessLayer.getPatient(MRN: MRN!)!;
-        self.imgPatientProfile.layer.cornerRadius = self.imgPatientProfile.frame.size.width / 2;
-        self.imgPatientProfile.clipsToBounds = true;
+        self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
+        self.imgProfile.clipsToBounds = true;
         
         let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
         let filename = "\(entity.MedicalNo!).jpg";
@@ -26,18 +29,23 @@ class MenuViewController: UITableViewController {
         if(FileManager.default.fileExists(atPath: filepath)){
             let url = NSURL.fileURL(withPath: filepath);
             let data = NSData(contentsOf: url)
-            self.imgPatientProfile.image = UIImage(data: data! as Data)
+            self.imgProfile.image = UIImage(data: data! as Data)
         }
         else if(entity.GCSex == Constant.Sex.MALE){
-            self.imgPatientProfile.image = UIImage(named: "patient_male")!
+            self.imgProfile.image = UIImage(named: "patient_male")!
         }
         else {
-            self.imgPatientProfile.image = UIImage(named: "patient_female")!
+            self.imgProfile.image = UIImage(named: "patient_female")!
         }
         lblPatientName.text = entity.FullName;
         lblMedicalNo.text = entity.MedicalNo;
-*/
 
+        
+        let lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN!))");
+        if(lstAppointment.count == 0){
+            lblAppointmentCount.isHidden = true;
+        }
+        lblAppointmentCount.text = String(lstAppointment.count);
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -54,13 +62,14 @@ class MenuViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Return the number of rows in the section.
+        return 10;
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
