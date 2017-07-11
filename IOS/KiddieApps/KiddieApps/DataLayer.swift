@@ -26,6 +26,7 @@ public class Patient : BaseClass{
     var MobilePhoneNo2:String?;
     var LastSyncDateTime:DateTime?;
     var LastSyncAppointmentDateTime:DateTime?;
+    var LastSyncVaccinationDateTime:DateTime?;
     public func getMobilePhoneNoDisplay() -> String{
         if (self.MobilePhoneNo2 != ""){
             return MobilePhoneNo1! + " / " + MobilePhoneNo2!;
@@ -184,6 +185,57 @@ public class SettingDao{
     }
 }
 
+public class VaccinationShotDt : BaseClass{
+    var `Type`:NSNumber?;
+    var ID:NSNumber?;
+    var VaccinationDate:DateTime?;
+    var MRN:NSNumber?;
+    var ParamedicName:String?;
+    var VaccinationTypeID:NSNumber?;
+    var VaccinationTypeName:String?;
+    var VaccinationNo:String?;
+    var VaccineName:String?;
+    var Dose:NSNumber?;
+    var DoseUnit:String?;
+    
+    override func getPrimaryKey() -> [String]{
+        return ["Type", "ID"];
+    }
+}
+public class VaccinationShotDtDao{
+    private var helper:DBHelper;
+    private let p_Type = "@p_Type";
+    private let p_ID = "@p_ID";
+    
+    public init() {
+        helper = DBHelper();
+    }
+    public func get(Type:Int, ID:Int) -> VaccinationShotDt?{
+        sharedInstance.database!.open()
+        var query = helper.getRecord(tableName: "VaccinationShotDt", lstPrimaryKey: VaccinationShotDt().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_Type, with: String(Type));
+        query = query.replacingOccurrences(of: p_ID, with: String(ID));
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        let result = helper.dataListRowToObject(row: row, obj: VaccinationShotDt()) as! VaccinationShotDt?;
+        sharedInstance.database!.close()
+        return result;
+    }
+    public func insert(record:VaccinationShotDt) -> Bool{
+        let query = helper.insert(tableName: "VaccinationShotDt", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func update(record:VaccinationShotDt) -> Bool{
+        let query = helper.update(tableName: "VaccinationShotDt", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func delete(Type:Int, ID:Int) -> Bool{
+        let record = get(Type: Type, ID: ID);
+        let query = helper.delete(tableName: "VaccinationShotDt", record: record!);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+}
+
+
 public class vAppointment : BaseClass{
     var AppointmentID:NSNumber?
     var MRN:NSNumber?
@@ -203,4 +255,8 @@ public class vAppointment : BaseClass{
     var LastUpdatedDate:DateTime?
 }
 
+public class vVaccinationType : BaseClass{
+    var VaccinationTypeID:NSNumber?
+    var VaccinationTypeName:String?
+}
 

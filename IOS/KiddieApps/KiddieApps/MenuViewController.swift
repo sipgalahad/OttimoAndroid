@@ -9,9 +9,34 @@
 import UIKit
 
 class MenuViewController: UITableViewController {
-
+    
+    @IBOutlet weak var imgProfile: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*let MRN = UserDefaults.standard.object(forKey: "MRN") as? Int;
+        
+        let entity:Patient = BusinessLayer.getPatient(MRN: MRN!)!;
+        self.imgPatientProfile.layer.cornerRadius = self.imgPatientProfile.frame.size.width / 2;
+        self.imgPatientProfile.clipsToBounds = true;
+        
+        let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
+        let filename = "\(entity.MedicalNo!).jpg";
+        let filepath = directoryPath.appending(filename);
+        if(FileManager.default.fileExists(atPath: filepath)){
+            let url = NSURL.fileURL(withPath: filepath);
+            let data = NSData(contentsOf: url)
+            self.imgPatientProfile.image = UIImage(data: data! as Data)
+        }
+        else if(entity.GCSex == Constant.Sex.MALE){
+            self.imgPatientProfile.image = UIImage(named: "patient_male")!
+        }
+        else {
+            self.imgPatientProfile.image = UIImage(named: "patient_female")!
+        }
+        lblPatientName.text = entity.FullName;
+        lblMedicalNo.text = entity.MedicalNo;
+*/
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

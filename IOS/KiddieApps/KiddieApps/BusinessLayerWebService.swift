@@ -26,4 +26,23 @@ public class BusinessLayerWebService{
             completionHandler(retval);
         });
     }
+    
+    // MARK: VaccinationShotDt
+    public static func getVaccinationShotDtList(filterExpression:String, completionHandler: @escaping (_ result:WebServiceResponse) -> Void){
+        WebServiceHelper().getListObject(methodName: "GetvMobileVaccinationShotDtList", filterExpression: filterExpression, completionHandler: { (result) -> Void in
+            //self.txtMedicalNo.text = result;
+            let retval:WebServiceResponse = WebServiceResponse();
+            
+            let dict = WebServiceHelper.convertToDictionary(text: result)
+            retval.timeStamp = WebServiceHelper.JSONDateToDateTime(jsonDate: dict?["Timestamp"] as! String);
+            let obj = dict?["ReturnObj"] as! NSArray
+            
+            for tmp in obj{
+                let entity:VaccinationShotDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: VaccinationShotDt()) as! VaccinationShotDt
+                retval.returnObj.append(entity);
+            }
+            completionHandler(retval);
+        });
+    }
+
 }

@@ -129,6 +129,47 @@ public class BusinessLayer{
         return result;
     }
     
+    // MARK: VaccinationShotDt
+    public static func getVaccinationShotDt(Type:Int, ID:Int) -> VaccinationShotDt?
+    {
+        return VaccinationShotDtDao().get(Type: Type, ID: ID);
+    }
+    public static func insertVaccinationShotDt(record:VaccinationShotDt) -> Bool
+    {
+        return VaccinationShotDtDao().insert(record: record);
+    }
+    public static func updateVaccinationShotDt(record:VaccinationShotDt) -> Bool
+    {
+        return VaccinationShotDtDao().update(record: record);
+    }
+    public static func deleteVaccinationShotDt(Type:Int, ID:Int) -> Bool
+    {
+        return VaccinationShotDtDao().delete(Type: Type, ID: ID);
+    }
+    public static func getVaccinationShotDtList(filterExpression:String) -> [VaccinationShotDt]{
+        var result:Array<VaccinationShotDt> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "VaccinationShotDt", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        if (row != nil) {
+            while (row.next()) {
+                result.append(helper.dataRowToObject(row: row, obj: VaccinationShotDt()) as! VaccinationShotDt);
+            }
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+
+    
     
     // MARK: vAppointment
     public static func getvAppointmentList(filterExpression:String) -> [vAppointment]{
@@ -142,6 +183,31 @@ public class BusinessLayer{
         if (row != nil) {
             while (row.next()) {
                 result.append(helper.dataRowToObject(row: row, obj: vAppointment()) as! vAppointment);
+            }
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+    
+    
+    // MARK: vVaccinationType
+    public static func getvVaccinationTypeList(filterExpression:String) -> [vVaccinationType]{
+        var result:Array<vVaccinationType> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "vVaccinationType", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        if (row != nil) {
+            while (row.next()) {
+                result.append(helper.dataRowToObject(row: row, obj: vVaccinationType()) as! vVaccinationType);
             }
         }
         sharedInstance.database!.close()

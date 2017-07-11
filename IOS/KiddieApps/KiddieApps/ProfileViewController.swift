@@ -24,7 +24,16 @@ class ProfileViewController: BasePatientPageViewController {
         let entity:Patient = BusinessLayer.getPatient(MRN: MRN!)!;
         self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
         self.imgProfile.clipsToBounds = true;
-        if(entity.GCSex == Constant.Sex.MALE){
+        
+        let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
+        let filename = "\(entity.MedicalNo!).jpg";
+        let filepath = directoryPath.appending(filename);
+        if(FileManager.default.fileExists(atPath: filepath)){
+            let url = NSURL.fileURL(withPath: filepath);
+            let data = NSData(contentsOf: url)
+            self.imgProfile.image = UIImage(data: data! as Data)
+        }
+        else if(entity.GCSex == Constant.Sex.MALE){
             self.imgProfile.image = UIImage(named: "patient_male")!
         }
         else {

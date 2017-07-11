@@ -140,21 +140,27 @@ class LoginViewController: BaseViewController {
                 self.indicator.stopAnimating();
             }
             if(result.returnObjPatient.count > 0){
+                var entityPatient = result.returnObjPatient[0];
                 for patient in result.returnObjPatient{
                     patient.LastSyncDateTime = DateTime.now();
                     patient.LastSyncAppointmentDateTime = DateTime.now();
+                    patient.LastSyncVaccinationDateTime = DateTime.now();
                     BusinessLayer.insertPatient(record: patient);
                 }
                 for app in result.returnObjAppointment{
                     BusinessLayer.insertAppointment(record: app);
                 }
+                for vaccination in result.returnObjVaccination{
+                    BusinessLayer.insertVaccinationShotDt(record: vaccination);
+                }
+
                 
                 if(result.returnObjImg != ""){
                     let imageData = NSData(base64Encoded: result.returnObjImg);
                     let image = UIImage(data: imageData! as Data);
-                    self.saveImageToDocumentDirectory(image!);
+                    self.saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
                 }
-                UserDefaults.standard.set(result.returnObjPatient[0].MRN, forKey:"MRN");
+                UserDefaults.standard.set(entityPatient.MRN, forKey:"MRN");
                 UserDefaults.standard.synchronize();
                 DispatchQueue.main.async() {
                     self.performSegue(withIdentifier: "mainView", sender: self);
@@ -168,7 +174,7 @@ class LoginViewController: BaseViewController {
         });
     }
     
-    func saveImageToDocumentDirectory(_ chosenImage: UIImage) -> String{
+    func saveImageToDocumentDirectory(medicalNo:String, _ chosenImage: UIImage) -> String{
         let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
         if(!FileManager.default.fileExists(atPath: directoryPath)){
             do {
@@ -178,7 +184,7 @@ class LoginViewController: BaseViewController {
                 print(error);
             }
         }
-        let filename = "01-00022181.jpg";
+        let filename = "\(medicalNo).jpg";
         let filepath = directoryPath.appending(filename);
         let url = NSURL.fileURL(withPath: filepath);
         do{
@@ -205,6 +211,12 @@ class LoginViewController: BaseViewController {
                 let entity:Appointment = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Appointment()) as! Appointment
                 retval.returnObjAppointment.append(entity);
             }
+            let objVaccination = dict?["ReturnObjVaccination"] as! NSArray
+            for tmp in objVaccination{
+                let entity:VaccinationShotDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: VaccinationShotDt()) as! VaccinationShotDt
+                retval.returnObjVaccination.append(entity);
+            }
+
             
             let objPatient = dict?["ReturnObjPatient"] as! NSArray
             for tmp in objPatient{

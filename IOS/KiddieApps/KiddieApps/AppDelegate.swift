@@ -7,16 +7,41 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseMessaging
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if #available(iOS 10.0, *){
+            UNUserNotificationCenter.current().delegate = self;
+            let authOptions : UNAuthorizationOptions = [.alert, .badge, .sound];
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: {_, _ in });
+            Messaging.messaging().delegate = self;
+        }
+        else{
+            let setting:UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil);
+            application.registerUserNotificationSettings(setting);
+        }
+        
+        application.registerForRemoteNotifications();
+        FirebaseApp.configure();
         return true
+    }
+    
+    func application(received remoteMessage: MessagingRemoteMessage) {
+        print(remoteMessage.appData);
+    }
+    
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

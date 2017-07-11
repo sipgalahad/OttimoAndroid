@@ -7,12 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1903417D63345D9D9377E4F0 /* Pods_KiddieApps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD249DCAFC9D33E39FAD0D /* Pods_KiddieApps.framework */; };
+		3661348EFD6353610F0C3F2F /* Pods_KiddieAppsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3646D2AC0866C653B66F0C04 /* Pods_KiddieAppsTests.framework */; };
+		3A8501D977F5436C22A53405 /* Pods_KiddieAppsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0449ABADE2C911D619AB02D /* Pods_KiddieAppsUITests.framework */; };
 		F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */; };
 		F30730101F12835500E66E1A /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307300F1F12835500E66E1A /* BaseViewController.swift */; };
 		F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */; };
 		F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */; };
 		F30730191F1290BD00E66E1A /* ManageAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */; };
+		F307301B1F13DBA400E66E1A /* MenuViewCellProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307301A1F13DBA400E66E1A /* MenuViewCellProfile.swift */; };
 		F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3222F261EF9664C00ED204D /* DataLayer.swift */; };
+		F34B5CAC1F1491D400B99271 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */; };
+		F34B5CAE1F14CDC900B99271 /* VaccinationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */; };
+		F34B5CB01F14CDE200B99271 /* VaccinationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */; };
 		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
 		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
 		F3B189091EF241F8002A9C0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3B189071EF241F8002A9C0B /* Main.storyboard */; };
@@ -71,13 +78,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3416F7112BF35BF9499A52D6 /* Pods-KiddieAppsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KiddieAppsUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KiddieAppsUITests/Pods-KiddieAppsUITests.release.xcconfig"; sourceTree = "<group>"; };
+		3646D2AC0866C653B66F0C04 /* Pods_KiddieAppsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KiddieAppsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C942D945106EE35657D7D45 /* Pods-KiddieAppsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KiddieAppsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KiddieAppsTests/Pods-KiddieAppsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		718464619CC0B71357D6AD0D /* Pods-KiddieAppsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KiddieAppsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KiddieAppsTests/Pods-KiddieAppsTests.release.xcconfig"; sourceTree = "<group>"; };
+		9A907D760C02E4953FF4A680 /* Pods-KiddieAppsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KiddieAppsUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KiddieAppsUITests/Pods-KiddieAppsUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		A8BAA2B4C6E5CFD41663E17D /* Pods-KiddieApps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KiddieApps.release.xcconfig"; path = "Pods/Target Support Files/Pods-KiddieApps/Pods-KiddieApps.release.xcconfig"; sourceTree = "<group>"; };
+		B0449ABADE2C911D619AB02D /* Pods_KiddieAppsUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KiddieAppsUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD249DCAFC9D33E39FAD0D /* Pods_KiddieApps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KiddieApps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F05A9831EF8B615214B41527 /* Pods-KiddieApps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KiddieApps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KiddieApps/Pods-KiddieApps.debug.xcconfig"; sourceTree = "<group>"; };
 		F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorFeedbackViewController.swift; sourceTree = "<group>"; };
 		F307300F1F12835500E66E1A /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePatientPageViewController.swift; sourceTree = "<group>"; };
 		F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountViewCell.swift; sourceTree = "<group>"; };
 		F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountViewController.swift; sourceTree = "<group>"; };
+		F307301A1F13DBA400E66E1A /* MenuViewCellProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewCellProfile.swift; sourceTree = "<group>"; };
 		F3222F251EF9632000ED204D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		F3222F261EF9664C00ED204D /* DataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLayer.swift; sourceTree = "<group>"; };
+		F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinationViewCell.swift; sourceTree = "<group>"; };
+		F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinationViewController.swift; sourceTree = "<group>"; };
 		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3B189031EF241F8002A9C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3B189051EF241F8002A9C0B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3EA7C6A1EF9855500A0AAA3 /* libsqlite3.tbd in Frameworks */,
+				1903417D63345D9D9377E4F0 /* Pods_KiddieApps.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3661348EFD6353610F0C3F2F /* Pods_KiddieAppsTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,12 +175,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A8501D977F5436C22A53405 /* Pods_KiddieAppsUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9944A05860352658FA53EA6D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F05A9831EF8B615214B41527 /* Pods-KiddieApps.debug.xcconfig */,
+				A8BAA2B4C6E5CFD41663E17D /* Pods-KiddieApps.release.xcconfig */,
+				4C942D945106EE35657D7D45 /* Pods-KiddieAppsTests.debug.xcconfig */,
+				718464619CC0B71357D6AD0D /* Pods-KiddieAppsTests.release.xcconfig */,
+				9A907D760C02E4953FF4A680 /* Pods-KiddieAppsUITests.debug.xcconfig */,
+				3416F7112BF35BF9499A52D6 /* Pods-KiddieAppsUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		F30730131F12868A00E66E1A /* BasePage */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,6 +227,7 @@
 				F3B189221EF241F8002A9C0B /* KiddieAppsUITests */,
 				F3B189011EF241F8002A9C0B /* Products */,
 				F3EA7C501EF97F1800A0AAA3 /* Frameworks */,
+				9944A05860352658FA53EA6D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,6 +251,7 @@
 				F3B189031EF241F8002A9C0B /* AppDelegate.swift */,
 				F3B189071EF241F8002A9C0B /* Main.storyboard */,
 				F3B1890A1EF241F8002A9C0B /* Assets.xcassets */,
+				F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */,
 				F3B1890C1EF241F8002A9C0B /* LaunchScreen.storyboard */,
 				F3B1890F1EF241F8002A9C0B /* Info.plist */,
 				F3222F251EF9632000ED204D /* MyPlayground.playground */,
@@ -283,6 +321,9 @@
 			isa = PBXGroup;
 			children = (
 				F3EA7C531EF9801D00A0AAA3 /* libsqlite3.tbd */,
+				E5AD249DCAFC9D33E39FAD0D /* Pods_KiddieApps.framework */,
+				3646D2AC0866C653B66F0C04 /* Pods_KiddieAppsTests.framework */,
+				B0449ABADE2C911D619AB02D /* Pods_KiddieAppsUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -323,6 +364,7 @@
 				F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */,
 				F3B189351EF923E3002A9C0B /* InitViewController.swift */,
 				F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */,
+				F307301A1F13DBA400E66E1A /* MenuViewCellProfile.swift */,
 				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
 				F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */,
 				F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */,
@@ -332,6 +374,8 @@
 				F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */,
 				F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */,
 				F3EAF1351F100D51002E47D9 /* RequestPasswordViewController.swift */,
+				F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */,
+				F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */,
 				F3B189051EF241F8002A9C0B /* ViewController.swift */,
 			);
 			name = ViewController;
@@ -344,9 +388,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F3B189281EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieApps" */;
 			buildPhases = (
+				EA73A3461DED19841805C147 /* [CP] Check Pods Manifest.lock */,
 				F3B188FC1EF241F8002A9C0B /* Sources */,
 				F3B188FD1EF241F8002A9C0B /* Frameworks */,
 				F3B188FE1EF241F8002A9C0B /* Resources */,
+				C8FB579855CFAAF2F90DBC91 /* [CP] Embed Pods Frameworks */,
+				39B5FB314C4629EFC2EAEF53 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -361,9 +408,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F3B1892B1EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieAppsTests" */;
 			buildPhases = (
+				D809BEB89DED7C9BBC7449DD /* [CP] Check Pods Manifest.lock */,
 				F3B189101EF241F8002A9C0B /* Sources */,
 				F3B189111EF241F8002A9C0B /* Frameworks */,
 				F3B189121EF241F8002A9C0B /* Resources */,
+				E93C11939EE37DFB0B36AB0F /* [CP] Embed Pods Frameworks */,
+				7985E195F611DE9FF63CD425 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -379,9 +429,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F3B1892E1EF241F8002A9C0B /* Build configuration list for PBXNativeTarget "KiddieAppsUITests" */;
 			buildPhases = (
+				9FD78CB817F7FEF48DBE474A /* [CP] Check Pods Manifest.lock */,
 				F3B1891B1EF241F8002A9C0B /* Sources */,
 				F3B1891C1EF241F8002A9C0B /* Frameworks */,
 				F3B1891D1EF241F8002A9C0B /* Resources */,
+				E1CAC033D184446ED7D7E1A2 /* [CP] Embed Pods Frameworks */,
+				0758A7F6D5BC5D68DFFAD0CD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -451,6 +504,7 @@
 				F3DB17E81F03D5C5005D9DF8 /* Images.xcassets in Resources */,
 				F3EA7C731EF98EC200A0AAA3 /* OttimoPatient.db in Resources */,
 				F3B189091EF241F8002A9C0B /* Main.storyboard in Resources */,
+				F34B5CAC1F1491D400B99271 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +524,144 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0758A7F6D5BC5D68DFFAD0CD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KiddieAppsUITests/Pods-KiddieAppsUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		39B5FB314C4629EFC2EAEF53 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KiddieApps/Pods-KiddieApps-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7985E195F611DE9FF63CD425 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KiddieAppsTests/Pods-KiddieAppsTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9FD78CB817F7FEF48DBE474A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C8FB579855CFAAF2F90DBC91 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KiddieApps/Pods-KiddieApps-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D809BEB89DED7C9BBC7449DD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E1CAC033D184446ED7D7E1A2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KiddieAppsUITests/Pods-KiddieAppsUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E93C11939EE37DFB0B36AB0F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KiddieAppsTests/Pods-KiddieAppsTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA73A3461DED19841805C147 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F3B188FC1EF241F8002A9C0B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -484,6 +676,7 @@
 				F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */,
 				F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */,
 				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
+				F307301B1F13DBA400E66E1A /* MenuViewCellProfile.swift in Sources */,
 				F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */,
 				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
 				F3EAF1361F100D51002E47D9 /* RequestPasswordViewController.swift in Sources */,
@@ -495,10 +688,12 @@
 				F3D4CCCC1EFA4F55009E8FC9 /* Constant.swift in Sources */,
 				F3EA7C681EF984C100A0AAA3 /* FMResultSet.m in Sources */,
 				F3EA7C771EF9A10000A0AAA3 /* ModelManager.swift in Sources */,
+				F34B5CAE1F14CDC900B99271 /* VaccinationViewCell.swift in Sources */,
 				F3D4CCD21EFA5A6D009E8FC9 /* BaseClass.swift in Sources */,
 				F3EA7C751EF991AC00A0AAA3 /* DBHelper.swift in Sources */,
 				F3EAF13C1F100ECC002E47D9 /* MessageCenterViewController.swift in Sources */,
 				F3DB17EA1F03E09C005D9DF8 /* ProfileViewController.swift in Sources */,
+				F34B5CB01F14CDE200B99271 /* VaccinationViewController.swift in Sources */,
 				F3D4CCCA1EFA44F5009E8FC9 /* DateTime.swift in Sources */,
 				F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */,
 				F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */,
@@ -661,12 +856,13 @@
 		};
 		F3B189291EF241F8002A9C0B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F05A9831EF8B615214B41527 /* Pods-KiddieApps.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = KiddieApps/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieApps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KiddieApps/KiddieApps-Bridging-Header.h";
@@ -677,12 +873,13 @@
 		};
 		F3B1892A1EF241F8002A9C0B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8BAA2B4C6E5CFD41663E17D /* Pods-KiddieApps.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = KiddieApps/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = samanasoft.ios.KiddieApps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KiddieApps/KiddieApps-Bridging-Header.h";
@@ -692,6 +889,7 @@
 		};
 		F3B1892C1EF241F8002A9C0B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C942D945106EE35657D7D45 /* Pods-KiddieAppsTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -706,6 +904,7 @@
 		};
 		F3B1892D1EF241F8002A9C0B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 718464619CC0B71357D6AD0D /* Pods-KiddieAppsTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -720,6 +919,7 @@
 		};
 		F3B1892F1EF241F8002A9C0B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A907D760C02E4953FF4A680 /* Pods-KiddieAppsUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = KiddieAppsUITests/Info.plist;
@@ -733,6 +933,7 @@
 		};
 		F3B189301EF241F8002A9C0B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3416F7112BF35BF9499A52D6 /* Pods-KiddieAppsUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = KiddieAppsUITests/Info.plist;

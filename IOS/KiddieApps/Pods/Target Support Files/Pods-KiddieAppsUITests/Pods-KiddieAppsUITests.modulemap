@@ -1,0 +1,6 @@
+framework module Pods_KiddieAppsUITests {
+  umbrella header "Pods-KiddieAppsUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
