@@ -98,3 +98,36 @@ func displayMyAlertMessage(ctrl:UIViewController, userMessage:String){
     ctrl.present(myAlert, animated: true, completion: nil);
 }
 
+
+
+func saveImageToDocumentDirectory(medicalNo:String, _ chosenImage: UIImage) -> String{
+    let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
+    if(!FileManager.default.fileExists(atPath: directoryPath)){
+        do {
+            try FileManager.default.createDirectory(at: NSURL.fileURL(withPath: directoryPath), withIntermediateDirectories: true, attributes: nil)
+        }
+        catch {
+            print(error);
+        }
+    }
+    let filename = "\(medicalNo).jpg";
+    let filepath = directoryPath.appending(filename);
+    let url = NSURL.fileURL(withPath: filepath);
+    do{
+        try UIImageJPEGRepresentation(chosenImage, 1.0)?.write(to: url, options: .atomic);
+        return String.init("/KiddieApps/\(filename)")
+    }
+    catch{
+        print(error)
+        print("file cannot be save at path \(filepath), with error : \(error)");
+        return filepath;
+    }
+}
+
+func isValidEmail(testStr:String) -> Bool {
+    // print("validate calendar: \(testStr)")
+    let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+    
+    let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+    return emailTest.evaluate(with: testStr)
+}

@@ -104,9 +104,14 @@ public class DBInitActivity extends Activity {
                     listMRN += MRN.toString();
                 }
 
-                String deviceID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-                mAuthTask = new ReloadDataTask(listMRN, deviceID);
-                mAuthTask.execute((Void) null);
+                if(listMRN.equals("")){
+                    isDifferentDBVersion = false;
+                }
+                else {
+                    String deviceID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    mAuthTask = new ReloadDataTask(listMRN, deviceID);
+                    mAuthTask.execute((Void) null);
+                }
             }
 
             if(!isMyServiceRunning(AlarmStartService.class)) {
@@ -275,71 +280,68 @@ public class DBInitActivity extends Activity {
                 Toast.makeText(getBaseContext(), "Update Data Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                 showProgress(false);
             } else {
-                Patient entity = null;
                 if (result.returnObjPatient != null) {
                     @SuppressWarnings("unchecked")
                     List<Patient> lstPatient = (List<Patient>) result.returnObjPatient;
-                    for (Patient entity1 : lstPatient) {
-                        Log.d("testtest", entity1.PreferredName + "; " + entity1.MedicalNo);
-                        entity = entity1;
-                    }
-                }
+                    int ctr = 0;
+                    for (Patient entity : lstPatient) {
+                        Patient tempPatient = BusinessLayer.getPatient(getBaseContext(), entity.MRN);
+                        if (tempPatient == null) {
+                            entity.LastSyncDateTime = result.timestamp;
+                            entity.LastSyncAppointmentDateTime = result.timestamp;
 
-                if (entity != null) {
-                    Patient tempPatient = BusinessLayer.getPatient(getBaseContext(), entity.MRN);
-                    if (tempPatient == null) {
-                        entity.LastSyncDateTime = result.timestamp;
-                        entity.LastSyncAppointmentDateTime = result.timestamp;
-                        BusinessLayer.insertPatient(getBaseContext(), entity);
-                        FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
-                        List<DataLayer.Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
-                        for (DataLayer.Appointment entity2 : lstOldAppointment) {
-                            BusinessLayer.deleteAppointment(getBaseContext(), entity2.AppointmentID);
-                        }
+                            BusinessLayer.insertPatient(getBaseContext(), entity);
+                            FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
+                            List<DataLayer.Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
+                            for (DataLayer.Appointment entity2 : lstOldAppointment) {
+                                BusinessLayer.deleteAppointment(getBaseContext(), entity2.AppointmentID);
+                            }
 
-                        @SuppressWarnings("unchecked")
-                        List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObjAppointment;
-                        for (DataLayer.Appointment entity2 : lstAppointment) {
-                            BusinessLayer.insertAppointment(getBaseContext(), entity2);
-                            Helper.insertAppointmentToEventCalender(getBaseContext(), entity2);
-                        }
+                            @SuppressWarnings("unchecked")
+                            List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObjAppointment;
+                            for (DataLayer.Appointment entity2 : lstAppointment) {
+                                BusinessLayer.insertAppointment(getBaseContext(), entity2);
+                                Helper.insertAppointmentToEventCalender(getBaseContext(), entity2);
+                            }
 
-                        List<DataLayer.VaccinationShotDt> lstOldVaccination = BusinessLayer.getVaccinationShotDtList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
-                        for (DataLayer.VaccinationShotDt entity2 : lstOldVaccination) {
-                            BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
-                        }
+                            List<DataLayer.VaccinationShotDt> lstOldVaccination = BusinessLayer.getVaccinationShotDtList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
+                            for (DataLayer.VaccinationShotDt entity2 : lstOldVaccination) {
+                                BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
+                            }
 
-                        @SuppressWarnings("unchecked")
-                        List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
-                        for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
-                            BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
-                        }
-                        Log.d("img", result.returnObjImg);
-                        if(!result.returnObjImg.equals("")) {
-                            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-                            File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
-                            File mypath = new File(directory, entity.MedicalNo + ".jpg");
+                            @SuppressWarnings("unchecked")
+                            List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
+                            for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
+                                BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
+                            }
 
-                            FileOutputStream fos = null;
-                            try {
-                                fos = new FileOutputStream(mypath);
+                            String returnObjImg = result.returnObjImg.get(ctr);
+                            if(!returnObjImg.equals("")) {
+                                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                                File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+                                File mypath = new File(directory, entity.MedicalNo + ".jpg");
 
-                                byte[] decodedString = Base64.decode(result.returnObjImg, Base64.DEFAULT);
-                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                                decodedByte.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
+                                FileOutputStream fos = null;
                                 try {
-                                    fos.close();
-                                } catch (IOException e) {
+                                    fos = new FileOutputStream(mypath);
+
+                                    byte[] decodedString = Base64.decode(returnObjImg, Base64.DEFAULT);
+                                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                    decodedByte.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                } catch (Exception e) {
                                     e.printStackTrace();
+                                } finally {
+                                    try {
+                                        fos.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
+                            ctr++;
                         }
+                        goToNextPage();
                     }
-                    goToNextPage();
-
                 } else {
                     showProgress(false);
                 }
@@ -383,7 +385,7 @@ public class DBInitActivity extends Activity {
             JSONArray returnObjAppointment = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAppointment");
             JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");
             JSONArray returnObjVaccination = WebServiceHelper.getCustomReturnObject(response, "ReturnObjVaccination");
-            String img = response.optString("ReturnObjImage");
+            JSONArray returnObjImg = WebServiceHelper.getCustomReturnObject(response, "ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
             List<DataLayer.Patient> lst = new ArrayList<Patient>();
@@ -401,10 +403,14 @@ public class DBInitActivity extends Activity {
                 JSONObject row = (JSONObject) returnObjVaccination.get(i);
                 lst3.add((DataLayer.VaccinationShotDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.VaccinationShotDt()));
             }
+            List<String> lst4 = new ArrayList();
+            for (int i = 0; i < returnObjImg.length();++i){
+                lst4.add(returnObjImg.get(i).toString());
+            }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
-            result.returnObjImg = img;
+            result.returnObjImg = lst4;
             result.timestamp = timestamp;
         } catch (Exception e) {
             result = null;
@@ -417,6 +423,6 @@ public class DBInitActivity extends Activity {
         public List<?> returnObjPatient;
         public List<?> returnObjAppointment;
         public List<?> returnObjVaccination;
-        public String returnObjImg;
+        public List<String> returnObjImg;
     }
 }

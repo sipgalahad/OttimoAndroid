@@ -36,7 +36,7 @@ public class Util{
             } catch let error1 as NSError {
                 error = error1
             }
-            let alert: UIAlertView = UIAlertView()
+            /*let alert: UIAlertView = UIAlertView()
             if (error != nil) {
                 alert.title = "Error Occured"
                 alert.message = error?.localizedDescription
@@ -45,7 +45,7 @@ public class Util{
                 alert.message = "Your database copy successfully"
             }
             alert.addButton(withTitle: "Ok")
-            alert.show()
+            alert.show()*/
         }
     }
     class func invokeAlertMethod(strTitle: NSString, strBody: NSString, delegate: AnyObject?)

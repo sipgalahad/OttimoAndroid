@@ -20,3 +20,11 @@ public class WebServiceResponsePatient{
     public var returnObjVaccination:Array<VaccinationShotDt> = [];
     public var returnObjImg:String = "";
 }
+
+public class WebServiceResponsePatient2{
+    public var timeStamp:DateTime = DateTime();
+    public var returnObjPatient:Array<Patient> = [];
+    public var returnObjAppointment:Array<Appointment> = [];
+    public var returnObjVaccination:Array<VaccinationShotDt> = [];
+    public var returnObjImg:Array<String> = [];
+}

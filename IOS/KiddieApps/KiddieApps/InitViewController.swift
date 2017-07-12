@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InitViewController: UIViewController {
+class InitViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +30,7 @@ class InitViewController: UIViewController {
         else{
             let DBVersion = UserDefaults.standard.object(forKey: Constant.Session.DB_VERSION) as? String;
             if DBVersion != Constant.DB_VERSION{
+                DaoBase.getInstance();
                 let lstMRN:[Int] = BusinessLayer.getPatientMRNList(filterExpression: "");
                 
                 Util.copyFile(fileName: "OttimoPatient.db", isReplaceDB: true);
@@ -44,7 +45,39 @@ class InitViewController: UIViewController {
                     listMRN += String(mrn);
                 }
                 
-                goToNextPage();
+                self.indicator.startAnimating();
+                let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+                reloadDataAfterUpdateApps(listMRN: listMRN, deviceID: deviceID, completionHandler: { (result) -> Void in
+                    DispatchQueue.main.async() {
+                        self.indicator.stopAnimating();
+                    }
+                    var entityPatient = result.returnObjPatient[0];
+                    var ctr:Int = 0;
+                    for patient in result.returnObjPatient{
+                        patient.LastSyncDateTime = DateTime.now();
+                        patient.LastSyncAppointmentDateTime = DateTime.now();
+                        patient.LastSyncVaccinationDateTime = DateTime.now();
+                        BusinessLayer.insertPatient(record: patient);
+                        
+                        let returnObjImg = result.returnObjImg[ctr];
+                        if(returnObjImg != ""){
+                            let imageData = NSData(base64Encoded: returnObjImg);
+                            let image = UIImage(data: imageData! as Data);
+                            saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                        }
+                        ctr += 1;
+                        
+                    }
+                    for app in result.returnObjAppointment{
+                        BusinessLayer.insertAppointment(record: app);
+                    }
+                    for vaccination in result.returnObjVaccination{
+                        BusinessLayer.insertVaccinationShotDt(record: vaccination);
+                    }
+                    DispatchQueue.main.async() {
+                        self.goToNextPage();
+                    }
+                });
             }
             else{
                 DaoBase.getInstance();
@@ -65,14 +98,17 @@ class InitViewController: UIViewController {
         }
     }
     
-    public func reloadDataAfterUpdateApps(listMRN:String, deviceID: String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
+    public func reloadDataAfterUpdateApps(listMRN:String, deviceID: String, completionHandler: @escaping (_ result:WebServiceResponsePatient2) -> Void){
         WebServiceHelper().ReloadDataAfterUpdateApps(listMRN: listMRN, deviceID: deviceID, completionHandler: { (result) -> Void in
             //self.txtMedicalNo.text = result;
-            let retval:WebServiceResponsePatient = WebServiceResponsePatient();
+            let retval:WebServiceResponsePatient2 = WebServiceResponsePatient2();
             
             let dict = WebServiceHelper.convertToDictionary(text: result)
             retval.timeStamp = WebServiceHelper.JSONDateToDateTime(jsonDate: dict?["Timestamp"] as! String);
-            retval.returnObjImg = dict?["ReturnObjImage"] as! String;
+            let objImage = dict?["ReturnObjImage"] as! NSArray
+            for tmp in objImage{
+                retval.returnObjImg.append(tmp as! String);
+            }
             let objAppointment = dict?["ReturnObjAppointment"] as! NSArray
             for tmp in objAppointment{
                 let entity:Appointment = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Appointment()) as! Appointment

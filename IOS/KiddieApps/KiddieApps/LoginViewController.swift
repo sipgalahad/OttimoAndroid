@@ -16,6 +16,12 @@ class LoginViewController: BaseViewController {
     var mutableData:NSMutableData = NSMutableData()
     var currentElementName:NSString = ""
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
+    }
+    
     @IBAction func onBtnSignInTapped(_ sender: Any) {
         
         //if(txtMedicalNo.text == "001" && txtPassword.text == "123"){
@@ -158,7 +164,7 @@ class LoginViewController: BaseViewController {
                 if(result.returnObjImg != ""){
                     let imageData = NSData(base64Encoded: result.returnObjImg);
                     let image = UIImage(data: imageData! as Data);
-                    self.saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                    saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
                 }
                 UserDefaults.standard.set(entityPatient.MRN, forKey:"MRN");
                 UserDefaults.standard.synchronize();
@@ -172,30 +178,6 @@ class LoginViewController: BaseViewController {
                 }
             }
         });
-    }
-    
-    func saveImageToDocumentDirectory(medicalNo:String, _ chosenImage: UIImage) -> String{
-        let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
-        if(!FileManager.default.fileExists(atPath: directoryPath)){
-            do {
-                try FileManager.default.createDirectory(at: NSURL.fileURL(withPath: directoryPath), withIntermediateDirectories: true, attributes: nil)
-            }
-            catch {
-                print(error);
-            }
-        }
-        let filename = "\(medicalNo).jpg";
-        let filepath = directoryPath.appending(filename);
-        let url = NSURL.fileURL(withPath: filepath);
-        do{
-            try UIImageJPEGRepresentation(chosenImage, 1.0)?.write(to: url, options: .atomic);
-            return String.init("/KiddieApps/\(filename)")
-        }
-        catch{
-            print(error)
-            print("file cannot be save at path \(filepath), with error : \(error)");
-            return filepath;
-        }
     }
     
     public func login(medicalNo:String, password: String, deviceID: String, deviceName: String, OSVersion: String, appVersion: String, FCMToken: String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){

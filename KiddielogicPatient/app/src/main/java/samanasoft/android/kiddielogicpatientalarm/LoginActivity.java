@@ -310,11 +310,13 @@ public class LoginActivity extends AppCompatActivity {
                             BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
                         }
 
+                        Log.d("img", "A");
                         @SuppressWarnings("unchecked")
                         List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
                         for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
                             BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
                         }
+                        Log.d("img", "B");
                         Log.d("img", result.returnObjImg);
                         if(!result.returnObjImg.equals("")) {
                             ContextWrapper cw = new ContextWrapper(getApplicationContext());

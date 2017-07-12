@@ -17,6 +17,10 @@ class RequestPasswordViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //navigationItem.title = "One"
+    }
 
     @IBAction func onBtnRequestPasswordClick(_ sender: Any) {
         let medicalNo:String = txtMedicalNo.text!;

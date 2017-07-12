@@ -28,6 +28,7 @@ import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import samanasoft.android.ottimo.dal.DataLayer.Appointment;
+import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDt;
 import samanasoft.android.framework.Constant;
 
 public class AlarmSyncDataService extends Service {
@@ -108,24 +109,34 @@ public class AlarmSyncDataService extends Service {
                         }
 
                         for (Appointment entity : lstAppointment) {
-                            //Appointment oldData = BusinessLayer.getAppointment(context, entity.AppointmentID);
-                            ///if (oldData == null) {
-                            //if (entity.GCAppointmentStatus != Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus != Constant.AppointmentStatus.VOID) {
                             BusinessLayer.insertAppointment(context, entity);
                             Helper.insertAppointmentToEventCalender(context, entity);
-                            //}
-                            //} else {
-                            //    if (entity.GCAppointmentStatus == Constant.AppointmentStatus.CANCELLED || entity.GCAppointmentStatus == Constant.AppointmentStatus.VOID) {
-                            //        BusinessLayer.deleteAppointment(context, entity.AppointmentID);
-                            //        Helper.deleteAppointmentFromEventCalender(getBaseContext(), entity);
-                            //    }
-                            //   else {
-                            //        BusinessLayer.updateAppointment(context, entity);
-                            //    }
-                            //}
                         }
                     }
                 }
+                if (result.returnObjVaccination != null) {
+                    @SuppressWarnings("unchecked")
+                    List<VaccinationShotDt> lstVaccination = (List<VaccinationShotDt>) result.returnObjVaccination;
+
+                    String lstVaccinationID = "";
+                    for (VaccinationShotDt entity : lstVaccination) {
+                        if (!lstVaccinationID.equals(""))
+                            lstVaccinationID += ",";
+                        lstVaccinationID += entity.ID;
+                    }
+
+                    if (!lstVaccinationID.equals("")) {
+                        List<VaccinationShotDt> lstOldVaccination = BusinessLayer.getVaccinationShotDtList(context, String.format("ID IN (%1$s) AND Type = 1", lstVaccinationID));
+                        for (VaccinationShotDt entity : lstOldVaccination) {
+                            BusinessLayer.deleteVaccinationShotDt(context, entity.Type, entity.ID);
+                        }
+
+                        for (VaccinationShotDt entity : lstVaccination) {
+                            BusinessLayer.insertVaccinationShotDt(context, entity);
+                        }
+                    }
+                }
+
                 if (!result.returnObjImg.equals("")) {
                     ContextWrapper cw = new ContextWrapper(context);
                     File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
@@ -166,6 +177,14 @@ public class AlarmSyncDataService extends Service {
                     lst2.add((DataLayer.Appointment)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Appointment()));
                 }
             }
+            List<DataLayer.VaccinationShotDt> lst3 = new ArrayList<DataLayer.VaccinationShotDt>();
+            if (!response.isNull("ReturnObjVaccination")) {
+                JSONArray returnObjVaccination = WebServiceHelper.getCustomReturnObject(response, "ReturnObjVaccination");
+                for (int i = 0; i < returnObjVaccination.length();++i){
+                    JSONObject row = (JSONObject) returnObjVaccination.get(i);
+                    lst3.add((DataLayer.VaccinationShotDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.VaccinationShotDt()));
+                }
+            }
 
             List<DataLayer.Patient> lst = new ArrayList<Patient>();
             if (!response.isNull("ReturnObjPatient")) {
@@ -184,6 +203,7 @@ public class AlarmSyncDataService extends Service {
 
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
+            result.returnObjVaccination = lst3;
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception ex) {
@@ -199,6 +219,7 @@ public class AlarmSyncDataService extends Service {
         public DateTime timestamp;
         public List<?> returnObjPatient;
         public List<?> returnObjAppointment;
+        public List<?> returnObjVaccination;
         public String returnObjImg;
     }
 

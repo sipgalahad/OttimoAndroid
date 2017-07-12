@@ -128,7 +128,7 @@ public class VaccinationActivity extends BaseMainActivity {
             // Bind the data efficiently with the holder.
             holder.txtVaccinationDate.setText(entity.VaccinationDate.toString(Constant.FormatString.DATE_FORMAT) + " (" + entity.VaccinationNo + ")");
             holder.txtVaccinationInformationParamedicName.setText(entity.ParamedicName);
-            holder.txtVaccinationInformationDose.setText(entity.Dose + " " + entity.DoseUnit);
+            holder.txtVaccinationInformationDose.setText(entity.VaccineName + " (" + entity.Dose + " " + entity.DoseUnit + ")");
             return convertView;
 
         }
