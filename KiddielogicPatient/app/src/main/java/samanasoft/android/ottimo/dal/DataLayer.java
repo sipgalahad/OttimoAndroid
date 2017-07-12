@@ -338,10 +338,10 @@ public class DataLayer{
     //region VaccinationShotDt
     @Table(Name = "VaccinationShotDt")
     public static class VaccinationShotDt{
-        @Column(DataType = DataType.INT, Name = "Type")
+        @Column(DataType = DataType.INT, Name = "Type", IsPrimaryKey = Bool.TRUE)
         public int Type;
 
-        @Column(DataType = DataType.INT, Name = "ID")
+        @Column(DataType = DataType.INT, Name = "ID", IsPrimaryKey = Bool.TRUE)
         public int ID;
 
         @Column(DataType = DataType.DATETIME, Name = "VaccinationDate")

@@ -41,14 +41,17 @@ public class ManageAccountActivity extends AppCompatActivity {
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_single_choice,
+                android.R.layout.simple_list_item_1,
                 android.R.id.text1, lstEntity);
         ListView listView = (ListView)findViewById(R.id.lvwPatient);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                 patient = lstPatient.get(myItemInt);
+                Intent i = new Intent(getBaseContext(), MainActivity.class);
+                i.putExtra("mrn", patient.MRN);
+                startActivity(i);
             }
         });
 
@@ -73,34 +76,6 @@ public class ManageAccountActivity extends AppCompatActivity {
             Intent i = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(i);
             return true;
-        }
-        else if (id == R.id.action_choose_account) {
-            if(patient != null) {
-                Intent i = new Intent(getBaseContext(), MainActivity.class);
-                i.putExtra("mrn", patient.MRN);
-                startActivity(i);
-            }
-            else
-                Toast.makeText(getBaseContext(), "Silakan Pilih Akun Terlebih Dahulu", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.action_delete_account) {
-            if(patient != null) {
-                List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", patient.MRN));
-                for(Appointment appointment : lstAppointment){
-                    BusinessLayer.deleteAppointment(getBaseContext(), appointment.AppointmentID);
-                }
-                BusinessLayer.deletePatient(getBaseContext(), patient.MRN);
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(patient.MedicalNo);
-                //Delete Photo
-                ContextWrapper cw = new ContextWrapper(getApplicationContext());
-                File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
-                File mypath = new File(directory, patient.MedicalNo + ".jpg");
-                if(mypath.exists())
-                    mypath.delete();
-                fillListView();
-            }
-            else
-                Toast.makeText(getBaseContext(), "Silakan Pilih Akun Terlebih Dahulu", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

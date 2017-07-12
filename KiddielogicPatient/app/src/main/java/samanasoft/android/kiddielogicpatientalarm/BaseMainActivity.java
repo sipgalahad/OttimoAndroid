@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -168,7 +170,44 @@ public class BaseMainActivity extends AppCompatActivity
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             i.putExtra("mrn", MRN);
             startActivity(i);
-            // Handle the camera action
+        } else if (id == R.id.nav_logout) {
+            Patient patient = BusinessLayer.getPatient(this, MRN);
+            List<DataLayer.Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", MRN));
+            for(DataLayer.Appointment appointment : lstAppointment){
+                Helper.deleteAppointmentFromEventCalender(getBaseContext(), appointment);
+                BusinessLayer.deleteAppointment(getBaseContext(), appointment.AppointmentID);
+            }
+            List<DataLayer.VaccinationShotDt> lstOldVaccination = BusinessLayer.getVaccinationShotDtList(getBaseContext(), String.format("MRN = '%1$s'", MRN));
+            for (DataLayer.VaccinationShotDt entity2 : lstOldVaccination) {
+                BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
+            }
+            BusinessLayer.deletePatient(getBaseContext(), MRN);
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(patient.MedicalNo);
+            //Delete Photo
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+            File mypath = new File(directory, patient.MedicalNo + ".jpg");
+            if(mypath.exists())
+                mypath.delete();
+
+            List<Patient> lstPatient = BusinessLayer.getPatientList(getBaseContext(), "");
+            if (lstPatient.size() == 1) {
+                Intent i = new Intent(getBaseContext(), MainActivity.class);
+                i.putExtra("mrn", lstPatient.get(0).MRN);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+            } else if (lstPatient.size() > 1) {
+                Intent i = new Intent(getBaseContext(), ManageAccountActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("isinit", true);
+                startActivity(i);
+            }
+            finish();
         } else if (id == R.id.nav_vaccination) {
             Intent i = new Intent(getBaseContext(), VaccinationActivity.class);
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);

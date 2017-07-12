@@ -15,16 +15,18 @@ public class Util{
         let fileURL = documentsURL.appendingPathComponent(fileName)
         return fileURL.path;
     }
-    class func copyFile(fileName: NSString) {
+    class func copyFile(fileName: NSString, isReplaceDB: Bool) {
         let dbPath: String = getPath(fileName: fileName as String)
         let fileManager = FileManager.default;
-        /*if fileManager.fileExists(atPath: dbPath) {
-            do {
-                try fileManager.removeItem(atPath: dbPath)
-            } catch let error1 as NSError {
-                var error2 = error1
+        if isReplaceDB {
+            if fileManager.fileExists(atPath: dbPath) {
+                do {
+                    try fileManager.removeItem(atPath: dbPath)
+                } catch let error1 as NSError {
+                    var error2 = error1
+                }
             }
-        }*/
+        }
         if !fileManager.fileExists(atPath: dbPath) {
             let documentsURL = Bundle.main.resourceURL
             let fromPath = documentsURL!.appendingPathComponent(fileName as String)
@@ -70,19 +72,28 @@ public class DBHelper{
         }
         
         var result = "";
-        result += "SELECT * FROM " + tableName;
-        result += " WHERE " + whereExpression;
+        result += "SELECT * FROM \(tableName)";
+        result += " WHERE \(whereExpression)";
         
         return result;
     }
     public func select(tableName:String, filterExpression:String) -> String{
         var result = "";
-        result += "SELECT * FROM " + tableName;
+        result += "SELECT * FROM \(tableName)";
         if(!filterExpression.isEmpty){
-            result += " WHERE " + filterExpression;
+            result += " WHERE \(filterExpression)";
         }
         return result;
     }
+    public func selectListColumn(tableName:String, filterExpression:String, columnName:String) -> String{
+        var result = "";
+        result += "SELECT \(columnName) FROM \(tableName)";
+        if(!filterExpression.isEmpty){
+            result += " WHERE \(filterExpression)";
+        }
+        return result;
+    }
+
 
     
     public func delete(tableName:String, lstPrimaryKey:[String]) -> String{
@@ -93,12 +104,12 @@ public class DBHelper{
                 whereExpression += " AND ";
             }
             whereExpression += key + " = ";
-            whereExpression += "'@p_" + key + "'";
+            whereExpression += "'@p_\(key)'";
         }
         
         var result = "";
-        result += "DELETE FROM " + tableName;
-        result += " WHERE " + whereExpression;
+        result += "DELETE FROM \(tableName)";
+        result += " WHERE \(whereExpression)";
         
         return result;
     }
@@ -120,9 +131,9 @@ public class DBHelper{
             }
         }
         var sqlInsert = "";
-        sqlInsert += "INSERT INTO " + tableName;
-        sqlInsert += " (" + fieldName + ")";
-        sqlInsert += " VALUES (" + fieldValue + ")";
+        sqlInsert += "INSERT INTO \(tableName)";
+        sqlInsert += " (\(fieldName))";
+        sqlInsert += " VALUES (\(fieldValue))";
         
         return sqlInsert;
     }
@@ -150,9 +161,9 @@ public class DBHelper{
             }
         }
         var sqlUpdate = "";
-        sqlUpdate += "UPDATE " + tableName;
-        sqlUpdate += " SET " + fieldStatement;
-        sqlUpdate += " WHERE " + whereExpression;
+        sqlUpdate += "UPDATE \(tableName)";
+        sqlUpdate += " SET \(fieldStatement)";
+        sqlUpdate += " WHERE \(whereExpression)";
         
         return sqlUpdate;
     }

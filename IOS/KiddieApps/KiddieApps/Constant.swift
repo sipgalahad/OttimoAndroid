@@ -9,7 +9,8 @@
 import Foundation
 
 public class Constant {
-    public static let AppVersion = "1.0";
+    public static let APP_VERSION = "1.0";
+    public static let DB_VERSION = "2";
     
     public static let SHORT_MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     public static let MONTHS = [ "January", "February", "March", "April", "May", "June", "July",
@@ -29,6 +30,12 @@ public class Constant {
         public static let DATE_FORMAT_DB = "yyyy-MM-dd";
         public static let DATE_TIME_FORMAT_DB = "yyyy-MM-dd HH:mm:ss";
     }
+    public class Session
+    {
+        public static let DB_VERSION = "DBVersion";
+        public static let APP_VERSION = "AppVersion";
+    }
+
     public class ConstantDate
     {
         public static let DEFAULT_NULL = "01-01-1900";

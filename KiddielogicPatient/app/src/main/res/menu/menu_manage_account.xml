@@ -2,18 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_choose_account"
-        android:orderInCategory="100"
-        android:title="Pilih Account"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_add_account"
         android:orderInCategory="100"
         android:title="Tambah Account"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_delete_account"
-        android:orderInCategory="100"
-        android:title="Hapus Account"
         app:showAsAction="never" />
 </menu>

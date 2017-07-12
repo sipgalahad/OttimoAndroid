@@ -88,6 +88,29 @@ public class BusinessLayer{
         //}
         return result;
     }
+    public static func getPatientMRNList(filterExpression:String) -> [Int]{
+        var result:Array<Int> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.selectListColumn(tableName: "Patient", filterExpression: filterExpression, columnName: "MRN");
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        if (row != nil) {
+            while (row.next()) {
+                result.append(Int(row.string(forColumn: "MRN")!)!);
+            }
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+
 
     // MARK: Setting
     public static func getSetting(settingCode:String) -> Setting?

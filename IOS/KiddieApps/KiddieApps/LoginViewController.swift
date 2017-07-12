@@ -134,7 +134,7 @@ class LoginViewController: BaseViewController {
         let deviceName = UIDevice.current.modelName;
         
         self.indicator.startAnimating();
-        login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: Constant.AppVersion, FCMToken: "1", completionHandler: { (result) -> Void in
+        login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: Constant.APP_VERSION, FCMToken: "1", completionHandler: { (result) -> Void in
             
             DispatchQueue.main.async() {
                 self.indicator.stopAnimating();

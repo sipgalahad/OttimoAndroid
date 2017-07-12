@@ -15,7 +15,6 @@
 		F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */; };
 		F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */; };
 		F30730191F1290BD00E66E1A /* ManageAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */; };
-		F307301B1F13DBA400E66E1A /* MenuViewCellProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307301A1F13DBA400E66E1A /* MenuViewCellProfile.swift */; };
 		F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3222F261EF9664C00ED204D /* DataLayer.swift */; };
 		F34B5CAC1F1491D400B99271 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */; };
 		F34B5CAE1F14CDC900B99271 /* VaccinationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */; };
@@ -92,7 +91,6 @@
 		F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePatientPageViewController.swift; sourceTree = "<group>"; };
 		F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountViewCell.swift; sourceTree = "<group>"; };
 		F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountViewController.swift; sourceTree = "<group>"; };
-		F307301A1F13DBA400E66E1A /* MenuViewCellProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewCellProfile.swift; sourceTree = "<group>"; };
 		F3222F251EF9632000ED204D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		F3222F261EF9664C00ED204D /* DataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLayer.swift; sourceTree = "<group>"; };
 		F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -364,7 +362,6 @@
 				F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */,
 				F3B189351EF923E3002A9C0B /* InitViewController.swift */,
 				F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */,
-				F307301A1F13DBA400E66E1A /* MenuViewCellProfile.swift */,
 				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
 				F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */,
 				F30730181F1290BD00E66E1A /* ManageAccountViewController.swift */,
@@ -676,7 +673,6 @@
 				F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */,
 				F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */,
 				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
-				F307301B1F13DBA400E66E1A /* MenuViewCellProfile.swift in Sources */,
 				F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */,
 				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
 				F3EAF1361F100D51002E47D9 /* RequestPasswordViewController.swift in Sources */,
