@@ -146,6 +146,171 @@ public class DataLayer{
         }
     }
     //endregion
+    //region LaboratoryResultDt
+    @Table(Name = "LaboratoryResultDt")
+    public static class LaboratoryResultDt{
+        @Column(DataType = DataType.INT, Name = "LaboratoryResultDtID", IsPrimaryKey = Bool.TRUE)
+        public int LaboratoryResultDtID;
+
+        @Column(DataType = DataType.INT, Name = "ID")
+        public int ID;
+
+        @Column(DataType = DataType.INT, Name = "MRN")
+        public int MRN;
+
+        @Column(DataType = DataType.STRING, Name = "ItemName1")
+        public String ItemName1;
+
+        @Column(DataType = DataType.STRING, Name = "ItemGroupName1")
+        public String ItemGroupName1;
+
+        @Column(DataType = DataType.INT, Name = "LabTestResultTypeID")
+        public int LabTestResultTypeID;
+
+        @Column(DataType = DataType.STRING, Name = "LabTestResultTypeName")
+        public String LabTestResultTypeName;
+
+        @Column(DataType = DataType.INT, Name = "FractionID")
+        public int FractionID;
+
+        @Column(DataType = DataType.STRING, Name = "FractionName")
+        public String FractionName;
+
+        @Column(DataType = DataType.DOUBLE, Name = "MetricResultValue")
+        public Double MetricResultValue;
+
+        @Column(DataType = DataType.DOUBLE, Name = "MinMetricNormalValue")
+        public Double MinMetricNormalValue;
+
+        @Column(DataType = DataType.DOUBLE, Name = "MaxMetricNormalValue")
+        public Double MaxMetricNormalValue;
+
+        @Column(DataType = DataType.STRING, Name = "MetricUnit")
+        public String MetricUnit;
+
+        @Column(DataType = DataType.STRING, Name = "NilaiRujukanMetric")
+        public String NilaiRujukanMetric;
+
+        @Column(DataType = DataType.DOUBLE, Name = "InternationalResultValue")
+        public Double InternationalResultValue;
+
+        @Column(DataType = DataType.DOUBLE, Name = "MinInternationalNormalValue")
+        public Double MinInternationalNormalValue;
+
+        @Column(DataType = DataType.DOUBLE, Name = "MaxInternationalNormalValue")
+        public Double MaxInternationalNormalValue;
+
+        @Column(DataType = DataType.STRING, Name = "InternationalUnit")
+        public String InternationalUnit;
+
+        @Column(DataType = DataType.STRING, Name = "NilaiRujukanInternational")
+        public String NilaiRujukanInternational;
+
+        @Column(DataType = DataType.STRING, Name = "LabTestResultTypeDtName")
+        public String LabTestResultTypeDtName;
+
+        @Column(DataType = DataType.STRING, Name = "TextNormalValue")
+        public String TextNormalValue;
+
+        @Column(DataType = DataType.STRING, Name = "TextValue")
+        public String TextValue;
+
+        @Column(DataType = DataType.STRING, Name = "ResultSummary")
+        public String ResultSummary;
+
+        @Column(DataType = DataType.STRING, Name = "Remarks")
+        public String Remarks;
+    }
+    public static class LaboratoryResultDtDao{
+        private DbHelper helper;
+        private DaoBase daoBase;
+        private final String p_LaboratoryResultDtID = "@p_LaboratoryResultDtID";
+
+        public LaboratoryResultDtDao(Context context){
+            this.helper = new DbHelper(LaboratoryResultDt.class);
+            this.daoBase = new DaoBase(context);
+        }
+        public LaboratoryResultDt get(int LaboratoryResultDtID){
+            String query = helper.getRecord();
+            query = query.replace(p_LaboratoryResultDtID, Integer.toString(LaboratoryResultDtID));
+            Cursor row = daoBase.getDataRow(query);
+            return (row == null) ? null : (LaboratoryResultDt)helper.dataRowToObject(row, new LaboratoryResultDt());
+        }
+        public int insert(LaboratoryResultDt record){
+            String query = helper.insert(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int update(LaboratoryResultDt record){
+            String query = helper.update(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int delete(int LaboratoryResultDtID){
+            LaboratoryResultDt record = get(LaboratoryResultDtID);
+            String query = helper.delete(record);
+            return daoBase.executeNonQuery(query);
+        }
+    }
+    //endregion
+    //region LaboratoryResultHd
+    @Table(Name = "LaboratoryResultHd")
+    public static class LaboratoryResultHd{
+        @Column(DataType = DataType.INT, Name = "ID", IsPrimaryKey = Bool.TRUE)
+        public int ID;
+
+        @Column(DataType = DataType.INT, Name = "MRN")
+        public int MRN;
+
+        @Column(DataType = DataType.STRING, Name = "ReferenceNo")
+        public String ReferenceNo;
+
+        @Column(DataType = DataType.DATETIME, Name = "ResultDate")
+        public DateTime ResultDate;
+
+        @Column(DataType = DataType.STRING, Name = "ResultTime")
+        public String ResultTime;
+
+        @Column(DataType = DataType.STRING, Name = "ProviderName")
+        public String ProviderName;
+
+        @Column(DataType = DataType.STRING, Name = "ParamedicName")
+        public String ParamedicName;
+
+        @Column(DataType = DataType.STRING, Name = "Remarks")
+        public String Remarks;
+
+        @Column(DataType = DataType.DATETIME, Name = "LastUpdatedDate")
+        public DateTime LastUpdatedDate;
+    }
+    public static class LaboratoryResultHdDao{
+        private DbHelper helper;
+        private DaoBase daoBase;
+        private final String p_ID = "@p_ID";
+
+        public LaboratoryResultHdDao(Context context){
+            this.helper = new DbHelper(LaboratoryResultHd.class);
+            this.daoBase = new DaoBase(context);
+        }
+        public LaboratoryResultHd get(int ID){
+            String query = helper.getRecord();
+            query = query.replace(p_ID, Integer.toString(ID));
+            Cursor row = daoBase.getDataRow(query);
+            return (row == null) ? null : (LaboratoryResultHd)helper.dataRowToObject(row, new LaboratoryResultHd());
+        }
+        public int insert(LaboratoryResultHd record){
+            String query = helper.insert(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int update(LaboratoryResultHd record){
+            String query = helper.update(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int delete(int ID){
+            LaboratoryResultHd record = get(ID);
+            String query = helper.delete(record);
+            return daoBase.executeNonQuery(query);
+        }
+    }
+    //endregion
     //region Patient
     @Table(Name = "Patient")
     public static class Patient{
@@ -202,6 +367,9 @@ public class DataLayer{
 
         @Column(DataType = DataType.DATETIME, Name = "LastSyncVaccinationDateTime")
         public DateTime LastSyncVaccinationDateTime;
+
+        @Column(DataType = DataType.DATETIME, Name = "LastSyncLabResultDateTime")
+        public DateTime LastSyncLabResultDateTime;
 
         public String getMobilePhoneNoDisplay(){
             if(MobilePhoneNo2 != null && !MobilePhoneNo2.isEmpty())
@@ -370,6 +538,9 @@ public class DataLayer{
 
         @Column(DataType = DataType.STRING, Name = "DoseUnit")
         public String DoseUnit;
+
+        @Column(DataType = DataType.DATETIME, Name = "LastUpdatedDate")
+        public DateTime LastUpdatedDate;
     }
     public static class VaccinationShotDtDao{
         private DbHelper helper;

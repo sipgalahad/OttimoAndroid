@@ -18,6 +18,8 @@ public class WebServiceResponsePatient{
     public var returnObjPatient:Array<Patient> = [];
     public var returnObjAppointment:Array<Appointment> = [];
     public var returnObjVaccination:Array<VaccinationShotDt> = [];
+    public var returnObjLabResultHd:Array<LaboratoryResultHd> = [];
+    public var returnObjLabResultDt:Array<LaboratoryResultDt> = [];
     public var returnObjImg:String = "";
 }
 
@@ -26,5 +28,7 @@ public class WebServiceResponsePatient2{
     public var returnObjPatient:Array<Patient> = [];
     public var returnObjAppointment:Array<Appointment> = [];
     public var returnObjVaccination:Array<VaccinationShotDt> = [];
+    public var returnObjLabResultHd:Array<LaboratoryResultHd> = [];
+    public var returnObjLabResultDt:Array<LaboratoryResultDt> = [];
     public var returnObjImg:Array<String> = [];
 }

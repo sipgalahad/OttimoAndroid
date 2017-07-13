@@ -22,14 +22,14 @@ class VaccinationViewController: BasePatientPageViewController, UITableViewDeleg
         BusinessLayerWebService.getVaccinationShotDtList(filterExpression: "MRN = \(String(describing: MRN))", completionHandler: { (result) -> Void in
             let lstOldVaccination:[VaccinationShotDt] = BusinessLayer.getVaccinationShotDtList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldVaccination {
-                BusinessLayer.deleteVaccinationShotDt(Type: app.Type as! Int, ID: app.ID as! Int);
+                let _ = BusinessLayer.deleteVaccinationShotDt(Type: app.Type as! Int, ID: app.ID as! Int);
             }
             for app in result.returnObj {
-                BusinessLayer.insertVaccinationShotDt(record: app as! VaccinationShotDt);
+                let _ = BusinessLayer.insertVaccinationShotDt(record: app as! VaccinationShotDt);
             }
             let patient:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
             patient.LastSyncVaccinationDateTime = DateTime.now();
-            BusinessLayer.updatePatient(record: patient);
+            let _ = BusinessLayer.updatePatient(record: patient);
             
             self.lstVaccinationType = BusinessLayer.getvVaccinationTypeList(filterExpression: "1 = 1 ORDER BY VaccinationTypeName");
             if self.lstVaccinationType.count > 0{
@@ -104,9 +104,11 @@ class VaccinationViewController: BasePatientPageViewController, UITableViewDeleg
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedVaccinationTpeID = lstVaccinationType[row].VaccinationTypeID as! Int;
-        bindGridView();
-        tblView.reloadData();
+        if(lstVaccinationType.count > 0){
+            selectedVaccinationTpeID = lstVaccinationType[row].VaccinationTypeID as! Int;
+            bindGridView();
+            tblView.reloadData();
+        }
     }
     
 

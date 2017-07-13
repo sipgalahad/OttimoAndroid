@@ -34,10 +34,8 @@ public class BusinessLayer{
         sharedInstance.database!.open()
         let query = helper.select(tableName: "Appointment", filterExpression: filterExpression);
         let row = DaoBase.getInstance().getDataRow(query: query);
-        if (row != nil) {
-            while (row.next()) {
-                result.append(helper.dataRowToObject(row: row, obj: Appointment()) as! Appointment);
-            }
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: Appointment()) as! Appointment);
         }
         sharedInstance.database!.close()
         
@@ -48,6 +46,82 @@ public class BusinessLayer{
         //}
         return result;
     }
+    
+    // MARK: LaboratoryResultDt
+    public static func getLaboratoryResultDt(LaboratoryResultDtID:Int) -> LaboratoryResultDt?
+    {
+        return LaboratoryResultDtDao().get(LaboratoryResultDtID: LaboratoryResultDtID);
+    }
+    public static func insertLaboratoryResultDt(record:LaboratoryResultDt) -> Bool
+    {
+        return LaboratoryResultDtDao().insert(record: record);
+    }
+    public static func updateLaboratoryResultDt(record:LaboratoryResultDt) -> Bool
+    {
+        return LaboratoryResultDtDao().update(record: record);
+    }
+    public static func deleteLaboratoryResultDt(LaboratoryResultDtID:Int) -> Bool
+    {
+        return LaboratoryResultDtDao().delete(LaboratoryResultDtID: LaboratoryResultDtID);
+    }
+    public static func getLaboratoryResultDtList(filterExpression:String) -> [LaboratoryResultDt]{
+        var result:Array<LaboratoryResultDt> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "LaboratoryResultDt", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: LaboratoryResultDt()) as! LaboratoryResultDt);
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+
+    public static func getLaboratoryResultHd(ID:Int) -> LaboratoryResultHd?
+    {
+        return LaboratoryResultHdDao().get(ID: ID);
+    }
+    public static func insertLaboratoryResultHd(record:LaboratoryResultHd) -> Bool
+    {
+        return LaboratoryResultHdDao().insert(record: record);
+    }
+    public static func updateLaboratoryResultHd(record:LaboratoryResultHd) -> Bool
+    {
+        return LaboratoryResultHdDao().update(record: record);
+    }
+    public static func deleteLaboratoryResultHd(ID:Int) -> Bool
+    {
+        return LaboratoryResultHdDao().delete(ID: ID);
+    }
+    public static func getLaboratoryResultHdList(filterExpression:String) -> [LaboratoryResultHd]{
+        var result:Array<LaboratoryResultHd> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "LaboratoryResultHd", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: LaboratoryResultHd()) as! LaboratoryResultHd);
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+
     
     // MARK: Patient
     public static func getPatient(MRN:Int) -> Patient?
@@ -74,10 +148,8 @@ public class BusinessLayer{
         sharedInstance.database!.open()
         let query = helper.select(tableName: "Patient", filterExpression: filterExpression);
         let row = DaoBase.getInstance().getDataRow(query: query);
-        if (row != nil) {
-            while (row.next()) {
-                result.append(helper.dataRowToObject(row: row, obj: Patient()) as! Patient);
-            }
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: Patient()) as! Patient);
         }
         sharedInstance.database!.close()
         
@@ -96,10 +168,8 @@ public class BusinessLayer{
         sharedInstance.database!.open()
         let query = helper.selectListColumn(tableName: "Patient", filterExpression: filterExpression, columnName: "MRN");
         let row = DaoBase.getInstance().getDataRow(query: query);
-        if (row != nil) {
-            while (row.next()) {
-                result.append(Int(row.string(forColumn: "MRN")!)!);
-            }
+        while (row.next()) {
+            result.append(Int(row.string(forColumn: "MRN")!)!);
         }
         sharedInstance.database!.close()
         
@@ -133,16 +203,14 @@ public class BusinessLayer{
         var result:Array<Setting> = Array();
         //do
         //{
-            let helper:DBHelper = DBHelper();
-            sharedInstance.database!.open()
-            let query = helper.select(tableName: "Setting", filterExpression: filterExpression);
-            let row = DaoBase.getInstance().getDataRow(query: query);
-            if (row != nil) {
-                while (row.next()) {
-                    result.append(helper.dataRowToObject(row: row, obj: Setting()) as! Setting);
-                }
-            }
-            sharedInstance.database!.close()
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "Setting", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: Setting()) as! Setting);
+        }
+        sharedInstance.database!.close()
 
         //}
         //catch (Exception)
@@ -177,10 +245,8 @@ public class BusinessLayer{
         sharedInstance.database!.open()
         let query = helper.select(tableName: "VaccinationShotDt", filterExpression: filterExpression);
         let row = DaoBase.getInstance().getDataRow(query: query);
-        if (row != nil) {
-            while (row.next()) {
-                result.append(helper.dataRowToObject(row: row, obj: VaccinationShotDt()) as! VaccinationShotDt);
-            }
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: VaccinationShotDt()) as! VaccinationShotDt);
         }
         sharedInstance.database!.close()
         
@@ -203,11 +269,10 @@ public class BusinessLayer{
         sharedInstance.database!.open()
         let query = helper.select(tableName: "vAppointment", filterExpression: filterExpression);
         let row = DaoBase.getInstance().getDataRow(query: query);
-        if (row != nil) {
-            while (row.next()) {
-                result.append(helper.dataRowToObject(row: row, obj: vAppointment()) as! vAppointment);
-            }
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: vAppointment()) as! vAppointment);
         }
+
         sharedInstance.database!.close()
         
         //}
@@ -228,10 +293,8 @@ public class BusinessLayer{
         sharedInstance.database!.open()
         let query = helper.select(tableName: "vVaccinationType", filterExpression: filterExpression);
         let row = DaoBase.getInstance().getDataRow(query: query);
-        if (row != nil) {
-            while (row.next()) {
-                result.append(helper.dataRowToObject(row: row, obj: vVaccinationType()) as! vVaccinationType);
-            }
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: vVaccinationType()) as! vVaccinationType);
         }
         sharedInstance.database!.close()
         

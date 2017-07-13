@@ -29,6 +29,8 @@ import samanasoft.android.ottimo.dal.DataLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import samanasoft.android.ottimo.dal.DataLayer.Appointment;
 import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDt;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHd;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultDt;
 import samanasoft.android.framework.Constant;
 
 public class AlarmSyncDataService extends Service {
@@ -75,7 +77,7 @@ public class AlarmSyncDataService extends Service {
         }
 
         protected WebServiceResponsePatient doInBackground(String... args) {
-            WebServiceResponsePatient result = SyncPatient(context, entity.MRN, deviceID, entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB));
+            WebServiceResponsePatient result = SyncPatient(context, entity.MRN, deviceID, entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncVaccinationDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncLabResultDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB));
             return result;
         }
         protected void onPostExecute(WebServiceResponsePatient result) {
@@ -136,6 +138,50 @@ public class AlarmSyncDataService extends Service {
                         }
                     }
                 }
+                if (result.returnObjLabResultHd != null) {
+                    @SuppressWarnings("unchecked")
+                    List<LaboratoryResultHd> lstEntity = (List<LaboratoryResultHd>) result.returnObjLabResultHd;
+
+                    String lstID = "";
+                    for (LaboratoryResultHd entity : lstEntity) {
+                        if (!lstID.equals(""))
+                            lstID += ",";
+                        lstID += entity.ID;
+                    }
+
+                    if (!lstID.equals("")) {
+                        List<LaboratoryResultHd> lstOldEntity = BusinessLayer.getLaboratoryResultHdList(context, String.format("ID IN (%1$s)", lstID));
+                        for (LaboratoryResultHd entity : lstOldEntity) {
+                            BusinessLayer.deleteLaboratoryResultHd(context, entity.ID);
+                        }
+
+                        for (LaboratoryResultHd entity : lstEntity) {
+                            BusinessLayer.insertLaboratoryResultHd(context, entity);
+                        }
+                    }
+                }
+                if (result.returnObjLabResultDt != null) {
+                    @SuppressWarnings("unchecked")
+                    List<LaboratoryResultDt> lstEntity = (List<LaboratoryResultDt>) result.returnObjLabResultDt;
+
+                    String lstID = "";
+                    for (LaboratoryResultDt entity : lstEntity) {
+                        if (!lstID.equals(""))
+                            lstID += ",";
+                        lstID += entity.LaboratoryResultDtID;
+                    }
+
+                    if (!lstID.equals("")) {
+                        List<LaboratoryResultDt> lstOldEntity = BusinessLayer.getLaboratoryResultDtList(context, String.format("LaboratoryResultDtID IN (%1$s)", lstID));
+                        for (LaboratoryResultDt entity : lstOldEntity) {
+                            BusinessLayer.deleteLaboratoryResultDt(context, entity.LaboratoryResultDtID);
+                        }
+
+                        for (LaboratoryResultDt entity : lstEntity) {
+                            BusinessLayer.insertLaboratoryResultDt(context, entity);
+                        }
+                    }
+                }
 
                 if (!result.returnObjImg.equals("")) {
                     ContextWrapper cw = new ContextWrapper(context);
@@ -164,10 +210,10 @@ public class AlarmSyncDataService extends Service {
 
     }
 
-    public WebServiceResponsePatient SyncPatient(Context context, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
+    public WebServiceResponsePatient SyncPatient(Context context, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate, String vaccinationLastUpdatedDate, String labResultLastUpdatedDate){
         WebServiceResponsePatient result = new WebServiceResponsePatient();
         try {
-            JSONObject response = WebServiceHelper.SyncPatient(context, MRN, deviceID, patientLastUpdatedDate, photoLastUpdatedDate, appointmentLastUpdatedDate);
+            JSONObject response = WebServiceHelper.SyncPatient(context, MRN, deviceID, patientLastUpdatedDate, photoLastUpdatedDate, appointmentLastUpdatedDate, vaccinationLastUpdatedDate, labResultLastUpdatedDate);
 
             List<DataLayer.Appointment> lst2 = new ArrayList<DataLayer.Appointment>();
             if (!response.isNull("ReturnObjAppointment")) {
@@ -183,6 +229,22 @@ public class AlarmSyncDataService extends Service {
                 for (int i = 0; i < returnObjVaccination.length();++i){
                     JSONObject row = (JSONObject) returnObjVaccination.get(i);
                     lst3.add((DataLayer.VaccinationShotDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.VaccinationShotDt()));
+                }
+            }
+            List<DataLayer.LaboratoryResultHd> lst4 = new ArrayList<DataLayer.LaboratoryResultHd>();
+            if (!response.isNull("ReturnObjLabResultHd")) {
+                JSONArray returnObjLabResultHd = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultHd");
+                for (int i = 0; i < returnObjLabResultHd.length(); ++i) {
+                    JSONObject row = (JSONObject) returnObjLabResultHd.get(i);
+                    lst4.add((DataLayer.LaboratoryResultHd) WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultHd()));
+                }
+            }
+            List<DataLayer.LaboratoryResultDt> lst5 = new ArrayList<DataLayer.LaboratoryResultDt>();
+            if (!response.isNull("ReturnObjLabResultDt")) {
+                JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
+                for (int i = 0; i < returnObjLabResultDt.length(); ++i) {
+                    JSONObject row = (JSONObject) returnObjLabResultDt.get(i);
+                    lst5.add((DataLayer.LaboratoryResultDt) WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultDt()));
                 }
             }
 
@@ -204,6 +266,8 @@ public class AlarmSyncDataService extends Service {
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
+            result.returnObjLabResultHd = lst4;
+            result.returnObjLabResultDt = lst5;
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception ex) {
@@ -220,6 +284,8 @@ public class AlarmSyncDataService extends Service {
         public List<?> returnObjPatient;
         public List<?> returnObjAppointment;
         public List<?> returnObjVaccination;
+        public List<?> returnObjLabResultHd;
+        public List<?> returnObjLabResultDt;
         public String returnObjImg;
     }
 

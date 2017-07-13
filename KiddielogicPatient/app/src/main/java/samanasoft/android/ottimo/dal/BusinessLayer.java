@@ -16,6 +16,10 @@ import samanasoft.android.framework.DbConfiguration;
 import samanasoft.android.framework.DbHelper;
 import samanasoft.android.framework.webservice.WebServiceHelper;
 import samanasoft.android.framework.webservice.WebServiceResponse;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultDt;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultDtDao;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHd;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHdDao;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import samanasoft.android.ottimo.dal.DataLayer.PatientDao;
 import samanasoft.android.ottimo.dal.DataLayer.MessageLog;
@@ -54,6 +58,96 @@ public class BusinessLayer {
             if(reader.moveToFirst()){
                 do {
                     result.add((DataLayer.AppointmentCalendarEvent)helper.dataReaderToObject(reader, new DataLayer.AppointmentCalendarEvent()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    //endregion
+    //region LaboratoryResultDt
+    public static DataLayer.LaboratoryResultDt getLaboratoryResultDt(Context context, int LaboratoryResultDtID)
+    {
+        return new DataLayer.LaboratoryResultDtDao(context).get(LaboratoryResultDtID);
+    }
+    public static int insertLaboratoryResultDt(Context context, DataLayer.LaboratoryResultDt record)
+    {
+        return new DataLayer.LaboratoryResultDtDao(context).insert(record);
+    }
+    public static int updateLaboratoryResultDt(Context context, DataLayer.LaboratoryResultDt record)
+    {
+        return new DataLayer.LaboratoryResultDtDao(context).update(record);
+    }
+    public static int deleteLaboratoryResultDt(Context context, int LaboratoryResultDtID)
+    {
+        return new DataLayer.LaboratoryResultDtDao(context).delete(LaboratoryResultDtID);
+    }
+    public static List<DataLayer.LaboratoryResultDt> getLaboratoryResultDtList(Context context, String filterExpression){
+        List<DataLayer.LaboratoryResultDt> result = new ArrayList<DataLayer.LaboratoryResultDt>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(DataLayer.LaboratoryResultDt.class);
+            String query = helper.select(filterExpression);
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add((DataLayer.LaboratoryResultDt)helper.dataReaderToObject(reader, new DataLayer.LaboratoryResultDt()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    //endregion
+    //region LaboratoryResultHd
+    public static DataLayer.LaboratoryResultHd getLaboratoryResultHd(Context context, int ID)
+    {
+        return new DataLayer.LaboratoryResultHdDao(context).get(ID);
+    }
+    public static int insertLaboratoryResultHd(Context context, DataLayer.LaboratoryResultHd record)
+    {
+        return new DataLayer.LaboratoryResultHdDao(context).insert(record);
+    }
+    public static int updateLaboratoryResultHd(Context context, DataLayer.LaboratoryResultHd record)
+    {
+        return new DataLayer.LaboratoryResultHdDao(context).update(record);
+    }
+    public static int deleteLaboratoryResultHd(Context context, int ID)
+    {
+        return new DataLayer.LaboratoryResultHdDao(context).delete(ID);
+    }
+    public static List<DataLayer.LaboratoryResultHd> getLaboratoryResultHdList(Context context, String filterExpression){
+        List<DataLayer.LaboratoryResultHd> result = new ArrayList<DataLayer.LaboratoryResultHd>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(DataLayer.LaboratoryResultHd.class);
+            String query = helper.select(filterExpression);
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add((DataLayer.LaboratoryResultHd)helper.dataReaderToObject(reader, new DataLayer.LaboratoryResultHd()));
                 }
                 while(reader.moveToNext());
             }

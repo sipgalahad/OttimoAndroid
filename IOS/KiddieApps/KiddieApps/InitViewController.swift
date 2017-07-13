@@ -25,16 +25,16 @@ class InitViewController: BaseViewController {
         var isGoToNextPage = true;
         if UserDefaults.standard.object(forKey: Constant.Session.DB_VERSION) == nil {
             Util.copyFile(fileName: "OttimoPatient.db", isReplaceDB: true);
-            DaoBase.getInstance();
+            let _ = DaoBase.getInstance();
         }
         else{
             let DBVersion = UserDefaults.standard.object(forKey: Constant.Session.DB_VERSION) as? String;
             if DBVersion != Constant.DB_VERSION{
-                DaoBase.getInstance();
+                let _ = DaoBase.getInstance();
                 let lstMRN:[Int] = BusinessLayer.getPatientMRNList(filterExpression: "");
                 
                 Util.copyFile(fileName: "OttimoPatient.db", isReplaceDB: true);
-                DaoBase.getInstance();
+                let _ = DaoBase.getInstance();
                 isGoToNextPage = false;
                 
                 var listMRN = "";
@@ -51,36 +51,44 @@ class InitViewController: BaseViewController {
                     DispatchQueue.main.async() {
                         self.indicator.stopAnimating();
                     }
-                    var entityPatient = result.returnObjPatient[0];
+                    let entityPatient = result.returnObjPatient[0];
                     var ctr:Int = 0;
                     for patient in result.returnObjPatient{
                         patient.LastSyncDateTime = DateTime.now();
                         patient.LastSyncAppointmentDateTime = DateTime.now();
                         patient.LastSyncVaccinationDateTime = DateTime.now();
-                        BusinessLayer.insertPatient(record: patient);
+                        patient.LastSyncLabResultDateTime = DateTime.now();
+                        let _ = BusinessLayer.insertPatient(record: patient);
                         
                         let returnObjImg = result.returnObjImg[ctr];
                         if(returnObjImg != ""){
                             let imageData = NSData(base64Encoded: returnObjImg);
                             let image = UIImage(data: imageData! as Data);
-                            saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                            let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
                         }
                         ctr += 1;
                         
                     }
                     for app in result.returnObjAppointment{
-                        BusinessLayer.insertAppointment(record: app);
+                        let _ = BusinessLayer.insertAppointment(record: app);
                     }
                     for vaccination in result.returnObjVaccination{
-                        BusinessLayer.insertVaccinationShotDt(record: vaccination);
+                        let _ = BusinessLayer.insertVaccinationShotDt(record: vaccination);
                     }
+                    for labResultHd in result.returnObjLabResultHd{
+                        let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
+                    }                    
+                    for labResultDt in result.returnObjLabResultDt{
+                        let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
+                    }
+
                     DispatchQueue.main.async() {
                         self.goToNextPage();
                     }
                 });
             }
             else{
-                DaoBase.getInstance();
+                let _ = DaoBase.getInstance();
             }
         }
         //ModelManager.getInstance().insertSetting();
@@ -119,7 +127,16 @@ class InitViewController: BaseViewController {
                 let entity:VaccinationShotDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: VaccinationShotDt()) as! VaccinationShotDt
                 retval.returnObjVaccination.append(entity);
             }
-            
+            let objLabResultHd = dict?["ReturnObjLabResultHd"] as! NSArray
+            for tmp in objLabResultHd{
+                let entity:LaboratoryResultHd = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultHd()) as! LaboratoryResultHd
+                retval.returnObjLabResultHd.append(entity);
+            }
+            let objLabResultDt = dict?["ReturnObjLabResultDt"] as! NSArray
+            for tmp in objLabResultDt{
+                let entity:LaboratoryResultDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultDt()) as! LaboratoryResultDt
+                retval.returnObjLabResultDt.append(entity);
+            }
             
             let objPatient = dict?["ReturnObjPatient"] as! NSArray
             for tmp in objPatient{

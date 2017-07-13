@@ -79,14 +79,14 @@ class MenuViewController: UITableViewController {
         if(indexPath.row == 5){
             let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldAppointment {
-                BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
+                let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
             }
             let lstOldVaccination:[VaccinationShotDt] = BusinessLayer.getVaccinationShotDtList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldVaccination {
-                BusinessLayer.deleteVaccinationShotDt(Type: app.Type as! Int, ID: app.ID as! Int);
+                let _ = BusinessLayer.deleteVaccinationShotDt(Type: app.Type as! Int, ID: app.ID as! Int);
             }
 
-            BusinessLayer.deletePatient(MRN: self.MRN);
+            let _ = BusinessLayer.deletePatient(MRN: self.MRN);
 
             self.performSegue(withIdentifier: "initViewLogout", sender: self)
         }

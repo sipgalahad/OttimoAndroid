@@ -56,14 +56,14 @@ class MyAppointmentViewController: UITableViewController {
         BusinessLayerWebService.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB))'", completionHandler: { (result) -> Void in
             let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldAppointment {
-                BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
+                let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
             }
             for app in result.returnObj {
-                BusinessLayer.insertAppointment(record: app as! Appointment);
+                let _ = BusinessLayer.insertAppointment(record: app as! Appointment);
             }
             let patient:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
             patient.LastSyncAppointmentDateTime = DateTime.now();
-            BusinessLayer.updatePatient(record: patient);
+            let _ = BusinessLayer.updatePatient(record: patient);
             
             self.lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
             DispatchQueue.main.async() {

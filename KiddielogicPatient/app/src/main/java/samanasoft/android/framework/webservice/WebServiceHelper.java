@@ -130,7 +130,7 @@ public class WebServiceHelper {
 		prop.setType(type);
 		return prop;
 	}
-	public static JSONObject SyncPatient(Context ctx, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate){
+	public static JSONObject SyncPatient(Context ctx, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate, String vaccinationLastUpdatedDate, String labResultLastUpdatedDate){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 
 		JSONObject result = null;
@@ -142,6 +142,8 @@ public class WebServiceHelper {
 		data += addXMLElement("PATIENT_LASTUPDATEDDATE", patientLastUpdatedDate);
 		data += addXMLElement("PHOTO_LASTUPDATEDDATE", photoLastUpdatedDate);
 		data += addXMLElement("APPOINTMENT_LASTUPDATEDDATE", appointmentLastUpdatedDate);
+		data += addXMLElement("VACCINATION_LASTUPDATEDDATE", vaccinationLastUpdatedDate);
+		data += addXMLElement("LAB_RESULT_LASTUPDATEDDATE", labResultLastUpdatedDate);
 		data += "</DATA></REQUEST>";
 
 		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));

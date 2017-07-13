@@ -146,25 +146,32 @@ class LoginViewController: BaseViewController {
                 self.indicator.stopAnimating();
             }
             if(result.returnObjPatient.count > 0){
-                var entityPatient = result.returnObjPatient[0];
+                let entityPatient = result.returnObjPatient[0];
                 for patient in result.returnObjPatient{
                     patient.LastSyncDateTime = DateTime.now();
                     patient.LastSyncAppointmentDateTime = DateTime.now();
                     patient.LastSyncVaccinationDateTime = DateTime.now();
-                    BusinessLayer.insertPatient(record: patient);
+                    patient.LastSyncLabResultDateTime = DateTime.now();
+                    let _ = BusinessLayer.insertPatient(record: patient);
                 }
                 for app in result.returnObjAppointment{
-                    BusinessLayer.insertAppointment(record: app);
+                    let _ = BusinessLayer.insertAppointment(record: app);
                 }
                 for vaccination in result.returnObjVaccination{
-                    BusinessLayer.insertVaccinationShotDt(record: vaccination);
+                    let _ = BusinessLayer.insertVaccinationShotDt(record: vaccination);
+                }
+                for labResultHd in result.returnObjLabResultHd{
+                    let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
+                }                
+                for labResultDt in result.returnObjLabResultDt{
+                    let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
                 }
 
                 
                 if(result.returnObjImg != ""){
                     let imageData = NSData(base64Encoded: result.returnObjImg);
                     let image = UIImage(data: imageData! as Data);
-                    saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                    let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
                 }
                 UserDefaults.standard.set(entityPatient.MRN, forKey:"MRN");
                 UserDefaults.standard.synchronize();
@@ -198,7 +205,16 @@ class LoginViewController: BaseViewController {
                 let entity:VaccinationShotDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: VaccinationShotDt()) as! VaccinationShotDt
                 retval.returnObjVaccination.append(entity);
             }
-
+            let objLabResultHd = dict?["ReturnObjLabResultHd"] as! NSArray
+            for tmp in objLabResultHd{
+                let entity:LaboratoryResultHd = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultHd()) as! LaboratoryResultHd
+                retval.returnObjLabResultHd.append(entity);
+            }
+            let objLabResultDt = dict?["ReturnObjLabResultDt"] as! NSArray
+            for tmp in objLabResultDt{
+                let entity:LaboratoryResultDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultDt()) as! LaboratoryResultDt
+                retval.returnObjLabResultDt.append(entity);
+            }
             
             let objPatient = dict?["ReturnObjPatient"] as! NSArray
             for tmp in objPatient{

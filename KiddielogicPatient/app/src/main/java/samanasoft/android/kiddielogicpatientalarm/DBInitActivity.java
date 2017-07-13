@@ -289,6 +289,8 @@ public class DBInitActivity extends Activity {
                         if (tempPatient == null) {
                             entity.LastSyncDateTime = result.timestamp;
                             entity.LastSyncAppointmentDateTime = result.timestamp;
+                            entity.LastSyncVaccinationDateTime = result.timestamp;
+                            entity.LastSyncLabResultDateTime = result.timestamp;
 
                             BusinessLayer.insertPatient(getBaseContext(), entity);
                             FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
@@ -313,6 +315,28 @@ public class DBInitActivity extends Activity {
                             List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
                             for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
                                 BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
+                            }
+
+                            List<DataLayer.LaboratoryResultHd> lstOldLabResultHd = BusinessLayer.getLaboratoryResultHdList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
+                            for (DataLayer.LaboratoryResultHd entity2 : lstOldLabResultHd) {
+                                BusinessLayer.deleteLaboratoryResultHd(getBaseContext(), entity2.ID);
+                            }
+
+                            @SuppressWarnings("unchecked")
+                            List<DataLayer.LaboratoryResultHd> lstLabResultHd = (List<DataLayer.LaboratoryResultHd>) result.returnObjLabResultHd;
+                            for (DataLayer.LaboratoryResultHd entity2 : lstLabResultHd) {
+                                BusinessLayer.insertLaboratoryResultHd(getBaseContext(), entity2);
+                            }
+
+                            List<DataLayer.LaboratoryResultDt> lstOldLabResultDt = BusinessLayer.getLaboratoryResultDtList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
+                            for (DataLayer.LaboratoryResultDt entity2 : lstOldLabResultDt) {
+                                BusinessLayer.deleteLaboratoryResultDt(getBaseContext(), entity2.LaboratoryResultDtID);
+                            }
+
+                            @SuppressWarnings("unchecked")
+                            List<DataLayer.LaboratoryResultDt> lstLabResultDt = (List<DataLayer.LaboratoryResultDt>) result.returnObjLabResultDt;
+                            for (DataLayer.LaboratoryResultDt entity2 : lstLabResultDt) {
+                                BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity2);
                             }
 
                             String returnObjImg = result.returnObjImg.get(ctr);
@@ -385,6 +409,8 @@ public class DBInitActivity extends Activity {
             JSONArray returnObjAppointment = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAppointment");
             JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");
             JSONArray returnObjVaccination = WebServiceHelper.getCustomReturnObject(response, "ReturnObjVaccination");
+            JSONArray returnObjLabResultHd = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultHd");
+            JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
             JSONArray returnObjImg = WebServiceHelper.getCustomReturnObject(response, "ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
@@ -403,14 +429,26 @@ public class DBInitActivity extends Activity {
                 JSONObject row = (JSONObject) returnObjVaccination.get(i);
                 lst3.add((DataLayer.VaccinationShotDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.VaccinationShotDt()));
             }
-            List<String> lst4 = new ArrayList();
+            List<DataLayer.LaboratoryResultHd> lst4 = new ArrayList<DataLayer.LaboratoryResultHd>();
+            for (int i = 0; i < returnObjLabResultHd.length();++i){
+                JSONObject row = (JSONObject) returnObjLabResultHd.get(i);
+                lst4.add((DataLayer.LaboratoryResultHd)WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultHd()));
+            }
+            List<DataLayer.LaboratoryResultDt> lst5 = new ArrayList<DataLayer.LaboratoryResultDt>();
+            for (int i = 0; i < returnObjLabResultDt.length();++i){
+                JSONObject row = (JSONObject) returnObjLabResultDt.get(i);
+                lst5.add((DataLayer.LaboratoryResultDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultDt()));
+            }
+            List<String> lst6 = new ArrayList();
             for (int i = 0; i < returnObjImg.length();++i){
-                lst4.add(returnObjImg.get(i).toString());
+                lst6.add(returnObjImg.get(i).toString());
             }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
-            result.returnObjImg = lst4;
+            result.returnObjLabResultHd = lst4;
+            result.returnObjLabResultDt = lst5;
+            result.returnObjImg = lst6;
             result.timestamp = timestamp;
         } catch (Exception e) {
             result = null;
@@ -423,6 +461,8 @@ public class DBInitActivity extends Activity {
         public List<?> returnObjPatient;
         public List<?> returnObjAppointment;
         public List<?> returnObjVaccination;
+        public List<?> returnObjLabResultHd;
+        public List<?> returnObjLabResultDt;
         public List<String> returnObjImg;
     }
 }

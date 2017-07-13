@@ -23,19 +23,21 @@ public class Util{
                 do {
                     try fileManager.removeItem(atPath: dbPath)
                 } catch let error1 as NSError {
-                    var error2 = error1
+                    let _ = error1
                 }
             }
         }
         if !fileManager.fileExists(atPath: dbPath) {
             let documentsURL = Bundle.main.resourceURL
             let fromPath = documentsURL!.appendingPathComponent(fileName as String)
-            var error : NSError?
+            let error : NSError?
             do {
                 try fileManager.copyItem(atPath: fromPath.path, toPath: dbPath)
             } catch let error1 as NSError {
                 error = error1
             }
+            
+            
             /*let alert: UIAlertView = UIAlertView()
             if (error != nil) {
                 alert.title = "Error Occured"

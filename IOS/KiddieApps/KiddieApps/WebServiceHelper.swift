@@ -156,7 +156,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         }
     }
 
-    
+
     public func ChangePassword(MRN:Int, oldPassword:String, newPassword:String, completionHandler: @escaping (_ result:String) -> Void){
         let appToken:String = Constant.APP_TOKEN;
         
@@ -325,7 +325,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" || currentElement == "Login2Result" || currentElement == "ChangePassword2Result" || currentElement == "RequestPassword2Result" || currentElement == "PostAppointmentAnswer2Result" || currentElement == "InsertErrorFeedback2Result" || currentElement == "ReloadDataAfterUpdateAppsResult"){
-            jsonResult = string;
+            jsonResult += string;
         }
     }
     

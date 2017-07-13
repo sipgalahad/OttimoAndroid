@@ -8,6 +8,171 @@
 
 import Foundation
 
+
+
+public class Appointment : BaseClass{
+    var AppointmentID:NSNumber?
+    var MRN:NSNumber?
+    var ServiceUnitName:String?
+    var QueueNo:NSNumber?
+    var StartDate:DateTime?
+    var ReminderDate:DateTime?
+    var EndDate:DateTime?
+    var StartTime:String?
+    var EndTime:String?
+    var cfStartTime:String?
+    var VisitTypeName:String?
+    var ParamedicName:String?
+    var SpecialtyName:String?
+    var GCAppointmentStatus:String?
+    var LastUpdatedDate:DateTime?
+    
+    override func getPrimaryKey() -> [String]{
+        return ["AppointmentID"];
+    }
+}
+public class AppointmentDao{
+    private var helper:DBHelper;
+    private let p_AppointmentID = "@p_AppointmentID";
+    
+    public init() {
+        helper = DBHelper();
+    }
+    public func get(AppointmentID:Int) -> Appointment?{
+        sharedInstance.database!.open()
+        var query = helper.getRecord(tableName: "Appointment", lstPrimaryKey: Appointment().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_AppointmentID, with: String(AppointmentID));
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        let result = helper.dataListRowToObject(row: row, obj: Appointment()) as! Appointment?;
+        sharedInstance.database!.close()
+        return result;
+    }
+    public func insert(record:Appointment) -> Bool{
+        let query = helper.insert(tableName: "Appointment", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func update(record:Appointment) -> Bool{
+        let query = helper.update(tableName: "Appointment", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func delete(AppointmentID:Int) -> Bool{
+        let record = get(AppointmentID: AppointmentID);
+        let query = helper.delete(tableName: "Appointment", record: record!);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+}
+
+
+
+public class LaboratoryResultDt : BaseClass{
+    var LaboratoryResultDtID:NSNumber?
+    var ID:NSNumber?
+    var MRN:NSNumber?
+    var ItemName1:String?
+    var ItemGroupName1:String?
+    var LabTestResultTypeID:NSNumber?
+    var LabTestResultTypeName:String?
+    var FractionID:NSNumber?
+    var FractionName:String?
+    var MetricResultValue:NSNumber?
+    var MinMetricNormalValue:NSNumber?
+    var MaxMetricNormalValue:NSNumber?
+    var MetricUnit:String?
+    var NilaiRujukanMetric:String?
+    var InternationalResultValue:NSNumber?
+    var MinInternationalNormalValue:NSNumber?
+    var MaxInternationalNormalValue:NSNumber?
+    var InternationalUnit:String?
+    var NilaiRujukanInternational:String?
+    var LabTestResultTypeDtName:String?
+    var TextNormalValue:String?
+    var TextValue:String?
+    var ResultSummary:String?
+    var Remarks:String?
+    
+    override func getPrimaryKey() -> [String]{
+        return ["LaboratoryResultDtID"];
+    }
+}
+
+public class LaboratoryResultDtDao{
+    private var helper:DBHelper;
+    private let p_LaboratoryResultDtID = "@p_LaboratoryResultDtID";
+    
+    public init() {
+        helper = DBHelper();
+    }
+    public func get(LaboratoryResultDtID:Int) -> LaboratoryResultDt?{
+        sharedInstance.database!.open()
+        var query = helper.getRecord(tableName: "LaboratoryResultDt", lstPrimaryKey: LaboratoryResultDt().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_LaboratoryResultDtID, with: String(LaboratoryResultDtID));
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        let result = helper.dataListRowToObject(row: row, obj: LaboratoryResultDt()) as! LaboratoryResultDt?;
+        sharedInstance.database!.close()
+        return result;
+    }
+    public func insert(record:LaboratoryResultDt) -> Bool{
+        let query = helper.insert(tableName: "LaboratoryResultDt", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func update(record:LaboratoryResultDt) -> Bool{
+        let query = helper.update(tableName: "LaboratoryResultDt", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func delete(LaboratoryResultDtID:Int) -> Bool{
+        let record = get(LaboratoryResultDtID: LaboratoryResultDtID);
+        let query = helper.delete(tableName: "LaboratoryResultDt", record: record!);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+}
+
+public class LaboratoryResultHd : BaseClass{
+    var ID:NSNumber?
+    var MRN:NSNumber?
+    var ReferenceNo:String?
+    var ResultDate:DateTime?
+    var ResultTime:String?
+    var ProviderName:String?
+    var ParamedicName:String?
+    var Remarks:String?
+    var LastUpdatedDate:DateTime?
+    
+    override func getPrimaryKey() -> [String]{
+        return ["ID"];
+    }
+}
+
+public class LaboratoryResultHdDao{
+    private var helper:DBHelper;
+    private let p_ID = "@p_ID";
+    
+    public init() {
+        helper = DBHelper();
+    }
+    public func get(ID:Int) -> LaboratoryResultHd?{
+        sharedInstance.database!.open()
+        var query = helper.getRecord(tableName: "LaboratoryResultHd", lstPrimaryKey: LaboratoryResultHd().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_ID, with: String(ID));
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        let result = helper.dataListRowToObject(row: row, obj: LaboratoryResultHd()) as! LaboratoryResultHd?;
+        sharedInstance.database!.close()
+        return result;
+    }
+    public func insert(record:LaboratoryResultHd) -> Bool{
+        let query = helper.insert(tableName: "LaboratoryResultHd", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func update(record:LaboratoryResultHd) -> Bool{
+        let query = helper.update(tableName: "LaboratoryResultHd", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func delete(ID:Int) -> Bool{
+        let record = get(ID: ID);
+        let query = helper.delete(tableName: "LaboratoryResultHd", record: record!);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+}
+
 public class Patient : BaseClass{
     var MRN:NSNumber?;
     var MedicalNo:String?;
@@ -27,6 +192,7 @@ public class Patient : BaseClass{
     var LastSyncDateTime:DateTime?;
     var LastSyncAppointmentDateTime:DateTime?;
     var LastSyncVaccinationDateTime:DateTime?;
+    var LastSyncLabResultDateTime:DateTime?;
     public func getMobilePhoneNoDisplay() -> String{
         if (self.MobilePhoneNo2 != ""){
             return MobilePhoneNo1! + " / " + MobilePhoneNo2!;
@@ -83,58 +249,6 @@ public class Variable{
     public init (Code:String, Value:String){
         self.Code = Code;
         self.Value = Value;
-    }
-}
-
-public class Appointment : BaseClass{
-    var AppointmentID:NSNumber?
-    var MRN:NSNumber?
-    var ServiceUnitName:String?
-    var QueueNo:NSNumber?
-    var StartDate:DateTime?
-    var ReminderDate:DateTime?
-    var EndDate:DateTime?
-    var StartTime:String?
-    var EndTime:String?
-    var cfStartTime:String?
-    var VisitTypeName:String?
-    var ParamedicName:String?
-    var SpecialtyName:String?
-    var GCAppointmentStatus:String?
-    var LastUpdatedDate:DateTime?
-    
-    override func getPrimaryKey() -> [String]{
-        return ["AppointmentID"];
-    }
-}
-public class AppointmentDao{
-    private var helper:DBHelper;
-    private let p_AppointmentID = "@p_AppointmentID";
-    
-    public init() {
-        helper = DBHelper();
-    }
-    public func get(AppointmentID:Int) -> Appointment?{
-        sharedInstance.database!.open()
-        var query = helper.getRecord(tableName: "Appointment", lstPrimaryKey: Appointment().getPrimaryKey());
-        query = query.replacingOccurrences(of: p_AppointmentID, with: String(AppointmentID));
-        let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: Appointment()) as! Appointment?;
-        sharedInstance.database!.close()
-        return result;
-    }
-    public func insert(record:Appointment) -> Bool{
-        let query = helper.insert(tableName: "Appointment", record: record);
-        return DaoBase.getInstance().executeNonQuery(query: query!);
-    }
-    public func update(record:Appointment) -> Bool{
-        let query = helper.update(tableName: "Appointment", record: record);
-        return DaoBase.getInstance().executeNonQuery(query: query!);
-    }
-    public func delete(AppointmentID:Int) -> Bool{
-        let record = get(AppointmentID: AppointmentID);
-        let query = helper.delete(tableName: "Appointment", record: record!);
-        return DaoBase.getInstance().executeNonQuery(query: query!);
     }
 }
 
@@ -197,6 +311,7 @@ public class VaccinationShotDt : BaseClass{
     var VaccineName:String?;
     var Dose:NSNumber?;
     var DoseUnit:String?;
+    var LastUpdatedDate:DateTime?
     
     override func getPrimaryKey() -> [String]{
         return ["Type", "ID"];
