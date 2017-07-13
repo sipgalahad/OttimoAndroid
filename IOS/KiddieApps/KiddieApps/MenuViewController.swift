@@ -85,9 +85,30 @@ class MenuViewController: UITableViewController {
             for app in lstOldVaccination {
                 let _ = BusinessLayer.deleteVaccinationShotDt(Type: app.Type as! Int, ID: app.ID as! Int);
             }
+            let lstOldLabResultHd:[LaboratoryResultHd] = BusinessLayer.getLaboratoryResultHdList(filterExpression: "MRN = \(String(describing: self.MRN))");
+            for app in lstOldLabResultHd {
+                let _ = BusinessLayer.deleteLaboratoryResultHd(ID: app.ID as! Int);
+            }
+            let lstOldLabResultDt:[LaboratoryResultDt] = BusinessLayer.getLaboratoryResultDtList(filterExpression: "MRN = \(String(describing: self.MRN))");
+            for app in lstOldLabResultDt {
+                let _ = BusinessLayer.deleteLaboratoryResultDt(LaboratoryResultDtID: app.LaboratoryResultDtID as! Int);
+            }
 
+            let entity:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
             let _ = BusinessLayer.deletePatient(MRN: self.MRN);
-
+            
+            
+            let directoryPath = NSHomeDirectory().appending("/KiddieApps/");
+            let filename = "\(entity.MedicalNo!).jpg";
+            let filepath = directoryPath.appending(filename);
+            if(FileManager.default.fileExists(atPath: filepath)){
+                do {
+                    try FileManager.default.removeItem(atPath: filepath);
+                } catch let error as NSError {
+                    print(error.debugDescription)
+                }
+            }
+            
             self.performSegue(withIdentifier: "initViewLogout", sender: self)
         }
     }

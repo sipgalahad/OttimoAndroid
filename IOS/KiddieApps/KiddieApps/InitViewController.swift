@@ -51,7 +51,6 @@ class InitViewController: BaseViewController {
                     DispatchQueue.main.async() {
                         self.indicator.stopAnimating();
                     }
-                    let entityPatient = result.returnObjPatient[0];
                     var ctr:Int = 0;
                     for patient in result.returnObjPatient{
                         patient.LastSyncDateTime = DateTime.now();
@@ -64,7 +63,7 @@ class InitViewController: BaseViewController {
                         if(returnObjImg != ""){
                             let imageData = NSData(base64Encoded: returnObjImg);
                             let image = UIImage(data: imageData! as Data);
-                            let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                            let _ = saveImageToDocumentDirectory(medicalNo: patient.MedicalNo!, image!);
                         }
                         ctr += 1;
                         

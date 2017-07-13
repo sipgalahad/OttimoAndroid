@@ -109,6 +109,7 @@ public class DBInitActivity extends Activity {
                 }
                 else {
                     String deviceID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    showProgress(true);
                     mAuthTask = new ReloadDataTask(listMRN, deviceID);
                     mAuthTask.execute((Void) null);
                 }
@@ -294,50 +295,6 @@ public class DBInitActivity extends Activity {
 
                             BusinessLayer.insertPatient(getBaseContext(), entity);
                             FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
-                            List<DataLayer.Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
-                            for (DataLayer.Appointment entity2 : lstOldAppointment) {
-                                BusinessLayer.deleteAppointment(getBaseContext(), entity2.AppointmentID);
-                            }
-
-                            @SuppressWarnings("unchecked")
-                            List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObjAppointment;
-                            for (DataLayer.Appointment entity2 : lstAppointment) {
-                                BusinessLayer.insertAppointment(getBaseContext(), entity2);
-                                Helper.insertAppointmentToEventCalender(getBaseContext(), entity2);
-                            }
-
-                            List<DataLayer.VaccinationShotDt> lstOldVaccination = BusinessLayer.getVaccinationShotDtList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
-                            for (DataLayer.VaccinationShotDt entity2 : lstOldVaccination) {
-                                BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
-                            }
-
-                            @SuppressWarnings("unchecked")
-                            List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
-                            for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
-                                BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
-                            }
-
-                            List<DataLayer.LaboratoryResultHd> lstOldLabResultHd = BusinessLayer.getLaboratoryResultHdList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
-                            for (DataLayer.LaboratoryResultHd entity2 : lstOldLabResultHd) {
-                                BusinessLayer.deleteLaboratoryResultHd(getBaseContext(), entity2.ID);
-                            }
-
-                            @SuppressWarnings("unchecked")
-                            List<DataLayer.LaboratoryResultHd> lstLabResultHd = (List<DataLayer.LaboratoryResultHd>) result.returnObjLabResultHd;
-                            for (DataLayer.LaboratoryResultHd entity2 : lstLabResultHd) {
-                                BusinessLayer.insertLaboratoryResultHd(getBaseContext(), entity2);
-                            }
-
-                            List<DataLayer.LaboratoryResultDt> lstOldLabResultDt = BusinessLayer.getLaboratoryResultDtList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
-                            for (DataLayer.LaboratoryResultDt entity2 : lstOldLabResultDt) {
-                                BusinessLayer.deleteLaboratoryResultDt(getBaseContext(), entity2.LaboratoryResultDtID);
-                            }
-
-                            @SuppressWarnings("unchecked")
-                            List<DataLayer.LaboratoryResultDt> lstLabResultDt = (List<DataLayer.LaboratoryResultDt>) result.returnObjLabResultDt;
-                            for (DataLayer.LaboratoryResultDt entity2 : lstLabResultDt) {
-                                BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity2);
-                            }
 
                             String returnObjImg = result.returnObjImg.get(ctr);
                             if(!returnObjImg.equals("")) {
@@ -364,8 +321,33 @@ public class DBInitActivity extends Activity {
                             }
                             ctr++;
                         }
-                        goToNextPage();
                     }
+
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.Appointment> lstAppointment = (List<DataLayer.Appointment>) result.returnObjAppointment;
+                    for (DataLayer.Appointment entity2 : lstAppointment) {
+                        BusinessLayer.insertAppointment(getBaseContext(), entity2);
+                        Helper.insertAppointmentToEventCalender(getBaseContext(), entity2);
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.VaccinationShotDt> lstVaccination = (List<DataLayer.VaccinationShotDt>) result.returnObjVaccination;
+                    for (DataLayer.VaccinationShotDt entity2 : lstVaccination) {
+                        BusinessLayer.insertVaccinationShotDt(getBaseContext(), entity2);
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.LaboratoryResultHd> lstLabResultHd = (List<DataLayer.LaboratoryResultHd>) result.returnObjLabResultHd;
+                    for (DataLayer.LaboratoryResultHd entity2 : lstLabResultHd) {
+                        BusinessLayer.insertLaboratoryResultHd(getBaseContext(), entity2);
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.LaboratoryResultDt> lstLabResultDt = (List<DataLayer.LaboratoryResultDt>) result.returnObjLabResultDt;
+                    for (DataLayer.LaboratoryResultDt entity2 : lstLabResultDt) {
+                        BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity2);
+                    }
+                    goToNextPage();
                 } else {
                     showProgress(false);
                 }

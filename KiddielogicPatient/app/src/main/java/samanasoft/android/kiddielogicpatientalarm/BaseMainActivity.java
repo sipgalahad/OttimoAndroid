@@ -181,6 +181,14 @@ public class BaseMainActivity extends AppCompatActivity
             for (DataLayer.VaccinationShotDt entity2 : lstOldVaccination) {
                 BusinessLayer.deleteVaccinationShotDt(getBaseContext(), entity2.Type, entity2.ID);
             }
+            List<DataLayer.LaboratoryResultHd> lstOldLabResultHd = BusinessLayer.getLaboratoryResultHdList(getBaseContext(), String.format("MRN = '%1$s'", MRN));
+            for (DataLayer.LaboratoryResultHd entity2 : lstOldLabResultHd) {
+                BusinessLayer.deleteLaboratoryResultHd(getBaseContext(), entity2.ID);
+            }
+            List<DataLayer.LaboratoryResultDt> lstOldLabResultDt = BusinessLayer.getLaboratoryResultDtList(getBaseContext(), String.format("MRN = '%1$s'", MRN));
+            for (DataLayer.LaboratoryResultDt entity2 : lstOldLabResultDt) {
+                BusinessLayer.deleteLaboratoryResultDt(getBaseContext(), entity2.LaboratoryResultDtID);
+            }
             BusinessLayer.deletePatient(getBaseContext(), MRN);
             FirebaseMessaging.getInstance().unsubscribeFromTopic(patient.MedicalNo);
             //Delete Photo
