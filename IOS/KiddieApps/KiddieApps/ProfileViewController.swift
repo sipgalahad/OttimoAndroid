@@ -46,6 +46,7 @@ class ProfileViewController: BasePatientPageViewController {
         lblDateOfBirth.text = entity.DateOfBirth!.toString(format: Constant.FormatString.DATE_FORMAT);
         lblMobilePhoneNo.text = entity.getMobilePhoneNoDisplay();
         lblEmailAddress.text = entity.getEmailAddressDisplay();
+        
         // Do any additional setup after loading the view.
     }
 

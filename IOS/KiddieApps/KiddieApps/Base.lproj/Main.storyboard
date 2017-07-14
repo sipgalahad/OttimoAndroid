@@ -725,6 +725,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="btnMenu" destination="4tX-wO-YaC" id="KvK-wY-wAA"/>
+                        <outlet property="btnRefresh" destination="RgV-zn-Xw6" id="Y7E-oC-5Ko"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lzw-Um-b6q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -840,6 +841,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="btnMenu" destination="1Ig-xp-aRF" id="V0f-tv-1aX"/>
+                        <outlet property="btnRefresh" destination="sGR-z2-0QE" id="pqY-KU-kC6"/>
                         <outlet property="spnVaccinationType" destination="q80-sl-KRd" id="AZP-YM-X2M"/>
                         <outlet property="tblView" destination="z9s-cL-7N6" id="1fW-F9-SfM"/>
                     </connections>

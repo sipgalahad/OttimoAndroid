@@ -18,15 +18,14 @@ class ErrorFeedbackViewController: BasePatientPageViewController {
     @IBAction func onBtnSaveClick(_ sender: Any) {        
         let deviceID = UIDevice.current.identifierForVendor!.uuidString;
         let message:String = txtMessage.text!;
-        self.indicator.startAnimating();
+        self.showLoadingPanel()
         insertErrorFeedback(deviceID: deviceID, errorMessage: message, completionHandler: { (result) -> Void in
-            DispatchQueue.main.async() {
-                self.indicator.stopAnimating();
-            }
             if(result == "1"){
+                self.hideLoadingPanel()
                 displayMyAlertMessage(ctrl: self, userMessage: "Kirim Error Feedback Berhasil Dilakukan.");
             }
             else{
+                self.hideLoadingPanel()
                 displayMyAlertMessage(ctrl: self, userMessage: "Kirim Error Feedback Gagal. Password Lama Tidak Cocok.");
                 
             }

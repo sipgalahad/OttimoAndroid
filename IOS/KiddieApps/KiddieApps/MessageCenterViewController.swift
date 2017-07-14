@@ -8,18 +8,11 @@
 
 import UIKit
 
-class MessageCenterViewController: UITableViewController {
+class MessageCenterViewController: BaseTableViewController {
 
-    @IBOutlet weak var btnMenu: UIBarButtonItem!
     var lstAppointment:[vAppointment] = [];
     override func viewDidLoad() {
         super.viewDidLoad()
-        if revealViewController() != nil {
-            btnMenu.target = revealViewController()
-            btnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-        //self.tableView.reloadData();
         lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "");
         // Do any additional setup after loading the view.
     }
@@ -58,14 +51,17 @@ class MessageCenterViewController: UITableViewController {
     func onBtnConfirmClick(sender:UIButton){
         let buttonRow = sender.tag;
         let entity:vAppointment = lstAppointment[buttonRow];
+        self.showLoadingPanel();
         postAppointmentAnswer(appointmentID: entity.AppointmentID as! Int, GCAppointmentStatus: Constant.AppointmentStatus.CONFIRMED, completionHandler: { (result) -> Void in
             if(result == "1"){
                 DispatchQueue.main.async() {
+                    self.hideLoadingPanel();
                     displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Perjanjian Berhasil Dilakukan.");
                 }
             }
             else{
                 DispatchQueue.main.async() {
+                    self.hideLoadingPanel();
                     displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Perjanjian Gagal. Harap Periksa Koneksi Internet Anda.");
                 }
             }
@@ -75,14 +71,17 @@ class MessageCenterViewController: UITableViewController {
     func onBtnCancelClick(sender:UIButton){
         let buttonRow = sender.tag;
         let entity:vAppointment = lstAppointment[buttonRow];
+        self.showLoadingPanel();
         postAppointmentAnswer(appointmentID: entity.AppointmentID as! Int, GCAppointmentStatus: Constant.AppointmentStatus.CANCELLED, completionHandler: { (result) -> Void in
             if(result == "1"){
                 DispatchQueue.main.async() {
+                    self.hideLoadingPanel();
                     displayMyAlertMessage(ctrl: self, userMessage: "Pembatalan Perjanjian Berhasil Dilakukan.");
                 }
             }
             else{
                 DispatchQueue.main.async() {
+                    self.hideLoadingPanel();
                     displayMyAlertMessage(ctrl: self, userMessage: "Pembatalan Perjanjian Gagal. Harap Periksa Koneksi Internet Anda.");
                 }
             }
@@ -101,8 +100,7 @@ class MessageCenterViewController: UITableViewController {
     }
     
     public func postAppointmentAnswer(appointmentID:Int, GCAppointmentStatus: String, completionHandler: @escaping (_ result:String) -> Void){
-        let deviceID = UIDevice.current.identifierForVendor!.uuidString;
-        WebServiceHelper().PostAppointmentAnswer(appointmentID: appointmentID, deviceID: deviceID, GCAppointmentStatus: GCAppointmentStatus, completionHandler: { (result) -> Void in
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString;        WebServiceHelper().PostAppointmentAnswer(appointmentID: appointmentID, deviceID: deviceID, GCAppointmentStatus: GCAppointmentStatus, completionHandler: { (result) -> Void in
             let dict = WebServiceHelper.convertToDictionary(text: result)
             let retval:String = dict?["Result"] as! String;
             completionHandler(retval);

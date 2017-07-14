@@ -26,18 +26,17 @@ class ChangePasswordViewController: BasePatientPageViewController {
             displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Password Tidak Cocok.");
         }
         else{
-            self.indicator.startAnimating();
+            self.showLoadingPanel();
             changePassword(MRN: MRN!, oldPassword: oldPassword, newPassword: newPassword,  completionHandler: { (result) -> Void in
-                DispatchQueue.main.async() {
-                    self.indicator.stopAnimating();
-                }
                 if(result == "1"){
                     DispatchQueue.main.async() {
+                        self.hideLoadingPanel()
                         displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Berhasil Dilakukan.");
                     }
                 }
                 else{
                     DispatchQueue.main.async() {
+                        self.hideLoadingPanel()
                         displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Gagal. Password Lama Tidak Cocok.");
                     }
                 }

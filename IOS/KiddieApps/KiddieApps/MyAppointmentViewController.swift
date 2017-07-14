@@ -8,19 +8,13 @@
 
 import UIKit
 
-class MyAppointmentViewController: UITableViewController {
+class MyAppointmentViewController: BasePatientTableViewController {
     
+    @IBOutlet weak var btnRefresh: UIBarButtonItem!
     let MRN:Int = (UserDefaults.standard.object(forKey: "MRN") as? Int)!;
-    @IBOutlet weak var btnMenu: UIBarButtonItem!
     var lstAppointment:[Appointment] = [];
     override func viewDidLoad() {
         super.viewDidLoad()
-        if revealViewController() != nil {
-            btnMenu.target = revealViewController()
-            btnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-        
         lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN))");
         // Do any additional setup after loading the view.
     }
@@ -53,7 +47,11 @@ class MyAppointmentViewController: UITableViewController {
         return cell
     }
     @IBAction func onBtnRefreshClick(_ sender: Any) {
+        self.showLoadingPanel();
+        self.btnRefresh.isEnabled = false;
         BusinessLayerWebService.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB))'", completionHandler: { (result) -> Void in
+            self.btnRefresh.isEnabled = true;
+            self.hideLoadingPanel();
             let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldAppointment {
                 let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);

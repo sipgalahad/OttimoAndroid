@@ -1,14 +1,14 @@
 //
-//  BaseViewController.swift
+//  BaseTableViewController.swift
 //  KiddieApps
 //
-//  Created by Aloysius Ari Wicaksono on 7/9/17.
+//  Created by Aloysius Ari Wicaksono on 7/14/17.
 //  Copyright © 2017 Samanasoft. All rights reserved.
 //
 
 import UIKit
 
-class BaseViewController: UIViewController {
+class BaseTableViewController: UITableViewController {    
     var indicator: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray);
     var panel: UIView = UIView()
     override func viewDidLoad() {
@@ -42,21 +42,4 @@ class BaseViewController: UIViewController {
         panel.isHidden = true;
         indicator.stopAnimating();
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

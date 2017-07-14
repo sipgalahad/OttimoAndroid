@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RequestPasswordViewController: UIViewController {
+class RequestPasswordViewController: BaseViewController {
 
     @IBOutlet weak var txtMedicalNo: UITextField!
     @IBOutlet weak var txtEmail: UITextField!
@@ -26,14 +26,17 @@ class RequestPasswordViewController: UIViewController {
         let medicalNo:String = txtMedicalNo.text!;
         let emailAddress:String = txtEmail.text!;
         
+        self.showLoadingPanel();
         requestPassword(medicalNo: medicalNo, emailAddress: emailAddress,  completionHandler: { (result) -> Void in
             if(result == "1"){
                 DispatchQueue.main.async() {
+                    self.hideLoadingPanel()
                     displayMyAlertMessage(ctrl: self, userMessage: "Permintaan Password Berhasil. Silakan cek Email anda untuk mengetahui password Anda.");
                 }
             }
             else{
                 DispatchQueue.main.async() {
+                    self.hideLoadingPanel()
                     displayMyAlertMessage(ctrl: self, userMessage: "Ubah Password Gagal. No RM dan Email Tidak Cocok.");
                 }
             }

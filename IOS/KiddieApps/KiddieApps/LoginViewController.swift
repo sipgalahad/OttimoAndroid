@@ -139,11 +139,11 @@ class LoginViewController: BaseViewController {
         let OSVersion = UIDevice.current.systemVersion;
         let deviceName = UIDevice.current.modelName;
         
-        self.indicator.startAnimating();
+        self.showLoadingPanel();
         login(medicalNo: txtMedicalNo.text!, password: txtPassword.text!, deviceID: deviceID, deviceName: deviceName, OSVersion: OSVersion, appVersion: Constant.APP_VERSION, FCMToken: "1", completionHandler: { (result) -> Void in
             
             DispatchQueue.main.async() {
-                self.indicator.stopAnimating();
+                self.hideLoadingPanel()
             }
             if(result.returnObjPatient.count > 0){
                 let entityPatient = result.returnObjPatient[0];

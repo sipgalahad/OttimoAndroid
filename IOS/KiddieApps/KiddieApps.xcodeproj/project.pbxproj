@@ -19,6 +19,8 @@
 		F34B5CAC1F1491D400B99271 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */; };
 		F34B5CAE1F14CDC900B99271 /* VaccinationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */; };
 		F34B5CB01F14CDE200B99271 /* VaccinationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */; };
+		F34B5CB21F192C1400B99271 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB11F192C1400B99271 /* BaseTableViewController.swift */; };
+		F34B5CB41F192C3700B99271 /* BasePatientTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB31F192C3700B99271 /* BasePatientTableViewController.swift */; };
 		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
 		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
 		F3B189091EF241F8002A9C0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3B189071EF241F8002A9C0B /* Main.storyboard */; };
@@ -96,6 +98,8 @@
 		F34B5CAB1F1491D400B99271 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinationViewCell.swift; sourceTree = "<group>"; };
 		F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinationViewController.swift; sourceTree = "<group>"; };
+		F34B5CB11F192C1400B99271 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		F34B5CB31F192C3700B99271 /* BasePatientTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePatientTableViewController.swift; sourceTree = "<group>"; };
 		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3B189031EF241F8002A9C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3B189051EF241F8002A9C0B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +202,8 @@
 			children = (
 				F307300F1F12835500E66E1A /* BaseViewController.swift */,
 				F30730111F1285DF00E66E1A /* BasePatientPageViewController.swift */,
+				F34B5CB11F192C1400B99271 /* BaseTableViewController.swift */,
+				F34B5CB31F192C3700B99271 /* BasePatientTableViewController.swift */,
 			);
 			name = BasePage;
 			sourceTree = "<group>";
@@ -457,6 +463,11 @@
 						CreatedOnToolsVersion = 8.3.3;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					F3B189131EF241F8002A9C0B = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -672,6 +683,7 @@
 				F3EA7C671EF984C100A0AAA3 /* FMDatabaseQueue.m in Sources */,
 				F3222F271EF9664C00ED204D /* DataLayer.swift in Sources */,
 				F30730171F128FAF00E66E1A /* ManageAccountViewCell.swift in Sources */,
+				F34B5CB21F192C1400B99271 /* BaseTableViewController.swift in Sources */,
 				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
 				F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */,
 				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
@@ -683,6 +695,7 @@
 				F3EA7C661EF984C100A0AAA3 /* FMDatabasePool.m in Sources */,
 				F3D4CCCC1EFA4F55009E8FC9 /* Constant.swift in Sources */,
 				F3EA7C681EF984C100A0AAA3 /* FMResultSet.m in Sources */,
+				F34B5CB41F192C3700B99271 /* BasePatientTableViewController.swift in Sources */,
 				F3EA7C771EF9A10000A0AAA3 /* ModelManager.swift in Sources */,
 				F34B5CAE1F14CDC900B99271 /* VaccinationViewCell.swift in Sources */,
 				F3D4CCD21EFA5A6D009E8FC9 /* BaseClass.swift in Sources */,

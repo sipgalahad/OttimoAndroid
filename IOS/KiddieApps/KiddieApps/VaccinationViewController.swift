@@ -10,6 +10,7 @@ import UIKit
 
 class VaccinationViewController: BasePatientPageViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    @IBOutlet weak var btnRefresh: UIBarButtonItem!
     @IBOutlet weak var spnVaccinationType: UIPickerView!
     @IBOutlet weak var tblView: UITableView!
     let MRN:Int = (UserDefaults.standard.object(forKey: "MRN") as? Int)!;
@@ -19,7 +20,12 @@ class VaccinationViewController: BasePatientPageViewController, UITableViewDeleg
     
     
     @IBAction func onBtnRefreshClick(_ sender: Any) {
+        self.showLoadingPanel()
+        self.btnRefresh.isEnabled = false;
         BusinessLayerWebService.getVaccinationShotDtList(filterExpression: "MRN = \(String(describing: MRN))", completionHandler: { (result) -> Void in
+            self.hideLoadingPanel()
+            self.btnRefresh.isEnabled = true;
+
             let lstOldVaccination:[VaccinationShotDt] = BusinessLayer.getVaccinationShotDtList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldVaccination {
                 let _ = BusinessLayer.deleteVaccinationShotDt(Type: app.Type as! Int, ID: app.ID as! Int);
