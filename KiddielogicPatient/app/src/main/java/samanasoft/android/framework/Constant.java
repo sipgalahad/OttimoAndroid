@@ -1,7 +1,7 @@
 package samanasoft.android.framework;
 
 public class Constant {
-    public static final String AppVersion = "1.0";
+    public static final String AppVersion = "1.1";
     public static final String DB_VERSION = "2";
 
 	public static final String[] SHORT_MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }; 
@@ -10,7 +10,7 @@ public class Constant {
     public static class Url
     {
         public static final String APP_DATA_URL = "http://192.168.0.102/appdata/ottimo";
-        public static final String BRIDGING_SERVER = "http://114.199.103.10:8080/KiddielogicTest/BridgingServer/Program/Mobile/MobileService.asmx";
+        public static final String BRIDGING_SERVER = "http://114.199.103.10:8080/Kiddielogic/BridgingServer/Program/Mobile/MobileService.asmx";
         //public static final String BRIDGING_SERVER = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
     }
     public static final String APP_TOKEN = "40BD001563085FC35165329EA1FF5C5ECBDBBEEF";
@@ -37,5 +37,12 @@ public class Constant {
         public static final String CHECK_IN = "0278^004";
         public static final String CANCELLED = "0278^005";
         public static final String VOID = "0278^999";
+    }
+    public static class LabResultSummary
+    {
+        public static final String LOW = "OT005^001";
+        public static final String NORMAL = "OT005^002";
+        public static final String HIGH = "OT005^003";
+        public static final String ABNORMAL = "OT005^004";
     }
 }

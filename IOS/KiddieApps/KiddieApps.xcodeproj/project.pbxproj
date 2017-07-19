@@ -21,6 +21,10 @@
 		F34B5CB01F14CDE200B99271 /* VaccinationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */; };
 		F34B5CB21F192C1400B99271 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB11F192C1400B99271 /* BaseTableViewController.swift */; };
 		F34B5CB41F192C3700B99271 /* BasePatientTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB31F192C3700B99271 /* BasePatientTableViewController.swift */; };
+		F34B5CB61F1FA6F600B99271 /* LabResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB51F1FA6F600B99271 /* LabResultViewController.swift */; };
+		F34B5CB81F1FA7DA00B99271 /* LabResultViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB71F1FA7DA00B99271 /* LabResultViewCell.swift */; };
+		F34B5CBA1F1FB95D00B99271 /* LabResultDtViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB91F1FB95D00B99271 /* LabResultDtViewCell.swift */; };
+		F34B5CBE1F1FBBF300B99271 /* LabResultDtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CBD1F1FBBF300B99271 /* LabResultDtViewController.swift */; };
 		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
 		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
 		F3B189091EF241F8002A9C0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3B189071EF241F8002A9C0B /* Main.storyboard */; };
@@ -100,6 +104,10 @@
 		F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinationViewController.swift; sourceTree = "<group>"; };
 		F34B5CB11F192C1400B99271 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		F34B5CB31F192C3700B99271 /* BasePatientTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePatientTableViewController.swift; sourceTree = "<group>"; };
+		F34B5CB51F1FA6F600B99271 /* LabResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultViewController.swift; sourceTree = "<group>"; };
+		F34B5CB71F1FA7DA00B99271 /* LabResultViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultViewCell.swift; sourceTree = "<group>"; };
+		F34B5CB91F1FB95D00B99271 /* LabResultDtViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultDtViewCell.swift; sourceTree = "<group>"; };
+		F34B5CBD1F1FBBF300B99271 /* LabResultDtViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultDtViewController.swift; sourceTree = "<group>"; };
 		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3B189031EF241F8002A9C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3B189051EF241F8002A9C0B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -367,6 +375,10 @@
 				F3DB17F11F03FDC4005D9DF8 /* ChangePasswordViewController.swift */,
 				F307300D1F1022FE00E66E1A /* ErrorFeedbackViewController.swift */,
 				F3B189351EF923E3002A9C0B /* InitViewController.swift */,
+				F34B5CB71F1FA7DA00B99271 /* LabResultViewCell.swift */,
+				F34B5CB51F1FA6F600B99271 /* LabResultViewController.swift */,
+				F34B5CB91F1FB95D00B99271 /* LabResultDtViewCell.swift */,
+				F34B5CBD1F1FBBF300B99271 /* LabResultDtViewController.swift */,
 				F3EA7C791EF9A6AC00A0AAA3 /* LoginViewController.swift */,
 				F3DB17ED1F03F5F6005D9DF8 /* MenuViewController.swift */,
 				F30730161F128FAF00E66E1A /* ManageAccountViewCell.swift */,
@@ -687,7 +699,9 @@
 				F3D4CCD41EFA64C6009E8FC9 /* DaoBase.swift in Sources */,
 				F30730121F1285DF00E66E1A /* BasePatientPageViewController.swift in Sources */,
 				F3DB17EE1F03F5F6005D9DF8 /* MenuViewController.swift in Sources */,
+				F34B5CBE1F1FBBF300B99271 /* LabResultDtViewController.swift in Sources */,
 				F3EAF1361F100D51002E47D9 /* RequestPasswordViewController.swift in Sources */,
+				F34B5CB61F1FA6F600B99271 /* LabResultViewController.swift in Sources */,
 				F3DB17F01F03F7C6005D9DF8 /* MyAppointmentViewController.swift in Sources */,
 				F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */,
 				F3EA7C641EF984C100A0AAA3 /* FMDatabase.m in Sources */,
@@ -703,6 +717,7 @@
 				F3EAF13C1F100ECC002E47D9 /* MessageCenterViewController.swift in Sources */,
 				F3DB17EA1F03E09C005D9DF8 /* ProfileViewController.swift in Sources */,
 				F34B5CB01F14CDE200B99271 /* VaccinationViewController.swift in Sources */,
+				F34B5CBA1F1FB95D00B99271 /* LabResultDtViewCell.swift in Sources */,
 				F3D4CCCA1EFA44F5009E8FC9 /* DateTime.swift in Sources */,
 				F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */,
 				F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */,
@@ -713,6 +728,7 @@
 				F30730191F1290BD00E66E1A /* ManageAccountViewController.swift in Sources */,
 				F3DB17E61F039555005D9DF8 /* SWRevealViewController.m in Sources */,
 				F3D4CCD61EFA6F0D009E8FC9 /* BusinessLayer.swift in Sources */,
+				F34B5CB81F1FA7DA00B99271 /* LabResultViewCell.swift in Sources */,
 				F3DB17DD1F02C200005D9DF8 /* WebServiceHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

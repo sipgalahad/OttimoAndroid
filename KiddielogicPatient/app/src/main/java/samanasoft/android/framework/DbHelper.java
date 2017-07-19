@@ -77,7 +77,6 @@ public class DbHelper{
         	Column colAttribute = (Column) field.getAnnotation(Column.class); 
         	if(field.isAnnotationPresent(Column.class)){		        			
         		try {
-					Log.d("temp", ctr + " ; " + colAttribute.Name());
         			setFieldValue(colAttribute, field, row, obj, ctr);
 	        		ctr++;
         		} catch (IllegalArgumentException e) {

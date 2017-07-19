@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_menu_appointment"
             android:title="My Vaccination" />
         <item
+            android:id="@+id/nav_labresult"
+            android:icon="@drawable/ic_menu_appointment"
+            android:title="My Laboratory Result" />
+        <item
             android:id="@+id/nav_change_password"
             android:icon="@drawable/ic_menu_manage"
             android:title="Change Password" />

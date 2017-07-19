@@ -41,6 +41,11 @@
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.LabResultActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="samanasoft.android.kiddielogicpatientalarm.MessageCenterActivity"
             android:label="@string/app_name"
             android:noHistory="true"
@@ -93,6 +98,17 @@
         <activity
             android:name="samanasoft.android.kiddielogicpatientalarm.ManageAccountActivity"
             android:label="@string/title_activity_manage_account"/>
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.LabResultDtActivity"
+            android:label="Detil"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="samanasoft.android.kiddielogicpatientalarm.LabResultActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicpatientalarm.LabResultActivity" />
+
+        </activity>
 
         <service android:name="samanasoft.android.kiddielogicpatientalarm.AlarmSyncDataService" />
         <service

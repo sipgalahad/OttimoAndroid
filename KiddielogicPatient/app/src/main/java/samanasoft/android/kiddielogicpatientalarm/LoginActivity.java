@@ -371,6 +371,12 @@ public class LoginActivity extends AppCompatActivity {
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     //i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     //i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(samanasoft.android.ottimo.common.Constant.SharedPreference.NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("mrn", entity.MRN);
+                    editor.commit();
+
                     startActivity(i);
 
                 } else {

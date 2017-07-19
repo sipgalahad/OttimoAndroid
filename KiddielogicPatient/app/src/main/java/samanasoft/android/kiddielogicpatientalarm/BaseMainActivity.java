@@ -3,6 +3,7 @@ package samanasoft.android.kiddielogicpatientalarm;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -46,7 +47,8 @@ public class BaseMainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Intent myIntent = getIntent();
-        MRN = myIntent.getIntExtra("mrn", 0);
+        SharedPreferences sharedPreferences = getSharedPreferences(samanasoft.android.ottimo.common.Constant.SharedPreference.NAME, MODE_PRIVATE);
+        MRN = sharedPreferences.getInt("mrn", 0);
         Log.d("test", "MRN Login = " + MRN);
         boolean isGotoMessageCenter = myIntent.getBooleanExtra("isGotoMessageCenter", false);
         if(isGotoMessageCenter) {
@@ -216,6 +218,11 @@ public class BaseMainActivity extends AppCompatActivity
                 startActivity(i);
             }
             finish();
+        } else if (id == R.id.nav_labresult) {
+            Intent i = new Intent(getBaseContext(), LabResultActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
         } else if (id == R.id.nav_vaccination) {
             Intent i = new Intent(getBaseContext(), VaccinationActivity.class);
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);

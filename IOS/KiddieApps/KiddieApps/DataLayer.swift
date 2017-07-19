@@ -73,7 +73,7 @@ public class LaboratoryResultDt : BaseClass{
     var LabTestResultTypeID:NSNumber?
     var LabTestResultTypeName:String?
     var FractionID:NSNumber?
-    var FractionName:String?
+    var FractionName1:String?
     var MetricResultValue:NSNumber?
     var MinMetricNormalValue:NSNumber?
     var MaxMetricNormalValue:NSNumber?
@@ -87,6 +87,7 @@ public class LaboratoryResultDt : BaseClass{
     var LabTestResultTypeDtName:String?
     var TextNormalValue:String?
     var TextValue:String?
+    var GCResultSummary:String?
     var ResultSummary:String?
     var Remarks:String?
     

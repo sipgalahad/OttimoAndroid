@@ -3,6 +3,7 @@ package samanasoft.android.kiddielogicpatientalarm;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -50,6 +51,10 @@ public class ManageAccountActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                 patient = lstPatient.get(myItemInt);
                 Intent i = new Intent(getBaseContext(), MainActivity.class);
+                SharedPreferences sharedPreferences = getSharedPreferences(samanasoft.android.ottimo.common.Constant.SharedPreference.NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("mrn", patient.MRN);
+                editor.commit();
                 i.putExtra("mrn", patient.MRN);
                 startActivity(i);
             }

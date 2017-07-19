@@ -173,8 +173,8 @@ public class DataLayer{
         @Column(DataType = DataType.INT, Name = "FractionID")
         public int FractionID;
 
-        @Column(DataType = DataType.STRING, Name = "FractionName")
-        public String FractionName;
+        @Column(DataType = DataType.STRING, Name = "FractionName1")
+        public String FractionName1;
 
         @Column(DataType = DataType.DOUBLE, Name = "MetricResultValue")
         public Double MetricResultValue;
@@ -214,6 +214,9 @@ public class DataLayer{
 
         @Column(DataType = DataType.STRING, Name = "TextValue")
         public String TextValue;
+
+        @Column(DataType = DataType.STRING, Name = "GCResultSummary")
+        public String GCResultSummary;
 
         @Column(DataType = DataType.STRING, Name = "ResultSummary")
         public String ResultSummary;

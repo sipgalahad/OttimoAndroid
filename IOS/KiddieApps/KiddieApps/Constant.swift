@@ -53,4 +53,11 @@ public class Constant {
         public static let CANCELLED = "0278^005";
         public static let VOID = "0278^999";
     }
+    public class LabResultSummary
+    {
+        public static let LOW = "OT005^001";
+        public static let NORMAL = "OT005^002";
+        public static let HIGH = "OT005^003";
+        public static let ABNORMAL = "OT005^004";
+    }
 }

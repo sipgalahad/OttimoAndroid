@@ -164,7 +164,7 @@ public class DBInitActivity extends Activity {
             Toast.makeText(this, "Anda tidak terhubung dengan internet", Toast.LENGTH_SHORT).show();
 
         String serverAppsVersion = prefs.getString(Constant.SharedPreference.SERVER_APPS_VERSION, "");
-        if(serverAppsVersion.equals("")) {
+        if(serverAppsVersion.equals("") || serverAppsVersion.compareTo(samanasoft.android.framework.Constant.AppVersion) < 0) {
             serverAppsVersion = samanasoft.android.framework.Constant.AppVersion;
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Constant.SharedPreference.SERVER_APPS_VERSION, serverAppsVersion);
@@ -193,6 +193,11 @@ public class DBInitActivity extends Activity {
         if (lstPatient.size() == 1) {
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.putExtra("mrn", lstPatient.get(0).MRN);
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constant.SharedPreference.NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("mrn", lstPatient.get(0).MRN);
+            editor.commit();
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(i);
