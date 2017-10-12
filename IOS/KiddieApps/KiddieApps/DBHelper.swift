@@ -219,8 +219,9 @@ public class DBHelper{
     }
     public func dataListRowToObject(row:FMResultSet?, obj:BaseClass) -> BaseClass?{
         if (row != nil) {
-            var obj2:BaseClass = BaseClass();
+            var obj2:BaseClass? = nil;
             while (row?.next())! {
+                obj2 = BaseClass();
                 obj2 = dataRowToObject(row: row, obj: obj)!;
             }
             return obj2;

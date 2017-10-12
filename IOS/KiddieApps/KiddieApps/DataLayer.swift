@@ -43,9 +43,13 @@ public class AppointmentDao{
         var query = helper.getRecord(tableName: "Appointment", lstPrimaryKey: Appointment().getPrimaryKey());
         query = query.replacingOccurrences(of: p_AppointmentID, with: String(AppointmentID));
         let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: Appointment()) as! Appointment?;
+        let temp = helper.dataListRowToObject(row: row, obj: Appointment());
         sharedInstance.database!.close()
-        return result;
+        if(temp != nil) {
+            let result = temp as! Appointment?;
+            return result;
+        }
+        return nil
     }
     public func insert(record:Appointment) -> Bool{
         let query = helper.insert(tableName: "Appointment", record: record);
@@ -108,9 +112,13 @@ public class LaboratoryResultDtDao{
         var query = helper.getRecord(tableName: "LaboratoryResultDt", lstPrimaryKey: LaboratoryResultDt().getPrimaryKey());
         query = query.replacingOccurrences(of: p_LaboratoryResultDtID, with: String(LaboratoryResultDtID));
         let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: LaboratoryResultDt()) as! LaboratoryResultDt?;
+        let temp = helper.dataListRowToObject(row: row, obj: LaboratoryResultDt());
         sharedInstance.database!.close()
-        return result;
+        if(temp != nil) {
+            let result = temp as! LaboratoryResultDt?;
+            return result;
+        }
+        return nil
     }
     public func insert(record:LaboratoryResultDt) -> Bool{
         let query = helper.insert(tableName: "LaboratoryResultDt", record: record);
@@ -155,9 +163,13 @@ public class LaboratoryResultHdDao{
         var query = helper.getRecord(tableName: "LaboratoryResultHd", lstPrimaryKey: LaboratoryResultHd().getPrimaryKey());
         query = query.replacingOccurrences(of: p_ID, with: String(ID));
         let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: LaboratoryResultHd()) as! LaboratoryResultHd?;
+        let temp = helper.dataListRowToObject(row: row, obj: LaboratoryResultHd());
         sharedInstance.database!.close()
-        return result;
+        if(temp != nil) {
+            let result = temp as! LaboratoryResultHd?;
+            return result;
+        }
+        return nil
     }
     public func insert(record:LaboratoryResultHd) -> Bool{
         let query = helper.insert(tableName: "LaboratoryResultHd", record: record);
@@ -223,9 +235,13 @@ public class PatientDao{
         var query = helper.getRecord(tableName: "Patient", lstPrimaryKey: Patient().getPrimaryKey());
         query = query.replacingOccurrences(of: p_MRN, with: String(MRN));
         let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: Patient()) as! Patient?;
+        let temp = helper.dataListRowToObject(row: row, obj: Patient());
         sharedInstance.database!.close()
-        return result;
+        if(temp != nil) {
+            let result = temp as! Patient?;
+            return result;
+        }
+        return nil
     }
     public func insert(record:Patient) -> Bool{
         let query = helper.insert(tableName: "Patient", record: record);
@@ -280,10 +296,13 @@ public class SettingDao{
         var query = helper.getRecord(tableName: "Setting", lstPrimaryKey: Setting().getPrimaryKey());
         query = query.replacingOccurrences(of: p_SettingCode, with: SettingCode);
         let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: Setting()) as! Setting?;
+        let temp = helper.dataListRowToObject(row: row, obj: Setting());
         sharedInstance.database!.close()
-        return result;
-    }
+        if(temp != nil) {
+            let result = temp as! Setting?;
+            return result;
+        }
+        return nil    }
     public func insert(record:Setting) -> Bool{
         let query = helper.insert(tableName: "Setting", record: record);
         return DaoBase.getInstance().executeNonQuery(query: query!);
@@ -332,9 +351,13 @@ public class VaccinationShotDtDao{
         query = query.replacingOccurrences(of: p_Type, with: String(Type));
         query = query.replacingOccurrences(of: p_ID, with: String(ID));
         let row = DaoBase.getInstance().getDataRow(query: query);
-        let result = helper.dataListRowToObject(row: row, obj: VaccinationShotDt()) as! VaccinationShotDt?;
+        let temp = helper.dataListRowToObject(row: row, obj: VaccinationShotDt());
         sharedInstance.database!.close()
-        return result;
+        if(temp != nil) {
+            let result = temp as! VaccinationShotDt?;
+            return result;
+        }
+        return nil
     }
     public func insert(record:VaccinationShotDt) -> Bool{
         let query = helper.insert(tableName: "VaccinationShotDt", record: record);

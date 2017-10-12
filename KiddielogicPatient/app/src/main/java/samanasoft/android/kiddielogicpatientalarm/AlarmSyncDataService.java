@@ -1,15 +1,21 @@
 package samanasoft.android.kiddielogicpatientalarm;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 
 import org.json.JSONArray;
@@ -92,12 +98,16 @@ public class AlarmSyncDataService extends Service {
                         BusinessLayer.updatePatient(context, entity1);
                     }
                 }
+
+                int editedMRN = 0;
                 if (result.returnObjAppointment != null) {
                     @SuppressWarnings("unchecked")
                     List<Appointment> lstAppointment = (List<Appointment>) result.returnObjAppointment;
 
                     String lstAppointmentID = "";
                     for (Appointment entity : lstAppointment) {
+                        if(editedMRN == 0)
+                            editedMRN = entity.MRN;
                         if (!lstAppointmentID.equals(""))
                             lstAppointmentID += ",";
                         lstAppointmentID += entity.AppointmentID;
@@ -116,6 +126,8 @@ public class AlarmSyncDataService extends Service {
                         }
                     }
                 }
+                if(editedMRN != 0)
+                    sendAppointmentNotification(editedMRN);
                 if (result.returnObjVaccination != null) {
                     @SuppressWarnings("unchecked")
                     List<VaccinationShotDt> lstVaccination = (List<VaccinationShotDt>) result.returnObjVaccination;
@@ -208,6 +220,34 @@ public class AlarmSyncDataService extends Service {
             }
         }
 
+    }
+
+    private void sendAppointmentNotification(int MRN) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle("Perubahan Appointment");
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.putExtra("mrn", MRN);
+        i.putExtra("isGoToAppointment", true);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        3,
+                        i,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, notification);
     }
 
     public WebServiceResponsePatient SyncPatient(Context context, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate, String vaccinationLastUpdatedDate, String labResultLastUpdatedDate){

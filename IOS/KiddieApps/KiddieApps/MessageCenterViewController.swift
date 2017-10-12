@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessageCenterViewController: BaseTableViewController {
+class MessageCenterViewController: BasePatientTableViewController {
 
     var lstAppointment:[vAppointment] = [];
     override func viewDidLoad() {

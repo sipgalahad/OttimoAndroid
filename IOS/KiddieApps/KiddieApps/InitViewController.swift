@@ -21,6 +21,9 @@ class InitViewController: BaseViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    public var isOpenMessageCenter = false;
+    public var appointmentID:Int = 0;
+    public var MRN:Int = 0;
     override func viewDidAppear(_ animated: Bool) {
         var isGoToNextPage = true;
         if UserDefaults.standard.object(forKey: Constant.Session.DB_VERSION) == nil {
@@ -149,7 +152,19 @@ class InitViewController: BaseViewController {
     
     func goToNextPage(){
         let lstPatient:[Patient] = BusinessLayer.getPatientList(filterExpression: "");
-        if(lstPatient.count == 0){
+        
+        if(isOpenMessageCenter){
+            let appointment = BusinessLayer.getAppointment(AppointmentID: appointmentID);
+            if(appointment != nil){
+                appointment?.GCAppointmentStatus = Constant.AppointmentStatus.CHECK_IN;
+                _ = BusinessLayer.updateAppointment(record: appointment!);
+            }
+            UserDefaults.standard.set(MRN, forKey:"MRN");
+            UserDefaults.standard.set(isOpenMessageCenter, forKey:"isOpenMessageCenter");
+            UserDefaults.standard.synchronize();
+            self.performSegue(withIdentifier: "mainViewInit", sender: self);            
+        }
+        else if(lstPatient.count == 0){
             self.performSegue(withIdentifier: "loginView", sender: self)
         }
         else if(lstPatient.count == 1){
@@ -157,6 +172,7 @@ class InitViewController: BaseViewController {
             let MRN:Int = Int(patient.MRN!);
             UserDefaults.standard.set(MRN, forKey:"MRN");
             UserDefaults.standard.synchronize();
+            UserDefaults.standard.set(false, forKey:"isOpenMessageCenter");
             self.performSegue(withIdentifier: "mainViewInit", sender: self);
         }
         else{

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseMessaging
 
 class LoginViewController: BaseViewController {
     
@@ -153,6 +155,9 @@ class LoginViewController: BaseViewController {
                     patient.LastSyncVaccinationDateTime = DateTime.now();
                     patient.LastSyncLabResultDateTime = DateTime.now();
                     let _ = BusinessLayer.insertPatient(record: patient);
+                    
+                    let medicalNo = patient.MedicalNo!
+                    Messaging.messaging().subscribe(toTopic: medicalNo)
                 }
                 for app in result.returnObjAppointment{
                     let _ = BusinessLayer.insertAppointment(record: app);
@@ -174,6 +179,7 @@ class LoginViewController: BaseViewController {
                     let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
                 }
                 UserDefaults.standard.set(entityPatient.MRN, forKey:"MRN");
+                UserDefaults.standard.set(false, forKey:"isOpenMessageCenter");
                 UserDefaults.standard.synchronize();
                 DispatchQueue.main.async() {
                     self.performSegue(withIdentifier: "mainView", sender: self);

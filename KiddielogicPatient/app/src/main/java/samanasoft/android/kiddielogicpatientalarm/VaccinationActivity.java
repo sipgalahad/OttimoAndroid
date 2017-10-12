@@ -51,7 +51,7 @@ public class VaccinationActivity extends BaseMainActivity {
         List<vVaccinationType> lstVaccinationType = BusinessLayer.getvVaccinationTypeList(getApplicationContext(), "1 = 1 ORDER BY VaccinationTypeName");
         vVaccinationType defaultObj = new vVaccinationType();
         defaultObj.VaccinationTypeID = 0;
-        defaultObj.VaccinationTypeName = "-- Jenis Vaksin --";
+        defaultObj.VaccinationTypeName = "-- Semua --";
         lstVaccinationType.add(0, defaultObj);
         //Log.d("testVaksin",lstVaccinationType.get(0).VaccinationTypeID + "");
 
@@ -78,9 +78,9 @@ public class VaccinationActivity extends BaseMainActivity {
         int vaccinationTypeID = (int) spnVaccinationType.getSelectedItemId();
         List<DataLayer.VaccinationShotDt> lstVaccination = null;
         if(vaccinationTypeID != 0)
-            lstVaccination = BusinessLayer.getVaccinationShotDtList(this, String.format("MRN = '%1$s' AND VaccinationTypeID = '%2$s' ORDER BY VaccinationNo", MRN, vaccinationTypeID));
+            lstVaccination = BusinessLayer.getVaccinationShotDtList(this, String.format("MRN = '%1$s' AND VaccinationTypeID = '%2$s' ORDER BY VaccinationNo DESC", MRN, vaccinationTypeID));
         else
-            lstVaccination = new ArrayList<DataLayer.VaccinationShotDt>();
+            lstVaccination = BusinessLayer.getVaccinationShotDtList(this, String.format("MRN = '%1$s' ORDER BY VaccinationTypeID ASC, VaccinationNo DESC", MRN, vaccinationTypeID));
         fillListVaccination(lstVaccination);
     }
 
@@ -126,9 +126,9 @@ public class VaccinationActivity extends BaseMainActivity {
             }
 
             // Bind the data efficiently with the holder.
-            holder.txtVaccinationDate.setText(entity.VaccinationDate.toString(Constant.FormatString.DATE_FORMAT) + " (" + entity.VaccinationNo + ")");
+            holder.txtVaccinationDate.setText(entity.VaccinationDate.toString(Constant.FormatString.DATE_FORMAT));
             holder.txtVaccinationInformationParamedicName.setText(entity.ParamedicName);
-            holder.txtVaccinationInformationDose.setText(entity.VaccineName + " (" + entity.Dose + " " + entity.DoseUnit + ")");
+            holder.txtVaccinationInformationDose.setText(entity.VaccinationTypeName + " - " + entity.VaccinationNo);
             return convertView;
 
         }

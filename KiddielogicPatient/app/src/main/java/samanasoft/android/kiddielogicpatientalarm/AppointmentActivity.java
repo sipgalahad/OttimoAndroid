@@ -31,11 +31,13 @@ import samanasoft.android.ottimo.dal.DataLayer.Patient;
 public class AppointmentActivity extends BaseMainActivity {
 
     private View mProgressView;
+    private TextView tvLastSyncDate;
     private ListView lvwAppointment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Patient entity = InitActivity(savedInstanceState, R.layout.activity_appointment);
+        tvLastSyncDate = (TextView)findViewById(R.id.tvLastSyncDate);
         lvwAppointment = (ListView)findViewById(R.id.lvwPatient);
         lvwAppointment.setDivider(null);
         lvwAppointment.setDividerHeight(0);
@@ -44,6 +46,9 @@ public class AppointmentActivity extends BaseMainActivity {
         //List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", entity.MRN));
         List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND StartDate >= '%2$s' AND MRN = '%3$s' ORDER BY StartDate", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), entity.MRN));
         fillListAppointment(lstAppointment);
+
+        Patient entityPatient = BusinessLayer.getPatient(this, MRN);
+        tvLastSyncDate.setText("Last Sync : " + entityPatient.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT));
     }
 
     private AppointmentInformationAdapter adapter;
@@ -234,6 +239,8 @@ public class AppointmentActivity extends BaseMainActivity {
                 Patient entityPatient = BusinessLayer.getPatient(getBaseContext(), MRN);
                 entityPatient.LastSyncAppointmentDateTime = result.timestamp;
                 BusinessLayer.updatePatient(getBaseContext(), entityPatient);
+
+                tvLastSyncDate.setText("Last Sync : " + entityPatient.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT));
             }
         }
 

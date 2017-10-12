@@ -20,12 +20,20 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import samanasoft.android.framework.DateTime;
+import samanasoft.android.framework.webservice.WebServiceHelper;
 import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.common.Constant;
 import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer;
+import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHd;
 
 /**
  * Created by DEV_ARI on 5/8/2017.
@@ -36,6 +44,8 @@ public class FCMMessagingService extends FirebaseMessagingService {
     String type = "";
     String deviceID = "";
     Integer appointmentID = 0;
+    Integer labResultID = 0;
+    Integer MRN = 0;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Displaying data in log
@@ -46,8 +56,8 @@ public class FCMMessagingService extends FirebaseMessagingService {
         if(remoteMessage.getData().size() > 0) {
             Map<String, String> lstData = remoteMessage.getData();
             type = lstData.get("type").toString();
-            /*Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
+            /*Handler handler2 = new Handler(Looper.getMainLooper());
+            handler2.post(new Runnable() {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Test : " + type, Toast.LENGTH_SHORT).show();
                 }
@@ -66,7 +76,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        new SendMessageTask(deviceID, appointmentID, samanasoft.android.framework.Constant.AppointmentStatus.SEND_CONFIRMATION).execute((Void) null);
+                    new SendMessageTask(deviceID, appointmentID, samanasoft.android.framework.Constant.AppointmentStatus.SEND_CONFIRMATION).execute((Void) null);
                     }
                 });
 
@@ -79,8 +89,146 @@ public class FCMMessagingService extends FirebaseMessagingService {
             } else if (type.equals("SyncApp")) {
                 Intent intentSyncData = new Intent(getApplicationContext(), AlarmSyncDataService.class);
                 startService(intentSyncData);
+            } else if (type.equals("LabResult")) {
+                MRN = Integer.parseInt(lstData.get("MRN"));
+                labResultID = Integer.parseInt(lstData.get("labResultID"));
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new LoadLabResultTask(labResultID).execute((Void) null);
+                    }
+                });
+                /*LaboratoryResultHd entityLab = BusinessLayer.getLaboratoryResultHd(getApplicationContext(), labResultID);
+                if(entityLab == null) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            new LoadLabResultTask(labResultID).execute((Void) null);
+                        }
+                    });
+                }
+                else{
+                    sendLabResultNotification();
+                }*/
             }
         }
+    }
+    public class LoadLabResultTask extends AsyncTask<Void, Void, WebServiceResponsePatient> {
+        private Integer labResultID;
+        LoadLabResultTask(Integer labResultID1) {
+            this.labResultID = labResultID1;
+        }
+
+        @Override
+        protected WebServiceResponsePatient doInBackground(Void... params) {
+            try {
+                WebServiceResponsePatient result = SyncLabResultPerID(getBaseContext(), labResultID);
+                return result;
+            }
+            catch (Exception ex) {
+                Toast.makeText(getBaseContext(), "Get LabResult Failed", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final WebServiceResponsePatient result) {
+            Log.d(TAG, "Masuk kok");
+            if (result == null) {
+                Log.d(TAG, "a");
+                Toast.makeText(getBaseContext(), "Update Data Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d(TAG, "b");
+                if (result.returnObjLabResultHd != null) {
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.LaboratoryResultHd> lstEntity = (List<DataLayer.LaboratoryResultHd>) result.returnObjLabResultHd;
+
+                    String lstID = "";
+                    for (DataLayer.LaboratoryResultHd entity : lstEntity) {
+                        if (!lstID.equals(""))
+                            lstID += ",";
+                        lstID += entity.ID;
+                    }
+
+                    if (!lstID.equals("")) {
+                        List<DataLayer.LaboratoryResultHd> lstOldEntity = BusinessLayer.getLaboratoryResultHdList(getBaseContext(), String.format("ID IN (%1$s)", lstID));
+                        for (DataLayer.LaboratoryResultHd entity : lstOldEntity) {
+                            BusinessLayer.deleteLaboratoryResultHd(getBaseContext(), entity.ID);
+                        }
+
+                        for (DataLayer.LaboratoryResultHd entity : lstEntity) {
+                            BusinessLayer.insertLaboratoryResultHd(getBaseContext(), entity);
+                        }
+                    }
+                }
+                if (result.returnObjLabResultDt != null) {
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.LaboratoryResultDt> lstEntity = (List<DataLayer.LaboratoryResultDt>) result.returnObjLabResultDt;
+
+                    String lstID = "";
+                    for (DataLayer.LaboratoryResultDt entity : lstEntity) {
+                        if (!lstID.equals(""))
+                            lstID += ",";
+                        lstID += entity.LaboratoryResultDtID;
+                    }
+
+                    if (!lstID.equals("")) {
+                        List<DataLayer.LaboratoryResultDt> lstOldEntity = BusinessLayer.getLaboratoryResultDtList(getBaseContext(), String.format("LaboratoryResultDtID IN (%1$s)", lstID));
+                        for (DataLayer.LaboratoryResultDt entity : lstOldEntity) {
+                            BusinessLayer.deleteLaboratoryResultDt(getBaseContext(), entity.LaboratoryResultDtID);
+                        }
+
+                        for (DataLayer.LaboratoryResultDt entity : lstEntity) {
+                            BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity);
+                        }
+                    }
+                }
+                sendLabResultNotification();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+    //endregion
+
+
+    public WebServiceResponsePatient SyncLabResultPerID(Context context, Integer LabResultID){
+        WebServiceResponsePatient result = new WebServiceResponsePatient();
+        try {
+            JSONObject response = WebServiceHelper.SyncLabResultPerID(context, LabResultID);
+
+            JSONArray returnObjLabResultHd = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultHd");
+            JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
+            DateTime timestamp = WebServiceHelper.getTimestamp(response);
+
+            List<DataLayer.LaboratoryResultHd> lst4 = new ArrayList<DataLayer.LaboratoryResultHd>();
+            for (int i = 0; i < returnObjLabResultHd.length();++i){
+                JSONObject row = (JSONObject) returnObjLabResultHd.get(i);
+                lst4.add((DataLayer.LaboratoryResultHd)WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultHd()));
+            }
+            List<DataLayer.LaboratoryResultDt> lst5 = new ArrayList<DataLayer.LaboratoryResultDt>();
+            for (int i = 0; i < returnObjLabResultDt.length();++i){
+                JSONObject row = (JSONObject) returnObjLabResultDt.get(i);
+                lst5.add((DataLayer.LaboratoryResultDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultDt()));
+            }
+            result.returnObjLabResultHd = lst4;
+            result.returnObjLabResultDt = lst5;
+            result.timestamp = timestamp;
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public class WebServiceResponsePatient {
+        public DateTime timestamp;
+        public List<?> returnObjLabResultHd;
+        public List<?> returnObjLabResultDt;
     }
     public class SendMessageTask extends AsyncTask<Void, Void, WebServiceResponse> {
         private final String mDeviceID;
@@ -146,12 +294,48 @@ public class FCMMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.drawable.logo)
                         .setContentTitle("Appointment Reminder")
                         .setContentText(messageBody);
-        Intent resultIntent = new Intent(this, NotificationOpenerActivity.class);
+        //Intent resultIntent = new Intent(this, NotificationOpenerActivity.class);
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.putExtra("mrn", MRN);
+        i.putExtra("isGotoMessageCenter", true);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
                         3,
-                        resultIntent,
+                        i,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, notification);
+    }
+
+    //This method is only generating push notification
+    //It is same as we did in earlier posts
+    private void sendLabResultNotification() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle("Laboratory Result");
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.putExtra("mrn", MRN);
+        i.putExtra("labresultid", labResultID);
+        i.putExtra("isGoToLabResult", true);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        3,
+                        i,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);

@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>619055338956-q0lbbn4olgoku8tmi81boo2t5o6ifp76.apps.googleusercontent.com</string>
+	<string>141062713374-rph0i5bfnr1pt1jojc5dvdchiod59prs.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.619055338956-q0lbbn4olgoku8tmi81boo2t5o6ifp76</string>
+	<string>com.googleusercontent.apps.141062713374-rph0i5bfnr1pt1jojc5dvdchiod59prs</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDJ_A5CyAyIMIDWMza3Qkcrj69Vb8MhwGg</string>
+	<string>AIzaSyD3pROxm5-D8dSstmcF1isVEG8HsE4JHGQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>619055338956</string>
+	<string>141062713374</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>samanasoft.ios.KiddieApps</string>
 	<key>PROJECT_ID</key>
-	<string>kiddielogic-163205</string>
+	<string>kiddieapps-89153</string>
 	<key>STORAGE_BUCKET</key>
-	<string>kiddielogic-163205.appspot.com</string>
+	<string>kiddieapps-89153.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:619055338956:ios:486ae8cd24ecfddd</string>
+	<string>1:141062713374:ios:486ae8cd24ecfddd</string>
 	<key>DATABASE_URL</key>
-	<string>https://kiddielogic-163205.firebaseio.com</string>
+	<string>https://kiddieapps-89153.firebaseio.com</string>
 </dict>
 </plist>

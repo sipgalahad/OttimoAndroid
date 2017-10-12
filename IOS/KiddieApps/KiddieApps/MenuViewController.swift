@@ -1,4 +1,4 @@
-//
+    //
 //  MenuViewController.swift
 //  KiddieApps
 //
@@ -16,9 +16,13 @@ class MenuViewController: UITableViewController {
     @IBOutlet weak var lblAppointmentCount: UILabel!
     @IBOutlet weak var lblMessageCenterCount: UILabel!
     let MRN:Int = (UserDefaults.standard.object(forKey: "MRN") as? Int)!;
+    var isOpenMessageCenter:Bool = false;
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if(UserDefaults.standard.object(forKey: "isOpenMessageCenter") != nil){
+            isOpenMessageCenter = (UserDefaults.standard.object(forKey: "isOpenMessageCenter") as? Bool)!;
+        }
         let entity:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
         self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
         self.imgProfile.clipsToBounds = true;
@@ -39,13 +43,19 @@ class MenuViewController: UITableViewController {
         }
         lblPatientName.text = entity.FullName;
         lblMedicalNo.text = entity.MedicalNo;
-
         
-        let lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN))");
+        
+        let lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(String(describing: DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)))'");
         if(lstAppointment.count == 0){
             lblAppointmentCount.isHidden = true;
         }
         lblAppointmentCount.text = String(lstAppointment.count);
+        
+        let lstMessageCenter = BusinessLayer.getAppointmentList(filterExpression: "GCAppointmentStatus = '\(String(describing: Constant.AppointmentStatus.CHECK_IN))' AND StartDate >= '\(String(describing: DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)))'");
+        if(lstMessageCenter.count == 0){
+            lblMessageCenterCount.isHidden = true;
+        }
+        lblMessageCenterCount.text = String(lstMessageCenter.count);
         
         let gradient: CAGradientLayer = CAGradientLayer()
         
@@ -56,6 +66,14 @@ class MenuViewController: UITableViewController {
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
         
         self.cellHeader.layer.insertSublayer(gradient, at: 0)
+        
+        
+        if(isOpenMessageCenter){
+            UserDefaults.standard.set(MRN, forKey:"MRN");
+            UserDefaults.standard.synchronize();
+            self.performSegue(withIdentifier: "messageCenterView", sender: self);
+        }
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -76,7 +94,7 @@ class MenuViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(indexPath.row == 5){
+        if(indexPath.row == 6){
             let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldAppointment {
                 let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);

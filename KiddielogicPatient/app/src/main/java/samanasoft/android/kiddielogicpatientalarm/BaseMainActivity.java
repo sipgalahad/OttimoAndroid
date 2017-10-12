@@ -57,6 +57,30 @@ public class BaseMainActivity extends AppCompatActivity
             i.putExtra("mrn", MRN);
             startActivity(i);
         }
+        boolean isGoToAppointment = myIntent.getBooleanExtra("isGoToAppointment", false);
+        if(isGoToAppointment) {
+            Intent i = new Intent(getBaseContext(), AppointmentActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
+        }
+        boolean isGoToLabResult = myIntent.getBooleanExtra("isGoToLabResult", false);
+        Integer labResultID = myIntent.getIntExtra("labresultid", 0);
+        if(isGoToLabResult) {
+            Intent i = new Intent(getBaseContext(), LabResultActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            i.putExtra("labresultid", labResultID);
+            i.putExtra("isGoToLabResultDt", true);
+            startActivity(i);
+        }
+        boolean isGoToLabResultDt = myIntent.getBooleanExtra("isGoToLabResultDt", false);
+        if(isGoToLabResultDt) {
+            Intent i = new Intent(getBaseContext(), LabResultDtActivity.class);
+            i.putExtra("mrn", MRN);
+            i.putExtra("labresultid", labResultID);
+            startActivity(i);
+        }
         Patient entity = null;
         if(MRN == 0){
             entity = BusinessLayer.getPatientList(this,"").get(0);
@@ -87,7 +111,7 @@ public class BaseMainActivity extends AppCompatActivity
     }
 
     protected void setMessageCenterCounter(){
-        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s%%' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '%3$s' AND StartDate >= '%2$s%%')", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.SEND_CONFIRMATION));
+        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s%%' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus IN ('%3$s','%4$s') AND StartDate >= '%2$s%%')", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.SEND_CONFIRMATION, Constant.AppointmentStatus.CONFIRMED));
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         int appointmentCount = lstAppointment.size();
         if(appointmentCount > 0) {

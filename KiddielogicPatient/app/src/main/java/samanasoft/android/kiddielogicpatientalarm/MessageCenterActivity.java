@@ -127,7 +127,7 @@ public class MessageCenterActivity extends BaseMainActivity {
                 message += " (Cancelled)";
             holder.txtAppointmentInformationMessage.setText(message);
 
-            if(entity.ReminderDate.toString(Constant.FormatString.DATE_TIME_FORMAT_DB).compareTo(DateTime.now().toString(Constant.FormatString.DATE_TIME_FORMAT_DB)) < 0){
+            if(entity.ReminderDate.toString(Constant.FormatString.DATE_FORMAT_DB).compareTo(DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB)) < 0){
                 holder.btnConfirm.setVisibility(View.INVISIBLE);
                 holder.btnCancel.setVisibility(View.INVISIBLE);
             }

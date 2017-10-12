@@ -55,6 +55,7 @@ class ManageAccountViewController: UITableViewController {
         let patient:Patient = lstPatient[indexPath.row];
         let MRN:Int = Int(patient.MRN!);
         UserDefaults.standard.set(MRN, forKey:"MRN");
+        UserDefaults.standard.set(false, forKey:"isOpenMessageCenter");
         UserDefaults.standard.synchronize();
         self.performSegue(withIdentifier: "mainViewManageAccount", sender: self);
     }
