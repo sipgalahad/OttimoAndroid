@@ -16,12 +16,12 @@ class MenuViewController: UITableViewController {
     @IBOutlet weak var lblAppointmentCount: UILabel!
     @IBOutlet weak var lblMessageCenterCount: UILabel!
     let MRN:Int = (UserDefaults.standard.object(forKey: "MRN") as? Int)!;
-    var isOpenMessageCenter:Bool = false;
+    var pageType:NSString = "";
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(UserDefaults.standard.object(forKey: "isOpenMessageCenter") != nil){
-            isOpenMessageCenter = (UserDefaults.standard.object(forKey: "isOpenMessageCenter") as? Bool)!;
+        if(UserDefaults.standard.object(forKey: "pageType") != nil){
+            pageType = (UserDefaults.standard.object(forKey: "pageType") as? NSString)!;
         }
         let entity:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
         self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
@@ -44,17 +44,25 @@ class MenuViewController: UITableViewController {
         lblPatientName.text = entity.FullName;
         lblMedicalNo.text = entity.MedicalNo;
         
+        let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
         
-        let lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(String(describing: DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)))'");
+        let lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(dtNow)'");
         if(lstAppointment.count == 0){
             lblAppointmentCount.isHidden = true;
         }
+        else{
+            lblAppointmentCount.isHidden = false;
+        }
         lblAppointmentCount.text = String(lstAppointment.count);
         
-        let lstMessageCenter = BusinessLayer.getAppointmentList(filterExpression: "GCAppointmentStatus = '\(String(describing: Constant.AppointmentStatus.CHECK_IN))' AND StartDate >= '\(String(describing: DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)))'");
+        let lstMessageCenter = BusinessLayer.getAppointmentList(filterExpression: "(GCAppointmentStatus != '\(Constant.AppointmentStatus.VOID)' AND ('\(dtNow)' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '\(Constant.AppointmentStatus.CHECK_IN)' AND StartDate >= '\(dtNow)')");
         if(lstMessageCenter.count == 0){
             lblMessageCenterCount.isHidden = true;
         }
+        else{
+            lblMessageCenterCount.isHidden = false;
+        }
+
         lblMessageCenterCount.text = String(lstMessageCenter.count);
         
         let gradient: CAGradientLayer = CAGradientLayer()
@@ -68,11 +76,20 @@ class MenuViewController: UITableViewController {
         self.cellHeader.layer.insertSublayer(gradient, at: 0)
         
         
-        if(isOpenMessageCenter){
+        if(pageType.isEqual(to: "app")){
             UserDefaults.standard.set(MRN, forKey:"MRN");
             UserDefaults.standard.synchronize();
             self.performSegue(withIdentifier: "messageCenterView", sender: self);
         }
+        else if(pageType.isEqual(to: "lab")){
+            let labResultID:Int = (UserDefaults.standard.object(forKey: "labResultID") as? Int)!;
+            UserDefaults.standard.set(MRN, forKey:"MRN");
+            UserDefaults.standard.set(pageType, forKey:"pageType");
+            UserDefaults.standard.set(labResultID, forKey:"labResultID");
+            UserDefaults.standard.synchronize();
+            self.performSegue(withIdentifier: "labResultView", sender: self);
+        }
+
 
     }
 

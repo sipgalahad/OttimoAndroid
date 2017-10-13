@@ -18,6 +18,15 @@ class LabResultViewController: BasePatientTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         lstLabResultHd = BusinessLayer.getLaboratoryResultHdList(filterExpression: "MRN = \(String(describing: MRN))");
+        
+        if(UserDefaults.standard.object(forKey: "pageType") != nil){
+            let pageType = (UserDefaults.standard.object(forKey: "pageType") as? NSString)!;
+            if(pageType.isEqual(to: "lab")){
+                selectedLabResultID = (UserDefaults.standard.object(forKey: "labResultID") as? Int)!;
+                self.performSegue(withIdentifier: "labResultDtView", sender: self);
+            }
+        }
+        
         // Do any additional setup after loading the view.
     }
     

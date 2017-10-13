@@ -179,7 +179,7 @@ class LoginViewController: BaseViewController {
                     let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
                 }
                 UserDefaults.standard.set(entityPatient.MRN, forKey:"MRN");
-                UserDefaults.standard.set(false, forKey:"isOpenMessageCenter");
+                UserDefaults.standard.set("", forKey:"pageType");
                 UserDefaults.standard.synchronize();
                 DispatchQueue.main.async() {
                     self.performSegue(withIdentifier: "mainView", sender: self);

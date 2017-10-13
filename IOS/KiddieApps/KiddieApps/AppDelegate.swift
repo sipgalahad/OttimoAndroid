@@ -270,7 +270,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 
                 vc.appointmentID = Int(appointmentID as String)!;
                 vc.MRN = Int(MRN as String)!;
-                vc.isOpenMessageCenter = true
+                vc.pageType = "app"
+                self.window?.rootViewController = vc;
+            }
+            else if(type.isEqual(to: "LabResult")){
+                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                
+                let labResultID = userInfo["labResultID"] as! NSString;
+                let MRN = userInfo["MRN"] as! NSString;
+                let vc = storyBoard.instantiateViewController(withIdentifier: "InitViewController") as! InitViewController;
+                
+                vc.labResultID = Int(labResultID as String)!;
+                vc.MRN = Int(MRN as String)!;
+                vc.pageType = "lab"
                 self.window?.rootViewController = vc;
             }
         }

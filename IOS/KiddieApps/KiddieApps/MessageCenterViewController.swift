@@ -13,7 +13,8 @@ class MessageCenterViewController: BasePatientTableViewController {
     var lstAppointment:[vAppointment] = [];
     override func viewDidLoad() {
         super.viewDidLoad()
-        lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "");
+        let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
+        lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "(GCAppointmentStatus != '\(Constant.AppointmentStatus.VOID)' AND ('\(dtNow)' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '\(Constant.AppointmentStatus.CHECK_IN)' AND StartDate >= '\(dtNow)')");
         // Do any additional setup after loading the view.
     }
 
@@ -40,6 +41,15 @@ class MessageCenterViewController: BasePatientTableViewController {
         let appointment:vAppointment = lstAppointment[indexPath.row];
         cell.lblMessage.text = "Mengingatkan \(String(describing: appointment.FullName!)) terjadwal \(String(describing: appointment.VisitTypeName!)) ke \(String(describing: appointment.ParamedicName!)) tgl \(appointment.StartDate!.toString(format: Constant.FormatString.DATE_FORMAT)) jam \(String(describing: appointment.cfStartTime!)) di KiddieCare. Jika setuju tekan tombol 'Confirm'. Jika tidak menjawab dianggap batal";
         
+        if(appointment.GCAppointmentStatus != Constant.AppointmentStatus.CHECK_IN){
+            cell.btnConfirm.isHidden = true;
+            cell.btnCancel.isHidden = true;
+        }
+        else {
+            cell.btnConfirm.isHidden = false;
+            cell.btnCancel.isHidden = false;
+        }
+    
         cell.btnConfirm.tag = indexPath.row;
         cell.btnCancel.tag = indexPath.row;
         cell.btnConfirm.addTarget(self, action: #selector(self.onBtnConfirmClick), for: .touchUpInside)
@@ -54,9 +64,16 @@ class MessageCenterViewController: BasePatientTableViewController {
         self.showLoadingPanel();
         postAppointmentAnswer(appointmentID: entity.AppointmentID as! Int, GCAppointmentStatus: Constant.AppointmentStatus.CONFIRMED, completionHandler: { (result) -> Void in
             if(result == "1"){
+                let appointment:Appointment = BusinessLayer.getAppointment(AppointmentID: entity.AppointmentID as! Int)!;
+                appointment.GCAppointmentStatus = Constant.AppointmentStatus.CONFIRMED;
+                _ = BusinessLayer.updateAppointment(record: appointment);
+                
+                let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
+                self.lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "(GCAppointmentStatus != '\(Constant.AppointmentStatus.VOID)' AND ('\(dtNow)' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '\(Constant.AppointmentStatus.CHECK_IN)' AND StartDate >= '\(dtNow)')");
                 DispatchQueue.main.async() {
                     self.hideLoadingPanel();
                     displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Perjanjian Berhasil Dilakukan.");
+                    self.tableView.reloadData();
                 }
             }
             else{
@@ -74,9 +91,16 @@ class MessageCenterViewController: BasePatientTableViewController {
         self.showLoadingPanel();
         postAppointmentAnswer(appointmentID: entity.AppointmentID as! Int, GCAppointmentStatus: Constant.AppointmentStatus.CANCELLED, completionHandler: { (result) -> Void in
             if(result == "1"){
+                let appointment:Appointment = BusinessLayer.getAppointment(AppointmentID: entity.AppointmentID as! Int)!;
+                appointment.GCAppointmentStatus = Constant.AppointmentStatus.CANCELLED;
+                _ = BusinessLayer.updateAppointment(record: appointment);
+                
+                let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
+                self.lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "(GCAppointmentStatus != '\(Constant.AppointmentStatus.VOID)' AND ('\(dtNow)' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '\(Constant.AppointmentStatus.CHECK_IN)' AND StartDate >= '\(dtNow)')");
                 DispatchQueue.main.async() {
                     self.hideLoadingPanel();
                     displayMyAlertMessage(ctrl: self, userMessage: "Pembatalan Perjanjian Berhasil Dilakukan.");
+                    self.tableView.reloadData();
                 }
             }
             else{

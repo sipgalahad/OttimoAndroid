@@ -15,7 +15,7 @@ class MyAppointmentViewController: BasePatientTableViewController {
     var lstAppointment:[Appointment] = [];
     override func viewDidLoad() {
         super.viewDidLoad()
-        lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN))");
+        lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB))'");
         // Do any additional setup after loading the view.
     }
 
@@ -63,7 +63,7 @@ class MyAppointmentViewController: BasePatientTableViewController {
             patient.LastSyncAppointmentDateTime = DateTime.now();
             let _ = BusinessLayer.updatePatient(record: patient);
             
-            self.lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
+            self.lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN)) AND StartDate >= '\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB))'");
             DispatchQueue.main.async() {
                 self.tableView.reloadData();
             }

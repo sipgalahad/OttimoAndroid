@@ -21,8 +21,9 @@ class InitViewController: BaseViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    public var isOpenMessageCenter = false;
+    public var pageType:NSString = "";
     public var appointmentID:Int = 0;
+    public var labResultID:Int = 0;
     public var MRN:Int = 0;
     override func viewDidAppear(_ animated: Bool) {
         var isGoToNextPage = true;
@@ -153,16 +154,63 @@ class InitViewController: BaseViewController {
     func goToNextPage(){
         let lstPatient:[Patient] = BusinessLayer.getPatientList(filterExpression: "");
         
-        if(isOpenMessageCenter){
+        if(pageType.isEqual(to: "app")){
             let appointment = BusinessLayer.getAppointment(AppointmentID: appointmentID);
             if(appointment != nil){
                 appointment?.GCAppointmentStatus = Constant.AppointmentStatus.CHECK_IN;
                 _ = BusinessLayer.updateAppointment(record: appointment!);
             }
             UserDefaults.standard.set(MRN, forKey:"MRN");
-            UserDefaults.standard.set(isOpenMessageCenter, forKey:"isOpenMessageCenter");
+            UserDefaults.standard.set(pageType, forKey:"pageType");
             UserDefaults.standard.synchronize();
             self.performSegue(withIdentifier: "mainViewInit", sender: self);            
+        }
+        else if(pageType.isEqual(to: "lab")){
+            self.showLoadingPanel();
+            syncLabResultPerID(ID: labResultID , completionHandler: { (result) -> Void in
+                self.hideLoadingPanel();
+                var lstID = "";
+                for entity in result.returnObjLabResultHd{
+                    if lstID != ""{
+                        lstID += ",";
+                    }
+                    lstID += String(describing: entity.ID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[LaboratoryResultHd] = BusinessLayer.getLaboratoryResultHdList(filterExpression: "ID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteLaboratoryResultHd(ID: oldEntity.ID as! Int);
+                    }
+                }
+                
+                lstID = "";
+                for entity in result.returnObjLabResultDt{
+                    if lstID != ""{
+                        lstID += ",";
+                    }
+                    lstID += String(describing: entity.LaboratoryResultDtID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[LaboratoryResultDt] = BusinessLayer.getLaboratoryResultDtList(filterExpression: "LaboratoryResultDtID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteLaboratoryResultDt(LaboratoryResultDtID: oldEntity.LaboratoryResultDtID as! Int);
+                    }
+                }
+                for labResultHd in result.returnObjLabResultHd{
+                    let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
+                }
+                for labResultDt in result.returnObjLabResultDt{
+                    let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
+                }
+                
+                DispatchQueue.main.async() {
+                    UserDefaults.standard.set(self.MRN, forKey:"MRN");
+                    UserDefaults.standard.set(self.pageType, forKey:"pageType");
+                    UserDefaults.standard.set(self.labResultID, forKey:"labResultID");
+                    UserDefaults.standard.synchronize();
+                    self.performSegue(withIdentifier: "mainViewInit", sender: self);
+                }
+            });
         }
         else if(lstPatient.count == 0){
             self.performSegue(withIdentifier: "loginView", sender: self)
@@ -172,7 +220,7 @@ class InitViewController: BaseViewController {
             let MRN:Int = Int(patient.MRN!);
             UserDefaults.standard.set(MRN, forKey:"MRN");
             UserDefaults.standard.synchronize();
-            UserDefaults.standard.set(false, forKey:"isOpenMessageCenter");
+            UserDefaults.standard.set("", forKey:"pageType");
             self.performSegue(withIdentifier: "mainViewInit", sender: self);
         }
         else{
@@ -181,6 +229,32 @@ class InitViewController: BaseViewController {
 
         
     }
+    
+    public func syncLabResultPerID(ID:Int, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
+        WebServiceHelper().SyncLabResultPerID(ID: ID, completionHandler: { (result) -> Void in
+            //self.txtMedicalNo.text = result;
+            let retval:WebServiceResponsePatient = WebServiceResponsePatient();
+            
+            let dict = WebServiceHelper.convertToDictionary(text: result)
+            retval.timeStamp = WebServiceHelper.JSONDateToDateTime(jsonDate: dict?["Timestamp"] as! String);
+            if(dict?["ReturnObjLabResultHd"] != nil){
+                let objLabResultHd = dict?["ReturnObjLabResultHd"] as! NSArray
+                for tmp in objLabResultHd{
+                    let entity:LaboratoryResultHd = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultHd()) as! LaboratoryResultHd
+                    retval.returnObjLabResultHd.append(entity);
+                }
+            }
+            if(dict?["ReturnObjLabResultDt"] != nil){
+                let objLabResultDt = dict?["ReturnObjLabResultDt"] as! NSArray
+                for tmp in objLabResultDt{
+                    let entity:LaboratoryResultDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultDt()) as! LaboratoryResultDt
+                    retval.returnObjLabResultDt.append(entity);
+                }
+            }
+            completionHandler(retval);
+        });
+    }
+
 
     /*
     // MARK: - Navigation
