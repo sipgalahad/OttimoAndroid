@@ -19,6 +19,7 @@ class LabResultDtViewController: BaseViewController, UITableViewDelegate, UITabl
     var lstLabResultDt:[LaboratoryResultDt] = [];
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserDefaults.standard.set("", forKey:"pageType");
 
         let entityHd:LaboratoryResultHd = BusinessLayer.getLaboratoryResultHd(ID: labResultID)!;
         lblResultNo.text = entityHd.ReferenceNo;

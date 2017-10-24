@@ -159,14 +159,35 @@ class InitViewController: BaseViewController {
             if(appointment != nil){
                 appointment?.GCAppointmentStatus = Constant.AppointmentStatus.CHECK_IN;
                 _ = BusinessLayer.updateAppointment(record: appointment!);
+                UserDefaults.standard.set(MRN, forKey:"MRN");
+                UserDefaults.standard.set(pageType, forKey:"pageType");
+                UserDefaults.standard.synchronize();
+                self.performSegue(withIdentifier: "mainViewInit", sender: self);
             }
-            UserDefaults.standard.set(MRN, forKey:"MRN");
-            UserDefaults.standard.set(pageType, forKey:"pageType");
-            UserDefaults.standard.synchronize();
-            self.performSegue(withIdentifier: "mainViewInit", sender: self);            
+            else{
+                self.showLoadingPanel();
+                let patient:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
+                syncAppointment(MRN: patient.MRN as! Int, appointmentLastUpdatedDate: (patient.LastSyncAppointmentDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, completionHandler: { (result) -> Void in                    self.hideLoadingPanel();
+                    let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
+                    for app in lstOldAppointment {
+                        let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
+                    }
+                    for app in result.returnObjAppointment {
+                        let _ = BusinessLayer.insertAppointment(record: app );
+                    }
+                    let patient:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
+                    patient.LastSyncAppointmentDateTime = DateTime.now();
+                    let _ = BusinessLayer.updatePatient(record: patient);
+                    
+                    UserDefaults.standard.set(self.MRN, forKey:"MRN");
+                    UserDefaults.standard.set(self.pageType, forKey:"pageType");
+                    UserDefaults.standard.synchronize();
+                    self.performSegue(withIdentifier: "mainViewInit", sender: self);
+                });
+            }
         }
         else if(pageType.isEqual(to: "lab")){
-            self.showLoadingPanel();
+            self.showLoadingPanel()
             syncLabResultPerID(ID: labResultID , completionHandler: { (result) -> Void in
                 self.hideLoadingPanel();
                 var lstID = "";
@@ -203,6 +224,7 @@ class InitViewController: BaseViewController {
                     let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
                 }
                 
+                
                 DispatchQueue.main.async() {
                     UserDefaults.standard.set(self.MRN, forKey:"MRN");
                     UserDefaults.standard.set(self.pageType, forKey:"pageType");
@@ -210,6 +232,7 @@ class InitViewController: BaseViewController {
                     UserDefaults.standard.synchronize();
                     self.performSegue(withIdentifier: "mainViewInit", sender: self);
                 }
+
             });
         }
         else if(lstPatient.count == 0){
@@ -229,6 +252,26 @@ class InitViewController: BaseViewController {
 
         
     }
+    
+    public func syncAppointment(MRN:Int, appointmentLastUpdatedDate:String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+        WebServiceHelper().SyncAppointment(MRN: MRN, deviceID: deviceID, appointmentLastUpdatedDate: appointmentLastUpdatedDate, completionHandler: { (result) -> Void in
+            //self.txtMedicalNo.text = result;
+            let retval:WebServiceResponsePatient = WebServiceResponsePatient();
+            
+            let dict = WebServiceHelper.convertToDictionary(text: result)
+            retval.timeStamp = WebServiceHelper.JSONDateToDateTime(jsonDate: dict?["Timestamp"] as! String);
+            if(dict?["ReturnObjAppointment"] != nil){
+                let objAppointment = dict?["ReturnObjAppointment"] as! NSArray
+                for tmp in objAppointment{
+                    let entity:Appointment = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Appointment()) as! Appointment
+                    retval.returnObjAppointment.append(entity);
+                }
+            }
+            completionHandler(retval);
+        });
+    }
+
     
     public func syncLabResultPerID(ID:Int, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
         WebServiceHelper().SyncLabResultPerID(ID: ID, completionHandler: { (result) -> Void in

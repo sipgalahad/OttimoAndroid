@@ -17,6 +17,14 @@ class BasePatientTableViewController: BaseTableViewController {
             btnMenu.target = revealViewController()
             btnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            
+            var pageType:NSString = "";
+            if(UserDefaults.standard.object(forKey: "pageType") != nil){
+                pageType = (UserDefaults.standard.object(forKey: "pageType") as? NSString)!;
+            }
+            if(pageType.isEqual(to: "")){
+                self.revealViewController().rearViewController.viewDidLoad();
+            }
         }
         
         

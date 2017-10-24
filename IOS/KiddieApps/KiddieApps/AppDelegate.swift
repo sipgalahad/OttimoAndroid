@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        UIApplication.shared.setMinimumBackgroundFetchInterval(60 * 60 * 12);
+        UIApplication.shared.setMinimumBackgroundFetchInterval(2);
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -80,97 +80,102 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         let lstPatient:[Patient] = BusinessLayer.getPatientList(filterExpression: "");
         for entity in lstPatient{
             let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+            syncPatientPerMRN(entity: entity, deviceID: deviceID)
+        }
+    }
+    
+    private func syncPatientPerMRN(entity:Patient, deviceID:String){
+        syncPatient(MRN: entity.MRN as! Int, deviceID: deviceID, patientLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, photoLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, appointmentLastUpdatedDate: (entity.LastSyncAppointmentDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, vaccinationLastUpdatedDate: (entity.LastSyncVaccinationDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, labResultLastUpdatedDate: (entity.LastSyncLabResultDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, completionHandler: { (result) -> Void in
             
-            syncPatient(MRN: entity.MRN as! Int, deviceID: deviceID, patientLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, photoLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, appointmentLastUpdatedDate: (entity.LastSyncAppointmentDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, vaccinationLastUpdatedDate: (entity.LastSyncVaccinationDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, labResultLastUpdatedDate: (entity.LastSyncLabResultDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, completionHandler: { (result) -> Void in
+            if(result.returnObjPatient.count > 0){
+                let entityPatient = result.returnObjPatient[0];
+                for patient in result.returnObjPatient{
+                    patient.LastSyncDateTime = DateTime.now();
+                    patient.LastSyncAppointmentDateTime = DateTime.now();
+                    patient.LastSyncVaccinationDateTime = DateTime.now();
+                    patient.LastSyncLabResultDateTime = DateTime.now();
+                    let _ = BusinessLayer.updatePatient(record: patient);
+                }
                 
-                if(result.returnObjPatient.count > 0){
-                    let entityPatient = result.returnObjPatient[0];
-                    for patient in result.returnObjPatient{
-                        patient.LastSyncDateTime = DateTime.now();
-                        patient.LastSyncAppointmentDateTime = DateTime.now();
-                        patient.LastSyncVaccinationDateTime = DateTime.now();
-                        patient.LastSyncLabResultDateTime = DateTime.now();
-                        let _ = BusinessLayer.updatePatient(record: patient);
+                var lstID = "";
+                for entity in result.returnObjAppointment{
+                    if lstID != ""{
+                        lstID += ",";
                     }
-                    
-                    var lstID = "";
-                    for entity in result.returnObjAppointment{
-                        if lstID != ""{
-                            lstID += ",";
-                        }
-                        lstID += String(describing: entity.AppointmentID!);
-                    }
-                    if (lstID != ""){
-                        let lstOldEntity:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "AppointmentID IN (\(lstID))");
-                        for oldEntity in lstOldEntity{
-                            let _ = BusinessLayer.deleteAppointment(AppointmentID: oldEntity.AppointmentID as! Int);
-                        }
-                    }
-                    
-                    lstID = "";
-                    for entity in result.returnObjVaccination{
-                        if lstID != ""{
-                            lstID += ",";
-                        }
-                        lstID += String(describing: entity.ID!);
-                    }
-                    if (lstID != ""){
-                        let lstOldEntity:[VaccinationShotDt] = BusinessLayer.getVaccinationShotDtList(filterExpression: "Type = 1 AND ID IN (\(lstID))");
-                        for oldEntity in lstOldEntity{
-                            let _ = BusinessLayer.deleteVaccinationShotDt(Type: 1, ID: oldEntity.ID as! Int);
-                        }
-                    }
-                    
-                    lstID = "";
-                    for entity in result.returnObjLabResultHd{
-                        if lstID != ""{
-                            lstID += ",";
-                        }
-                        lstID += String(describing: entity.ID!);
-                    }
-                    if (lstID != ""){
-                        let lstOldEntity:[LaboratoryResultHd] = BusinessLayer.getLaboratoryResultHdList(filterExpression: "ID IN (\(lstID))");
-                        for oldEntity in lstOldEntity{
-                            let _ = BusinessLayer.deleteLaboratoryResultHd(ID: oldEntity.ID as! Int);
-                        }
-                    }
-                    
-                    lstID = "";
-                    for entity in result.returnObjLabResultDt{
-                        if lstID != ""{
-                            lstID += ",";
-                        }
-                        lstID += String(describing: entity.LaboratoryResultDtID!);
-                    }
-                    if (lstID != ""){
-                        let lstOldEntity:[LaboratoryResultDt] = BusinessLayer.getLaboratoryResultDtList(filterExpression: "LaboratoryResultDtID IN (\(lstID))");
-                        for oldEntity in lstOldEntity{
-                            let _ = BusinessLayer.deleteLaboratoryResultDt(LaboratoryResultDtID: oldEntity.LaboratoryResultDtID as! Int);
-                        }
-                    }
-                    
-                    for app in result.returnObjAppointment{
-                        let _ = BusinessLayer.insertAppointment(record: app);
-                    }
-                    for vaccination in result.returnObjVaccination{
-                        let _ = BusinessLayer.insertVaccinationShotDt(record: vaccination);
-                    }
-                    for labResultHd in result.returnObjLabResultHd{
-                        let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
-                    }
-                    for labResultDt in result.returnObjLabResultDt{
-                        let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
-                    }
-                    
-                    
-                    if(result.returnObjImg != ""){
-                        let imageData = NSData(base64Encoded: result.returnObjImg);
-                        let image = UIImage(data: imageData! as Data);
-                        let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                    lstID += String(describing: entity.AppointmentID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "AppointmentID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteAppointment(AppointmentID: oldEntity.AppointmentID as! Int);
                     }
                 }
-            });
-        }
+                
+                lstID = "";
+                for entity in result.returnObjVaccination{
+                    if lstID != ""{
+                        lstID += ",";
+                    }
+                    lstID += String(describing: entity.ID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[VaccinationShotDt] = BusinessLayer.getVaccinationShotDtList(filterExpression: "Type = 1 AND ID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteVaccinationShotDt(Type: 1, ID: oldEntity.ID as! Int);
+                    }
+                }
+                
+                lstID = "";
+                for entity in result.returnObjLabResultHd{
+                    if lstID != ""{
+                        lstID += ",";
+                    }
+                    lstID += String(describing: entity.ID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[LaboratoryResultHd] = BusinessLayer.getLaboratoryResultHdList(filterExpression: "ID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteLaboratoryResultHd(ID: oldEntity.ID as! Int);
+                    }
+                }
+                
+                lstID = "";
+                for entity in result.returnObjLabResultDt{
+                    if lstID != ""{
+                        lstID += ",";
+                    }
+                    lstID += String(describing: entity.LaboratoryResultDtID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[LaboratoryResultDt] = BusinessLayer.getLaboratoryResultDtList(filterExpression: "LaboratoryResultDtID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteLaboratoryResultDt(LaboratoryResultDtID: oldEntity.LaboratoryResultDtID as! Int);
+                    }
+                }
+                
+                for app in result.returnObjAppointment{
+                    let _ = BusinessLayer.insertAppointment(record: app);
+                }
+                for vaccination in result.returnObjVaccination{
+                    let _ = BusinessLayer.insertVaccinationShotDt(record: vaccination);
+                }
+                for labResultHd in result.returnObjLabResultHd{
+                    let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
+                }
+                for labResultDt in result.returnObjLabResultDt{
+                    let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
+                }
+                
+                
+                if(result.returnObjImg != ""){
+                    let imageData = NSData(base64Encoded: result.returnObjImg);
+                    let image = UIImage(data: imageData! as Data);
+                    let _ = saveImageToDocumentDirectory(medicalNo: entityPatient.MedicalNo!, image!);
+                }
+            }
+        });
+
+        
     }
     
     public func syncPatient(MRN:Int, deviceID:String, patientLastUpdatedDate:String, photoLastUpdatedDate:String, appointmentLastUpdatedDate:String, vaccinationLastUpdatedDate:String, labResultLastUpdatedDate:String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
@@ -259,8 +264,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         print(userInfo)
         
         let state:UIApplicationState = application.applicationState
-        if(state == .background || state == .inactive){
-            let type = userInfo["type"] as! NSString;
+        
+        if(state == .background || state == .active || state == .inactive){            let type = userInfo["type"] as! NSString;
             if(type.isEqual(to: "AppReminder")){
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 
@@ -285,6 +290,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 vc.pageType = "lab"
                 self.window?.rootViewController = vc;
             }
+            else if(type.isEqual(to: "SyncApp")){
+                let MRN = userInfo["MRN"] as! NSString;
+                
+                let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+                let entity:Patient = BusinessLayer.getPatient(MRN: Int(MRN.intValue))!
+                syncPatientPerMRN(entity: entity, deviceID: deviceID)
+            }
+
         }
         completionHandler(UIBackgroundFetchResult.newData)
     }

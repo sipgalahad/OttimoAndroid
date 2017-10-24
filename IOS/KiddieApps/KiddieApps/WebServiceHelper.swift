@@ -163,11 +163,12 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         }
     }
     
-    public func SyncLabResult(MRN:Int, labResultLastUpdatedDate:String, completionHandler: @escaping (_ result:String) -> Void){
+    public func SyncLabResult(MRN:Int, deviceID:String, labResultLastUpdatedDate:String, completionHandler: @escaping (_ result:String) -> Void){
         let appToken:String = Constant.APP_TOKEN;
         
         var data:String = "<REQUEST><DATA>";
         data += addXMLElement(elementName: "MRN", value: String(MRN));
+        data += addXMLElement(elementName: "DEVICE_ID", value: deviceID);
         data += addXMLElement(elementName: "LAB_RESULT_LASTUPDATEDDATE", value: labResultLastUpdatedDate);
         data += "</DATA></REQUEST>";
         
@@ -176,6 +177,45 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
         
         let soapMessage = generateSOAPXMLFile(functionName: "SyncLabResult", lstParameter: lstParameter);
+        
+        let urlString:String = Constant.Url.BRIDGING_SERVER;
+        if let url = NSURL(string: urlString) {
+            let theRequest = NSMutableURLRequest(url: url as URL)
+            theRequest.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            theRequest.addValue((soapMessage), forHTTPHeaderField: "Content-Length")
+            theRequest.httpMethod = "POST"
+            theRequest.httpBody = soapMessage.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            URLSession.shared.dataTask(with: theRequest as URLRequest) { (data, response, error) in
+                if error == nil {
+                    if let data = data, let _ = String(data: data, encoding: String.Encoding.utf8) {
+                        let xmlParser = XMLParser(data: data)
+                        xmlParser.delegate = self as XMLParserDelegate;
+                        xmlParser.shouldResolveExternalEntities = true
+                        
+                        xmlParser.parse()
+                        completionHandler(self.jsonResult);
+                    }
+                } else {
+                    //self.txtMedicalNo.text = error.debugDescription;
+                }
+                }.resume()
+        }
+    }
+    
+    public func SyncAppointment(MRN:Int, deviceID:String, appointmentLastUpdatedDate:String, completionHandler: @escaping (_ result:String) -> Void){
+        let appToken:String = Constant.APP_TOKEN;
+        
+        var data:String = "<REQUEST><DATA>";
+        data += addXMLElement(elementName: "MRN", value: String(MRN));
+        data += addXMLElement(elementName: "DEVICE_ID", value: deviceID);
+        data += addXMLElement(elementName: "APPOINTMENT_LASTUPDATEDDATE", value: appointmentLastUpdatedDate);
+        data += "</DATA></REQUEST>";
+        
+        var lstParameter:Array<Variable> = Array();
+        lstParameter.append(Variable(Code : "appToken", Value : appToken));
+        lstParameter.append(Variable(Code : "data", Value : "<![CDATA[\(data)]]>"));
+        
+        let soapMessage = generateSOAPXMLFile(functionName: "SyncAppointment", lstParameter: lstParameter);
         
         let urlString:String = Constant.Url.BRIDGING_SERVER;
         if let url = NSURL(string: urlString) {
@@ -446,7 +486,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         currentElement="";    }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" || currentElement == "Login2Result" || currentElement == "ChangePassword2Result" || currentElement == "RequestPassword2Result" || currentElement == "PostAppointmentAnswer2Result" || currentElement == "InsertErrorFeedback2Result" || currentElement == "ReloadDataAfterUpdateAppsResult" || currentElement == "SyncPatient2Result" || currentElement == "SyncLabResultResult" || currentElement == "SyncLabResultPerIDResult"){
+        if(currentElement == "GetMobileListObjectResult" || currentElement == "GetAndroidAppVersion2Result" || currentElement == "Login2Result" || currentElement == "ChangePassword2Result" || currentElement == "RequestPassword2Result" || currentElement == "PostAppointmentAnswer2Result" || currentElement == "InsertErrorFeedback2Result" || currentElement == "ReloadDataAfterUpdateAppsResult" || currentElement == "SyncPatient2Result" || currentElement == "SyncLabResultResult" || currentElement == "SyncLabResultPerIDResult" || currentElement == "SyncAppointmentResult"){
             jsonResult += string;
         }
     }

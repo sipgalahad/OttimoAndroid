@@ -22,6 +22,7 @@ class LabResultViewController: BasePatientTableViewController {
         if(UserDefaults.standard.object(forKey: "pageType") != nil){
             let pageType = (UserDefaults.standard.object(forKey: "pageType") as? NSString)!;
             if(pageType.isEqual(to: "lab")){
+                UserDefaults.standard.set("", forKey:"pageType");
                 selectedLabResultID = (UserDefaults.standard.object(forKey: "labResultID") as? Int)!;
                 self.performSegue(withIdentifier: "labResultDtView", sender: self);
             }
@@ -128,7 +129,8 @@ class LabResultViewController: BasePatientTableViewController {
     }
     
     public func syncLabResult(MRN:Int, labResultLastUpdatedDate:String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
-        WebServiceHelper().SyncLabResult(MRN: MRN, labResultLastUpdatedDate: labResultLastUpdatedDate, completionHandler: { (result) -> Void in
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+        WebServiceHelper().SyncLabResult(MRN: MRN, deviceID: deviceID, labResultLastUpdatedDate: labResultLastUpdatedDate, completionHandler: { (result) -> Void in
             //self.txtMedicalNo.text = result;
             let retval:WebServiceResponsePatient = WebServiceResponsePatient();
             

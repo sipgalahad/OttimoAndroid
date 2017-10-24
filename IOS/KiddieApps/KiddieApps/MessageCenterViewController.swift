@@ -11,11 +11,14 @@ import UIKit
 class MessageCenterViewController: BasePatientTableViewController {
 
     var lstAppointment:[vAppointment] = [];
+    let dtNow = "\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)) 00:00:00"
     override func viewDidLoad() {
         super.viewDidLoad()
-        let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
+        UserDefaults.standard.set("", forKey:"pageType");
+        
         lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "(GCAppointmentStatus != '\(Constant.AppointmentStatus.VOID)' AND ('\(dtNow)' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '\(Constant.AppointmentStatus.CHECK_IN)' AND StartDate >= '\(dtNow)')");
         // Do any additional setup after loading the view.
+        //filterExpression	String	"(GCAppointmentStatus != \'0278^999\' AND (\'2017-10-23\' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = \'0278^004\' AND StartDate >= \'2017-10-23\')"
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,7 +44,7 @@ class MessageCenterViewController: BasePatientTableViewController {
         let appointment:vAppointment = lstAppointment[indexPath.row];
         cell.lblMessage.text = "Mengingatkan \(String(describing: appointment.FullName!)) terjadwal \(String(describing: appointment.VisitTypeName!)) ke \(String(describing: appointment.ParamedicName!)) tgl \(appointment.StartDate!.toString(format: Constant.FormatString.DATE_FORMAT)) jam \(String(describing: appointment.cfStartTime!)) di KiddieCare. Jika setuju tekan tombol 'Confirm'. Jika tidak menjawab dianggap batal";
         
-        if(appointment.GCAppointmentStatus != Constant.AppointmentStatus.CHECK_IN){
+        if(appointment.GCAppointmentStatus != Constant.AppointmentStatus.CHECK_IN || appointment.StartDate!.toString(format: Constant.FormatString.DATE_FORMAT) == dtNow){
             cell.btnConfirm.isHidden = true;
             cell.btnCancel.isHidden = true;
         }
@@ -72,7 +75,7 @@ class MessageCenterViewController: BasePatientTableViewController {
                 self.lstAppointment = BusinessLayer.getvAppointmentList(filterExpression: "(GCAppointmentStatus != '\(Constant.AppointmentStatus.VOID)' AND ('\(dtNow)' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '\(Constant.AppointmentStatus.CHECK_IN)' AND StartDate >= '\(dtNow)')");
                 DispatchQueue.main.async() {
                     self.hideLoadingPanel();
-                    displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Perjanjian Berhasil Dilakukan.");
+                    displayMyAlertMessage(ctrl: self, userMessage: "Konfirmasi Perjanjian Berhasil Dilakukan. Harap Datang Sesuai Jam Kelompok");
                     self.tableView.reloadData();
                 }
             }

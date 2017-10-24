@@ -1,4 +1,4 @@
-    //
+                //
 //  MenuViewController.swift
 //  KiddieApps
 //
@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseMessaging
 
 class MenuViewController: UITableViewController {
     @IBOutlet weak var imgProfile: UIImageView!
@@ -44,7 +46,7 @@ class MenuViewController: UITableViewController {
         lblPatientName.text = entity.FullName;
         lblMedicalNo.text = entity.MedicalNo;
         
-        let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
+        let dtNow = "\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)) 00:00:00"
         
         let lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(dtNow)'");
         if(lstAppointment.count == 0){
@@ -131,6 +133,9 @@ class MenuViewController: UITableViewController {
 
             let entity:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
             let _ = BusinessLayer.deletePatient(MRN: self.MRN);
+            
+            let medicalNo = entity.MedicalNo!
+            Messaging.messaging().unsubscribe(fromTopic: medicalNo)
             
             
             let directoryPath = NSHomeDirectory().appending("/KiddieApps/");

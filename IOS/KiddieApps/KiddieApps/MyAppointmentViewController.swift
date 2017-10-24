@@ -46,28 +46,57 @@ class MyAppointmentViewController: BasePatientTableViewController {
         cell.lblVisitTypeName.text = appointment.VisitTypeName;
         return cell
     }
+    
+    public func syncAppointment(MRN:Int, appointmentLastUpdatedDate:String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+        WebServiceHelper().SyncAppointment(MRN: MRN, deviceID: deviceID, appointmentLastUpdatedDate: appointmentLastUpdatedDate, completionHandler: { (result) -> Void in
+            //self.txtMedicalNo.text = result;
+            let retval:WebServiceResponsePatient = WebServiceResponsePatient();
+            
+            let dict = WebServiceHelper.convertToDictionary(text: result)
+            retval.timeStamp = WebServiceHelper.JSONDateToDateTime(jsonDate: dict?["Timestamp"] as! String);
+            if(dict?["ReturnObjAppointment"] != nil){
+                let objAppointment = dict?["ReturnObjAppointment"] as! NSArray
+                for tmp in objAppointment{
+                    let entity:Appointment = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Appointment()) as! Appointment
+                    retval.returnObjAppointment.append(entity);
+                }
+            }
+            completionHandler(retval);
+        });
+    }
+
     @IBAction func onBtnRefreshClick(_ sender: Any) {
         self.showLoadingPanel();
         self.btnRefresh.isEnabled = false;
-        BusinessLayerWebService.getAppointmentList(filterExpression: "MRN = \(String(describing: MRN)) AND StartDate >= '\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB))'", completionHandler: { (result) -> Void in
+        let patient:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
+        
+        syncAppointment(MRN: patient.MRN as! Int, appointmentLastUpdatedDate: (patient.LastSyncAppointmentDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, completionHandler: { (result) -> Void in
             self.btnRefresh.isEnabled = true;
             self.hideLoadingPanel();
-            let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
-            for app in lstOldAppointment {
-                let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
+            var lstID = "";
+            for entity in result.returnObjAppointment{
+                if lstID != ""{
+                    lstID += ",";
+                }
+                lstID += String(describing: entity.AppointmentID!);
             }
-            for app in result.returnObj {
-                let _ = BusinessLayer.insertAppointment(record: app as! Appointment);
+            if (lstID != ""){
+                let lstOldEntity:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "AppointmentID IN (\(lstID))");
+                for oldEntity in lstOldEntity{
+                    let _ = BusinessLayer.deleteAppointment(AppointmentID: oldEntity.AppointmentID as! Int);
+                }
             }
-            let patient:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
-            patient.LastSyncAppointmentDateTime = DateTime.now();
-            let _ = BusinessLayer.updatePatient(record: patient);
-            
+            for appointment in result.returnObjAppointment{
+                let _ = BusinessLayer.insertAppointment(record: appointment);
+            }
             self.lstAppointment = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN)) AND StartDate >= '\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB))'");
+            
             DispatchQueue.main.async() {
                 self.tableView.reloadData();
             }
         });
+
         
     }
 
