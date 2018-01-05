@@ -27,6 +27,63 @@ public class DataLayer{
     }
     //endregion
 
+    //region Announcement
+    @Table(Name = "Announcement")
+    public static class Announcement{
+        @Column(DataType = DataType.INT, Name = "AnnouncementID", IsPrimaryKey = Bool.TRUE)
+        public int AnnouncementID;
+
+        @Column(DataType = DataType.STRING, Name = "Title")
+        public String Title;
+
+        @Column(DataType = DataType.DATETIME, Name = "StartDate")
+        public DateTime StartDate;
+
+        @Column(DataType = DataType.DATETIME, Name = "EndDate")
+        public DateTime EndDate;
+
+        @Column(DataType = DataType.STRING, Name = "GCAnnouncementType")
+        public String GCAnnouncementType;
+
+        @Column(DataType = DataType.STRING, Name = "AnnouncementType")
+        public String AnnouncementType;
+
+        @Column(DataType = DataType.STRING, Name = "Remarks")
+        public String Remarks;
+
+        @Column(DataType = DataType.DATETIME, Name = "LastUpdatedDate")
+        public DateTime LastUpdatedDate;
+    }
+    public static class AnnouncementDao{
+        private DbHelper helper;
+        private DaoBase daoBase;
+        private final String p_AnnouncementID = "@p_AnnouncementID";
+
+        public AnnouncementDao(Context context){
+            this.helper = new DbHelper(Announcement.class);
+            this.daoBase = new DaoBase(context);
+        }
+        public Announcement get(int AnnouncementID){
+            String query = helper.getRecord();
+            query = query.replace(p_AnnouncementID, Integer.toString(AnnouncementID));
+            Cursor row = daoBase.getDataRow(query);
+            return (row == null) ? null : (Announcement)helper.dataRowToObject(row, new Announcement());
+        }
+        public int insert(Announcement record){
+            String query = helper.insert(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int update(Announcement record){
+            String query = helper.update(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int delete(int AnnouncementID){
+            Announcement record = get(AnnouncementID);
+            String query = helper.delete(record);
+            return daoBase.executeNonQuery(query);
+        }
+    }
+    //endregion
     //region Appointment
     @Table(Name = "Appointment")
     public static class Appointment{
@@ -92,6 +149,7 @@ public class DataLayer{
         }
         public int insert(Appointment record){
             String query = helper.insert(record);
+            Log.d("query",query);
             return daoBase.executeNonQuery(query);
         }
         public int update(Appointment record){

@@ -81,6 +81,23 @@ public class BaseMainActivity extends AppCompatActivity
             i.putExtra("labresultid", labResultID);
             startActivity(i);
         }
+        boolean isGoToAnnouncement = myIntent.getBooleanExtra("isGoToAnnouncement", false);
+        Integer announcementID = myIntent.getIntExtra("announcementid", 0);
+        if(isGoToAnnouncement) {
+            Intent i = new Intent(getBaseContext(), AnnouncementActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            i.putExtra("announcementid", announcementID);
+            i.putExtra("isGoToAnnouncementDt", true);
+            startActivity(i);
+        }
+        boolean isGoToAnnouncementDt = myIntent.getBooleanExtra("isGoToAnnouncementDt", false);
+        if(isGoToAnnouncementDt) {
+            Intent i = new Intent(getBaseContext(), AnnouncementDtActivity.class);
+            i.putExtra("mrn", MRN);
+            i.putExtra("announcementid", announcementID);
+            startActivity(i);
+        }
         Patient entity = null;
         if(MRN == 0){
             entity = BusinessLayer.getPatientList(this,"").get(0);
@@ -111,41 +128,43 @@ public class BaseMainActivity extends AppCompatActivity
     }
 
     protected void setMessageCenterCounter(){
-        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s%%' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus IN ('%3$s','%4$s') AND StartDate >= '%2$s%%')", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.SEND_CONFIRMATION, Constant.AppointmentStatus.CONFIRMED));
+        String dtNow = DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB) + " 00:00:00";
+        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus IN ('%3$s','%4$s') AND StartDate >= '%2$s')", Constant.AppointmentStatus.VOID, dtNow, Constant.AppointmentStatus.SEND_CONFIRMATION, Constant.AppointmentStatus.CONFIRMED));
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         int appointmentCount = lstAppointment.size();
-        if(appointmentCount > 0) {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            Menu menuNav = navigationView.getMenu();
-            MenuItem element = menuNav.findItem(R.id.nav_message_center);
-            String before = element.getTitle().toString();
+        if(appointmentCount > 0)
+            addCounterDigit(R.id.nav_message_center, "Message Center", appointmentCount);
 
-            String counter = Integer.toString(appointmentCount);
-            String s = before + "   " + counter + " ";
-            SpannableString sColored = new SpannableString(s);
-
-            sColored.setSpan(new BackgroundColorSpan(Color.RED), s.length() - (counter.length() + 2), s.length(), 0);
-            sColored.setSpan(new ForegroundColorSpan(Color.WHITE), s.length() - (counter.length() + 2), s.length(), 0);
-            element.setTitle(sColored);
-        }
         lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND StartDate >= '%2$s' AND MRN = '%3$s'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), MRN));
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         appointmentCount = lstAppointment.size();
-        if(appointmentCount > 0) {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            Menu menuNav = navigationView.getMenu();
-            MenuItem element = menuNav.findItem(R.id.nav_appointment);
-            String before = element.getTitle().toString();
+        if(appointmentCount > 0)
+            addCounterDigit(R.id.nav_appointment, "My Appointment", appointmentCount);
 
-            String counter = Integer.toString(appointmentCount);
-            String s = before + "   " + counter + " ";
-            SpannableString sColored = new SpannableString(s);
+        addCounterDigitAnnouncement(R.id.nav_announcement, "Announcement", Constant.AnnouncementType.ANNOUNCEMENT);
+        addCounterDigitAnnouncement(R.id.nav_news, "News", Constant.AnnouncementType.NEWS);
+        addCounterDigitAnnouncement(R.id.nav_advertisement, "Advertisement",Constant.AnnouncementType.ADVERTISEMENT);
+    }
 
-            sColored.setSpan(new BackgroundColorSpan(Color.RED), s.length() - (counter.length() + 2), s.length(), 0);
-            sColored.setSpan(new ForegroundColorSpan(Color.WHITE), s.length() - (counter.length() + 2), s.length(), 0);
-            element.setTitle(sColored);
-        }
+    private void addCounterDigitAnnouncement(int id, String originalText, String GCAnnouncementType){
+        List<DataLayer.Announcement> lstAnnouncement = BusinessLayer.getAnnouncementList(this, String.format("'%1$s' BETWEEN StartDate AND EndDate AND GCAnnouncementType = '%2$s' ORDER BY StartDate", DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB) + " 00:00:00", GCAnnouncementType));
+        int count = lstAnnouncement.size();
+        if(count > 0)
+            addCounterDigit(id, originalText, count);
+    }
 
+    private void addCounterDigit(int id, String originalText, int count){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menuNav = navigationView.getMenu();
+        MenuItem element = menuNav.findItem(id);
+
+        String counter = Integer.toString(count);
+        String s = originalText + "   " + counter + " ";
+        SpannableString sColored = new SpannableString(s);
+
+        sColored.setSpan(new BackgroundColorSpan(Color.RED), s.length() - (counter.length() + 2), s.length(), 0);
+        sColored.setSpan(new ForegroundColorSpan(Color.WHITE), s.length() - (counter.length() + 2), s.length(), 0);
+        element.setTitle(sColored);
     }
 
     protected Bitmap loadImageFromStorage(Patient entity)
@@ -280,6 +299,21 @@ public class BaseMainActivity extends AppCompatActivity
             startActivity(i);
         } else if (id == R.id.nav_error_feedback) {
             Intent i = new Intent(getBaseContext(), ErrorFeedbackActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
+        } else if (id == R.id.nav_announcement) {
+            Intent i = new Intent(getBaseContext(), AnnouncementActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
+        } else if (id == R.id.nav_news) {
+            Intent i = new Intent(getBaseContext(), NewsActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
+        } else if (id == R.id.nav_advertisement) {
+            Intent i = new Intent(getBaseContext(), AdvertisementActivity.class);
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             i.putExtra("mrn", MRN);
             startActivity(i);

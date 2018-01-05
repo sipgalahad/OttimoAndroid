@@ -96,6 +96,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.AnnouncementActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.NewsActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.AdvertisementActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="samanasoft.android.kiddielogicpatientalarm.ManageAccountActivity"
             android:label="@string/title_activity_manage_account"/>
         <activity
@@ -108,6 +123,33 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="samanasoft.android.kiddielogicpatientalarm.LabResultActivity" />
 
+        </activity>
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.AnnouncementDtActivity"
+            android:label="Detil"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicpatientalarm.AnnouncementActivity" />
+        </activity>
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.NewsDtActivity"
+            android:label="Detil"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicpatientalarm.NewsActivity" />
+        </activity>
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.AdvertisementDtActivity"
+            android:label="Detil"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicpatientalarm.AdvertisementActivity" />
         </activity>
 
         <service android:name="samanasoft.android.kiddielogicpatientalarm.AlarmSyncDataService" />

@@ -20,6 +20,8 @@ import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultDt;
 import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultDtDao;
 import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHd;
 import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHdDao;
+import samanasoft.android.ottimo.dal.DataLayer.Announcement;
+import samanasoft.android.ottimo.dal.DataLayer.AnnouncementDao;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import samanasoft.android.ottimo.dal.DataLayer.PatientDao;
 import samanasoft.android.ottimo.dal.DataLayer.MessageLog;
@@ -30,6 +32,72 @@ import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDt;
 import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDtDao;
 
 public class BusinessLayer {
+    //region Announcement
+    public static Announcement getAnnouncement(Context context, int AnnouncementID)
+    {
+        return new AnnouncementDao(context).get(AnnouncementID);
+    }
+    public static int insertAnnouncement(Context context, Announcement record)
+    {
+        return new AnnouncementDao(context).insert(record);
+    }
+    public static int updateAnnouncement(Context context, Announcement record)
+    {
+        return new AnnouncementDao(context).update(record);
+    }
+    public static int deleteAnnouncement(Context context, int AnnouncementID)
+    {
+        return new AnnouncementDao(context).delete(AnnouncementID);
+    }
+    public static List<Announcement> getAnnouncementList(Context context, String filterExpression){
+        List<Announcement> result = new ArrayList<Announcement>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(Announcement.class);
+            String query = helper.select(filterExpression);
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add((Announcement)helper.dataReaderToObject(reader, new Announcement()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    public static WebServiceResponse getWebServiceListAnnouncement(Context context, String filterExpression){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.getListObject(context, "GetvMobileAnnouncementList", filterExpression);
+
+            JSONArray returnObj = WebServiceHelper.getReturnObject(response);
+            DateTime timestamp = WebServiceHelper.getTimestamp(response);
+
+            List<DataLayer.Announcement> lst = new ArrayList<DataLayer.Announcement>();
+            for (int i = 0; i < returnObj.length();++i){
+                JSONObject row = (JSONObject) returnObj.get(i);
+                lst.add((DataLayer.Announcement)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Announcement()));
+            }
+            result.returnObj = lst;
+            result.timestamp = timestamp;
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //endregion
     //region AppointmentCalendarEvent
     public static DataLayer.AppointmentCalendarEvent getAppointmentCalendarEvent(Context context, int AppointmentID, long CalendarEventID)
     {

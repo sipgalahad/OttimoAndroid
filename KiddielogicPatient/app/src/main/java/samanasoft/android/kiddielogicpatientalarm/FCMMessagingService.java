@@ -45,6 +45,9 @@ public class FCMMessagingService extends FirebaseMessagingService {
     String deviceID = "";
     Integer appointmentID = 0;
     Integer labResultID = 0;
+    Integer announcementID = 0;
+    String AnnouncementType = "";
+    String AnnouncementTitle = "";
     Integer MRN = 0;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -113,9 +116,76 @@ public class FCMMessagingService extends FirebaseMessagingService {
                 else{
                     sendLabResultNotification();
                 }*/
+            } else if (type.equals("Announcement")) {
+                List<DataLayer.Patient> lstPatient = BusinessLayer.getPatientList(getBaseContext(), "");
+                if(lstPatient.size() > 0) {
+                    MRN = lstPatient.get(0).MRN;
+                    announcementID = Integer.parseInt(lstData.get("announcementID"));
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            new LoadAnnouncementTask(announcementID).execute((Void) null);
+                        }
+                    });
+                }
             }
         }
     }
+
+
+    public class LoadAnnouncementTask extends AsyncTask<Void, Void, WebServiceResponse> {
+        private Integer announcementID;
+        LoadAnnouncementTask(Integer announcementID1) {
+            this.announcementID = announcementID1;
+        }
+
+        @Override
+        protected WebServiceResponse doInBackground(Void... params) {
+            String filterExpression = String.format("AnnouncementID = '%1$s'", announcementID);
+            Log.d("filterExpression", filterExpression);
+            try {
+                WebServiceResponse result = BusinessLayer.getWebServiceListAnnouncement(getBaseContext(), filterExpression);
+                return result;
+            }
+            catch (Exception ex) {
+                Toast.makeText(getBaseContext(), "Get Announcement Failed", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final WebServiceResponse result) {
+            if(result == null) {
+                Toast.makeText(getBaseContext(), "Update Data Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+            }
+            else if(result.returnObj != null){
+                DataLayer.Announcement oldAnnouncement = BusinessLayer.getAnnouncement(getBaseContext(), announcementID);
+                if(oldAnnouncement != null)
+                    BusinessLayer.deleteAnnouncement(getBaseContext(), oldAnnouncement.AnnouncementID);
+
+                @SuppressWarnings("unchecked")
+                List<DataLayer.Announcement> lstAnnouncement = (List<DataLayer.Announcement>) result.returnObj;
+                for (DataLayer.Announcement entity : lstAnnouncement) {
+                    AnnouncementType = entity.AnnouncementType;
+                    AnnouncementTitle = entity.Title;
+                    BusinessLayer.insertAnnouncement(getBaseContext(), entity);
+                }
+            }
+            sendAnnouncementNotification();
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+
     public class LoadLabResultTask extends AsyncTask<Void, Void, WebServiceResponsePatient> {
         private Integer labResultID;
         LoadLabResultTask(Integer labResultID1) {
@@ -331,6 +401,38 @@ public class FCMMessagingService extends FirebaseMessagingService {
         i.putExtra("mrn", MRN);
         i.putExtra("labresultid", labResultID);
         i.putExtra("isGoToLabResult", true);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        3,
+                        i,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, notification);
+    }
+
+    //This method is only generating push notification
+    //It is same as we did in earlier posts
+    private void sendAnnouncementNotification() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle(AnnouncementType)
+                        .setContentText(AnnouncementTitle);
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.putExtra("mrn", MRN);
+        i.putExtra("announcementid", announcementID);
+        i.putExtra("isGoToAnnouncement", true);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,

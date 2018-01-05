@@ -226,7 +226,7 @@ public class AlarmSyncDataService extends Service {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo)
-                        .setContentTitle("Perubahan Appointment");
+                        .setContentTitle("Update Data");
         Intent i = new Intent(getBaseContext(), MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

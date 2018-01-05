@@ -4,7 +4,9 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -58,7 +60,10 @@ public class MessageCenterActivity extends BaseMainActivity {
 
     private AppointmentInformationAdapter adapter;
     private void fillListAppointment(){
-        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s%%' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '%3$s' AND StartDate >= '%2$s%%')", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), Constant.AppointmentStatus.SEND_CONFIRMATION));
+        String dtNow = DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB) + " 00:00:00";
+        String filterExpression = String.format("(GCAppointmentStatus != '%1$s' AND ('%2$s' BETWEEN ReminderDate AND StartDate)) OR (GCAppointmentStatus = '%3$s' AND StartDate >= '%2$s')", Constant.AppointmentStatus.VOID, dtNow, Constant.AppointmentStatus.SEND_CONFIRMATION);
+        List<DataLayer.vAppointment> lstAppointment = BusinessLayer.getvAppointmentList(this, filterExpression);
+
         adapter = new AppointmentInformationAdapter(getBaseContext(), lstAppointment);
         lvwAppointment.setAdapter(adapter);
     }
@@ -258,6 +263,18 @@ public class MessageCenterActivity extends BaseMainActivity {
             entity.GCAppointmentStatus = mGCAppointmentStatus;
             BusinessLayer.updateAppointment(getBaseContext(), entity);
 
+            if(entity.GCAppointmentStatus.equals(Constant.AppointmentStatus.CONFIRMED)) {
+                AlertDialog alertDialog = new AlertDialog.Builder(MessageCenterActivity.this).create();
+                alertDialog.setTitle("Konfirmasi Berhasil");
+                alertDialog.setMessage("Harap datang sesuai jam kelompok");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
             //Toast.makeText(getBaseContext(), "Harap datang sesuai jam kelompok", Toast.LENGTH_SHORT).show();
 
             showProgress(false);

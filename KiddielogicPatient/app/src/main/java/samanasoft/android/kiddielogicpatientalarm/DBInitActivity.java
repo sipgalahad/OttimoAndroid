@@ -108,6 +108,21 @@ public class DBInitActivity extends Activity {
                     isDifferentDBVersion = false;
                 }
                 else {
+                    editor.putString(Constant.SharedPreference.LIST_MRN, listMRN);
+
+                    String deviceID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    showProgress(true);
+                    mAuthTask = new ReloadDataTask(listMRN, deviceID);
+                    mAuthTask.execute((Void) null);
+                }
+            }
+            else{
+                String listMRN = prefs.getString(Constant.SharedPreference.LIST_MRN, "");
+                if(listMRN.equals("")){
+                    isDifferentDBVersion = false;
+                }
+                else {
+                    isDifferentDBVersion = true;
                     String deviceID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
                     showProgress(true);
                     mAuthTask = new ReloadDataTask(listMRN, deviceID);
@@ -352,6 +367,11 @@ public class DBInitActivity extends Activity {
                     for (DataLayer.LaboratoryResultDt entity2 : lstLabResultDt) {
                         BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity2);
                     }
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constant.SharedPreference.NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Constant.SharedPreference.LIST_MRN, "");
+
                     goToNextPage();
                 } else {
                     showProgress(false);

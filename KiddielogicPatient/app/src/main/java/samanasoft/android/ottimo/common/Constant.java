@@ -30,6 +30,8 @@ public class Constant {
 		public static final String FCM_TOKEN = "prefFCM_TOKEN";
 		public static final String SERVER_APPS_VERSION = "prefServerAppsVersion";
 		public static final String LAST_NOTIFICATION_DATE = "lastNotificationDate";
+		public static final String LIST_MRN = "prefListMRN";
+		public static final String LAST_SYNC_ANNOUNCEMENT = "prefLastSyncAnnouncement";
 
         public static final String APPOINTMENT_REMINDER_TIME = "prefAppointmentReminderTime";
         public static final String APPOINTMENT_REMINDER_MESSAGE = "prefAppointmentReminderMessage";

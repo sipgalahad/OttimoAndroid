@@ -340,6 +340,17 @@ public class LoginActivity extends AppCompatActivity {
                             BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity2);
                         }
 
+                        List<DataLayer.Announcement> lstOldAnnouncement = BusinessLayer.getAnnouncementList(getBaseContext(), "");
+                        for (DataLayer.Announcement entity2 : lstOldAnnouncement) {
+                            BusinessLayer.deleteAnnouncement(getBaseContext(), entity2.AnnouncementID);
+                        }
+
+                        @SuppressWarnings("unchecked")
+                        List<DataLayer.Announcement> lstAnnouncement = (List<DataLayer.Announcement>) result.returnObjAnnouncement;
+                        for (DataLayer.Announcement entity2 : lstAnnouncement) {
+                            BusinessLayer.insertAnnouncement(getBaseContext(), entity2);
+                        }
+
                         if(!result.returnObjImg.equals("")) {
                             ContextWrapper cw = new ContextWrapper(getApplicationContext());
                             File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
@@ -375,6 +386,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getSharedPreferences(samanasoft.android.ottimo.common.Constant.SharedPreference.NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putInt("mrn", entity.MRN);
+                    editor.putString(samanasoft.android.ottimo.common.Constant.SharedPreference.LAST_SYNC_ANNOUNCEMENT, result.timestamp.toString(Constant.FormatString.DATE_TIME_FORMAT_DB));
                     editor.commit();
 
                     startActivity(i);
@@ -486,6 +498,7 @@ public class LoginActivity extends AppCompatActivity {
             JSONArray returnObjVaccination = WebServiceHelper.getCustomReturnObject(response, "ReturnObjVaccination");
             JSONArray returnObjLabResultHd = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultHd");
             JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
+            JSONArray returnObjAnnouncement = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAnnouncement");
             String img = response.optString("ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
@@ -514,11 +527,17 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject row = (JSONObject) returnObjLabResultDt.get(i);
                 lst5.add((DataLayer.LaboratoryResultDt)WebServiceHelper.JSONObjectToObject(row, new DataLayer.LaboratoryResultDt()));
             }
+            List<DataLayer.Announcement> lst6 = new ArrayList<DataLayer.Announcement>();
+            for (int i = 0; i < returnObjAnnouncement.length();++i){
+                JSONObject row = (JSONObject) returnObjAnnouncement.get(i);
+                lst6.add((DataLayer.Announcement)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Announcement()));
+            }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
             result.returnObjLabResultHd = lst4;
             result.returnObjLabResultDt = lst5;
+            result.returnObjAnnouncement = lst6;
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception e) {
@@ -534,6 +553,7 @@ public class LoginActivity extends AppCompatActivity {
         public List<?> returnObjVaccination;
         public List<?> returnObjLabResultHd;
         public List<?> returnObjLabResultDt;
+        public List<?> returnObjAnnouncement;
         public String returnObjImg;
     }
 }

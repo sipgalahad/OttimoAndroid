@@ -1,7 +1,7 @@
 package samanasoft.android.framework;
 
 public class Constant {
-    public static final String AppVersion = "1.1";
+    public static final String AppVersion = "1.1.1";
     public static final String DB_VERSION = "2";
 
 	public static final String[] SHORT_MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }; 
@@ -12,6 +12,7 @@ public class Constant {
         public static final String APP_DATA_URL = "http://192.168.0.102/appdata/ottimo";
         public static final String BRIDGING_SERVER = "http://114.199.103.10:8080/KiddielogicTest/BridgingServer/Program/Mobile/MobileService.asmx";
         //public static final String BRIDGING_SERVER = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
+        //public static final String BRIDGING_SERVER = "http://10.10.205.93/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
     }
     public static final String APP_TOKEN = "40BD001563085FC35165329EA1FF5C5ECBDBBEEF";
 	public static class FormatString
@@ -28,6 +29,12 @@ public class Constant {
     public static class Sex {
         public static final String MALE = "0003^M";
         public static final String FEMALE = "0003^F";
+    }
+    public static class AnnouncementType
+    {
+        public static final String ANNOUNCEMENT = "OT040^001";
+        public static final String NEWS = "OT040^002";
+        public static final String ADVERTISEMENT = "OT040^003";
     }
     public static class AppointmentStatus
     {
