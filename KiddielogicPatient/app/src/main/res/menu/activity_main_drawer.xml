@@ -4,61 +4,52 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_personal_data"
-            android:icon="@drawable/ic_menu_personal_data"
-            android:title="My Personal Data" />
+            android:title="     My Personal Data" />
         <item
             android:id="@+id/nav_appointment"
-            android:icon="@drawable/ic_menu_appointment"
-            android:title="My Appointment" />
+            android:title="     My Appointment" />
+        <item
+            android:id="@+id/nav_vaccination"
+            android:title="     My Vaccination" />
         <item
             android:id="@+id/nav_labresult"
-            android:icon="@drawable/ic_menu_appointment"
-            android:title="My Laboratory Result" />
+            android:title="     My Laboratory Result" />
         <item
             android:id="@+id/nav_change_password"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Change Password" />
+            android:title="     Change Password" />
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_menu_logout"
-            android:title="Logout" />
+            android:title="     Logout" />
     </group>
+
+    <item android:title="Announcement">
+        <menu>
+            <item
+                android:id="@+id/nav_announcement"
+                android:title="     Announcement" />
+            <item
+                android:id="@+id/nav_news"
+                android:title="     News" />
+            <item
+                android:id="@+id/nav_advertisement"
+                android:title="     Advertisement" />
+        </menu>
+    </item>
 
     <item android:title="Other">
         <menu>
             <item
                 android:id="@+id/nav_message_center"
-                android:icon="@drawable/ic_menu_message_center"
-                android:title="Message Center" />
+                android:title="     Message Center" />
             <item
                 android:id="@+id/nav_manage_account"
-                android:icon="@drawable/ic_menu_manage_account"
-                android:title="Manage Account" />
+                android:title="     Manage Account" />
             <item
                 android:id="@+id/nav_error_feedback"
-                android:icon="@drawable/ic_menu_feedback"
-                android:title="Error Feedback" />
+                android:title="     Error Feedback" />
             <item
                 android:id="@+id/nav_user_help"
-                android:icon="@drawable/ic_menu_feedback"
-                android:title="User Help" />
+                android:title="     User Help" />
         </menu>
     </item>
-    <item android:title="Announcement">
-        <menu>
-            <item
-                android:id="@+id/nav_announcement"
-                android:icon="@drawable/ic_menu_appointment"
-                android:title="Announcement" />
-            <item
-                android:id="@+id/nav_news"
-                android:icon="@drawable/ic_menu_appointment"
-                android:title="News" />
-            <item
-                android:id="@+id/nav_advertisement"
-                android:icon="@drawable/ic_menu_appointment"
-                android:title="Advertisement" />
-        </menu>
-    </item>
-
 </menu>

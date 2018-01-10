@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
@@ -34,6 +35,7 @@ import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 import samanasoft.android.ottimo.dal.DataLayer.Appointment;
+import samanasoft.android.ottimo.dal.DataLayer.Announcement;
 import samanasoft.android.ottimo.dal.DataLayer.VaccinationShotDt;
 import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultHd;
 import samanasoft.android.ottimo.dal.DataLayer.LaboratoryResultDt;
@@ -83,7 +85,14 @@ public class AlarmSyncDataService extends Service {
         }
 
         protected WebServiceResponsePatient doInBackground(String... args) {
-            WebServiceResponsePatient result = SyncPatient(context, entity.MRN, deviceID, entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncVaccinationDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncLabResultDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB));
+            SharedPreferences prefs = getSharedPreferences(samanasoft.android.ottimo.common.Constant.SharedPreference.NAME, MODE_PRIVATE);
+            String lastSyncAnnouncement = prefs.getString(samanasoft.android.ottimo.common.Constant.SharedPreference.LAST_SYNC_ANNOUNCEMENT, "");
+            DateTime dtLastSyncAnnouncement = null;
+            if(lastSyncAnnouncement.equals(""))
+                dtLastSyncAnnouncement = new DateTime(2018, 1, 1, 0, 0, 0);
+            else
+                dtLastSyncAnnouncement = new DateTime(lastSyncAnnouncement);
+            WebServiceResponsePatient result = SyncPatient(context, entity.MRN, deviceID, entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncAppointmentDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncVaccinationDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), entity.LastSyncLabResultDateTime.toString(Constant.FormatString.DATE_TIME_FORMAT_DB), dtLastSyncAnnouncement.toString(Constant.FormatString.DATE_TIME_FORMAT_DB));
             return result;
         }
         protected void onPostExecute(WebServiceResponsePatient result) {
@@ -123,6 +132,28 @@ public class AlarmSyncDataService extends Service {
                         for (Appointment entity : lstAppointment) {
                             BusinessLayer.insertAppointment(context, entity);
                             Helper.insertAppointmentToEventCalender(context, entity);
+                        }
+                    }
+                }
+                if (result.returnObjAnnouncement != null) {
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.Announcement> lstAnnouncement = (List<Announcement>) result.returnObjAnnouncement;
+
+                    String lstAnnouncementID = "";
+                    for (Announcement entity : lstAnnouncement) {
+                        if (!lstAnnouncementID.equals(""))
+                            lstAnnouncementID += ",";
+                        lstAnnouncementID += entity.AnnouncementID;
+                    }
+
+                    if (!lstAnnouncementID.equals("")) {
+                        List<Announcement> lstOldAnnouncement = BusinessLayer.getAnnouncementList(context, String.format("AnnouncementID IN (%1$s)", lstAnnouncementID));
+                        for (Announcement entity : lstOldAnnouncement) {
+                            BusinessLayer.deleteAnnouncement(context, entity.AnnouncementID);
+                        }
+
+                        for (Announcement entity : lstAnnouncement) {
+                            BusinessLayer.insertAnnouncement(context, entity);
                         }
                     }
                 }
@@ -250,10 +281,10 @@ public class AlarmSyncDataService extends Service {
         notificationManager.notify(0, notification);
     }
 
-    public WebServiceResponsePatient SyncPatient(Context context, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate, String vaccinationLastUpdatedDate, String labResultLastUpdatedDate){
+    public WebServiceResponsePatient SyncPatient(Context context, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate, String vaccinationLastUpdatedDate, String labResultLastUpdatedDate, String announcementLastUpdatedDate){
         WebServiceResponsePatient result = new WebServiceResponsePatient();
         try {
-            JSONObject response = WebServiceHelper.SyncPatient(context, MRN, deviceID, patientLastUpdatedDate, photoLastUpdatedDate, appointmentLastUpdatedDate, vaccinationLastUpdatedDate, labResultLastUpdatedDate);
+            JSONObject response = WebServiceHelper.SyncPatient(context, MRN, deviceID, patientLastUpdatedDate, photoLastUpdatedDate, appointmentLastUpdatedDate, vaccinationLastUpdatedDate, labResultLastUpdatedDate, announcementLastUpdatedDate);
 
             List<DataLayer.Appointment> lst2 = new ArrayList<DataLayer.Appointment>();
             if (!response.isNull("ReturnObjAppointment")) {
@@ -296,6 +327,14 @@ public class AlarmSyncDataService extends Service {
                     lst.add((DataLayer.Patient)WebServiceHelper.JSONObjectToObject(row, new Patient()));
                 }
             }
+            List<DataLayer.Announcement> lst6 = new ArrayList<DataLayer.Announcement>();
+            if (!response.isNull("ReturnObjAnnouncement")) {
+                JSONArray returnObjAnnouncement = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAnnouncement");
+                for (int i = 0; i < returnObjAnnouncement.length();++i){
+                    JSONObject row = (JSONObject) returnObjAnnouncement.get(i);
+                    lst6.add((DataLayer.Announcement)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Announcement()));
+                }
+            }
 
             String img = "";
             if (!response.isNull("ReturnObjImage"))
@@ -308,6 +347,7 @@ public class AlarmSyncDataService extends Service {
             result.returnObjVaccination = lst3;
             result.returnObjLabResultHd = lst4;
             result.returnObjLabResultDt = lst5;
+            result.returnObjAnnouncement = lst6;
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception ex) {
@@ -326,6 +366,7 @@ public class AlarmSyncDataService extends Service {
         public List<?> returnObjVaccination;
         public List<?> returnObjLabResultHd;
         public List<?> returnObjLabResultDt;
+        public List<?> returnObjAnnouncement;
         public String returnObjImg;
     }
 

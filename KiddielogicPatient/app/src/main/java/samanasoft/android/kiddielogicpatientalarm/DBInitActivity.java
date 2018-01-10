@@ -368,9 +368,17 @@ public class DBInitActivity extends Activity {
                         BusinessLayer.insertLaboratoryResultDt(getBaseContext(), entity2);
                     }
 
+                    @SuppressWarnings("unchecked")
+                    List<DataLayer.Announcement> lstAnnouncement = (List<DataLayer.Announcement>) result.returnObjAnnouncement;
+                    for (DataLayer.Announcement entity2 : lstAnnouncement) {
+                        BusinessLayer.insertAnnouncement(getBaseContext(), entity2);
+                    }
+
                     SharedPreferences sharedPreferences = getSharedPreferences(Constant.SharedPreference.NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(Constant.SharedPreference.LIST_MRN, "");
+                    editor.putString(samanasoft.android.ottimo.common.Constant.SharedPreference.LAST_SYNC_ANNOUNCEMENT, result.timestamp.toString(samanasoft.android.framework.Constant.FormatString.DATE_TIME_FORMAT_DB));
+                    editor.commit();
 
                     goToNextPage();
                 } else {
@@ -418,6 +426,7 @@ public class DBInitActivity extends Activity {
             JSONArray returnObjVaccination = WebServiceHelper.getCustomReturnObject(response, "ReturnObjVaccination");
             JSONArray returnObjLabResultHd = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultHd");
             JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
+            JSONArray returnObjAnnouncement = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAnnouncement");
             JSONArray returnObjImg = WebServiceHelper.getCustomReturnObject(response, "ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
@@ -450,12 +459,18 @@ public class DBInitActivity extends Activity {
             for (int i = 0; i < returnObjImg.length();++i){
                 lst6.add(returnObjImg.get(i).toString());
             }
+            List<DataLayer.Announcement> lst7 = new ArrayList<DataLayer.Announcement>();
+            for (int i = 0; i < returnObjAnnouncement.length();++i){
+                JSONObject row = (JSONObject) returnObjAnnouncement.get(i);
+                lst7.add((DataLayer.Announcement)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Announcement()));
+            }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
             result.returnObjLabResultHd = lst4;
             result.returnObjLabResultDt = lst5;
             result.returnObjImg = lst6;
+            result.returnObjAnnouncement = lst7;
             result.timestamp = timestamp;
         } catch (Exception e) {
             result = null;
@@ -470,6 +485,7 @@ public class DBInitActivity extends Activity {
         public List<?> returnObjVaccination;
         public List<?> returnObjLabResultHd;
         public List<?> returnObjLabResultDt;
+        public List<?> returnObjAnnouncement;
         public List<String> returnObjImg;
     }
 }

@@ -12,6 +12,7 @@ class MessageCenterViewController: BasePatientTableViewController {
 
     var lstAppointment:[vAppointment] = [];
     let dtNow = "\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)) 00:00:00"
+    let dtNow2 = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
     override func viewDidLoad() {
         super.viewDidLoad()
         UserDefaults.standard.set("", forKey:"pageType");
@@ -44,7 +45,7 @@ class MessageCenterViewController: BasePatientTableViewController {
         let appointment:vAppointment = lstAppointment[indexPath.row];
         cell.lblMessage.text = "Mengingatkan \(String(describing: appointment.FullName!)) terjadwal \(String(describing: appointment.VisitTypeName!)) ke \(String(describing: appointment.ParamedicName!)) tgl \(appointment.StartDate!.toString(format: Constant.FormatString.DATE_FORMAT)) jam \(String(describing: appointment.cfStartTime!)) di KiddieCare. Jika setuju tekan tombol 'Confirm'. Jika tidak menjawab dianggap batal";
         
-        if(appointment.GCAppointmentStatus != Constant.AppointmentStatus.CHECK_IN || appointment.StartDate!.toString(format: Constant.FormatString.DATE_FORMAT) == dtNow){
+        if((appointment.GCAppointmentStatus != Constant.AppointmentStatus.OPEN && appointment.GCAppointmentStatus != Constant.AppointmentStatus.SEND_CONFIRMATION) || appointment.ReminderDate!.toString(format: Constant.FormatString.DATE_FORMAT_DB) < dtNow2){
             cell.btnConfirm.isHidden = true;
             cell.btnCancel.isHidden = true;
         }

@@ -33,12 +33,13 @@ import samanasoft.android.ottimo.dal.DataLayer.Announcement;
 import samanasoft.android.ottimo.dal.DataLayer.Patient;
 
 public class BaseAnnouncementActivity extends BaseMainActivity {
-
+    private String GCAnnouncementType;
     private View mProgressView;
     private TextView tvLastSyncDate;
     private ListView lvwAnnouncement;
 
-    protected void customOnCreate(Bundle savedInstanceState, String GCAnnouncementType){
+    protected void customOnCreate(Bundle savedInstanceState, String GCAnnouncementType1){
+        this.GCAnnouncementType = GCAnnouncementType1;
         Patient entity = InitActivity(savedInstanceState, R.layout.activity_announcement);
         tvLastSyncDate = (TextView)findViewById(R.id.tvLastSyncDate);
         lvwAnnouncement = (ListView)findViewById(R.id.lvwAnnouncement);
@@ -156,7 +157,7 @@ public class BaseAnnouncementActivity extends BaseMainActivity {
         // Show a progress spinner, and kick off a background task to
         // perform the user login attempt.
         showProgress(true);
-        mAuthTask = new LoadAnnouncementTask();
+        mAuthTask = new LoadAnnouncementTask(GCAnnouncementType);
         mAuthTask.execute((Void) null);
     }
 
@@ -200,8 +201,9 @@ public class BaseAnnouncementActivity extends BaseMainActivity {
      * the user.
      */
     public class LoadAnnouncementTask extends AsyncTask<Void, Void, WebServiceResponse> {
-        LoadAnnouncementTask() {
-
+        private String GCAnnouncementType;
+        LoadAnnouncementTask(String GCAnnouncementType1) {
+            this.GCAnnouncementType = GCAnnouncementType1;
         }
 
         @Override
@@ -237,7 +239,9 @@ public class BaseAnnouncementActivity extends BaseMainActivity {
                 for (Announcement entity : lstAnnouncement) {
                     BusinessLayer.insertAnnouncement(getBaseContext(), entity);
                 }
-                fillListAnnouncement(lstAnnouncement);
+
+                List<Announcement> lstAnnouncement1 = BusinessLayer.getAnnouncementList(getBaseContext(), String.format("'%1$s' BETWEEN StartDate AND EndDate AND GCAnnouncementType = '%2$s' ORDER BY StartDate", DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB) + " 00:00:00", GCAnnouncementType));
+                fillListAnnouncement(lstAnnouncement1);
 
                 SharedPreferences prefs = getSharedPreferences(samanasoft.android.ottimo.common.Constant.SharedPreference.NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();

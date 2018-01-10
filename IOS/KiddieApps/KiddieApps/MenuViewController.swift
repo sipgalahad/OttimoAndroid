@@ -16,6 +16,9 @@ class MenuViewController: UITableViewController {
     @IBOutlet weak var lblMedicalNo: UILabel!
     @IBOutlet weak var cellHeader: UITableViewCell!
     @IBOutlet weak var lblAppointmentCount: UILabel!
+    @IBOutlet weak var lblAnnouncementCount: UILabel!
+    @IBOutlet weak var lblNewsCount: UILabel!
+    @IBOutlet weak var lblAdvertisementCount: UILabel!
     @IBOutlet weak var lblMessageCenterCount: UILabel!
     let MRN:Int = (UserDefaults.standard.object(forKey: "MRN") as? Int)!;
     var pageType:NSString = "";
@@ -64,8 +67,34 @@ class MenuViewController: UITableViewController {
         else{
             lblMessageCenterCount.isHidden = false;
         }
-
         lblMessageCenterCount.text = String(lstMessageCenter.count);
+        
+        let lstAnnouncement = BusinessLayer.getAnnouncementList(filterExpression: "'\(dtNow)' BETWEEN StartDate AND EndDate AND GCAnnouncementType = '\(String(describing: Constant.AnnouncementType.ANNOUNCEMENT))'");
+        if(lstAnnouncement.count == 0){
+            lblAnnouncementCount.isHidden = true;
+        }
+        else{
+            lblAnnouncementCount.isHidden = false;
+        }
+        lblAnnouncementCount.text = String(lstAnnouncement.count);
+        
+        let lstNews = BusinessLayer.getAnnouncementList(filterExpression: "'\(dtNow)' BETWEEN StartDate AND EndDate AND GCAnnouncementType = '\(String(describing: Constant.AnnouncementType.NEWS))'");
+        if(lstNews.count == 0){
+            lblNewsCount.isHidden = true;
+        }
+        else{
+            lblNewsCount.isHidden = false;
+        }
+        lblNewsCount.text = String(lstNews.count);
+        
+        let lstAdvertisement = BusinessLayer.getAnnouncementList(filterExpression: "'\(dtNow)' BETWEEN StartDate AND EndDate AND GCAnnouncementType = '\(String(describing: Constant.AnnouncementType.ADVERTISEMENT))'");
+        if(lstAdvertisement.count == 0){
+            lblAdvertisementCount.isHidden = true;
+        }
+        else{
+            lblAdvertisementCount.isHidden = false;
+        }
+        lblAdvertisementCount.text = String(lstAdvertisement.count);
         
         let gradient: CAGradientLayer = CAGradientLayer()
         
@@ -91,8 +120,14 @@ class MenuViewController: UITableViewController {
             UserDefaults.standard.synchronize();
             self.performSegue(withIdentifier: "labResultView", sender: self);
         }
-
-
+        else if(pageType.isEqual(to: "ann")){
+            let announcementID:Int = (UserDefaults.standard.object(forKey: "announcementID") as? Int)!;
+            UserDefaults.standard.set(MRN, forKey:"MRN");
+            UserDefaults.standard.set(pageType, forKey:"pageType");
+            UserDefaults.standard.set(announcementID, forKey:"announcementID");
+            UserDefaults.standard.synchronize();
+            self.performSegue(withIdentifier: "announcementView", sender: self);
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -109,7 +144,7 @@ class MenuViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
-        return 11;
+        return 16;
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -150,6 +185,18 @@ class MenuViewController: UITableViewController {
             }
             
             self.performSegue(withIdentifier: "initViewLogout", sender: self)
+        }
+        else if(indexPath.row == 8){
+            UserDefaults.standard.set(Constant.AnnouncementType.ANNOUNCEMENT, forKey:"GCAnnouncementType");
+            self.performSegue(withIdentifier: "announcementView", sender: self)
+        }
+        else if(indexPath.row == 9){
+            UserDefaults.standard.set(Constant.AnnouncementType.NEWS, forKey:"GCAnnouncementType");
+            self.performSegue(withIdentifier: "announcementView", sender: self)
+        }
+        else if(indexPath.row == 10){
+            UserDefaults.standard.set(Constant.AnnouncementType.ADVERTISEMENT, forKey:"GCAnnouncementType");
+            self.performSegue(withIdentifier: "announcementView", sender: self)
         }
     }
 

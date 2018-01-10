@@ -171,7 +171,14 @@ class LoginViewController: BaseViewController {
                 for labResultDt in result.returnObjLabResultDt{
                     let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
                 }
-
+                
+                let lstOldAnnouncement = BusinessLayer.getAnnouncementList(filterExpression: "");                
+                for announcement in lstOldAnnouncement{
+                    let _ = BusinessLayer.deleteAnnouncement(AnnouncementID: announcement.AnnouncementID as! Int);
+                }
+                for announcement in result.returnObjAnnouncement{
+                    let _ = BusinessLayer.insertAnnouncement(record: announcement);
+                }
                 
                 if(result.returnObjImg != ""){
                     let imageData = NSData(base64Encoded: result.returnObjImg);
@@ -220,6 +227,11 @@ class LoginViewController: BaseViewController {
             for tmp in objLabResultDt{
                 let entity:LaboratoryResultDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultDt()) as! LaboratoryResultDt
                 retval.returnObjLabResultDt.append(entity);
+            }
+            let objAnnouncement = dict?["ReturnObjAnnouncement"] as! NSArray
+            for tmp in objAnnouncement{
+                let entity:Announcement = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Announcement()) as! Announcement
+                retval.returnObjAnnouncement.append(entity);
             }
             
             let objPatient = dict?["ReturnObjPatient"] as! NSArray

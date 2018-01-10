@@ -24,6 +24,7 @@ class InitViewController: BaseViewController {
     public var pageType:NSString = "";
     public var appointmentID:Int = 0;
     public var labResultID:Int = 0;
+    public var announcementID:Int = 0;
     public var MRN:Int = 0;
     override func viewDidAppear(_ animated: Bool) {
         var isGoToNextPage = true;
@@ -34,6 +35,7 @@ class InitViewController: BaseViewController {
         else{
             let DBVersion = UserDefaults.standard.object(forKey: Constant.Session.DB_VERSION) as? String;
             if DBVersion != Constant.DB_VERSION{
+                var isDifferentDBVersion = true;
                 let _ = DaoBase.getInstance();
                 let lstMRN:[Int] = BusinessLayer.getPatientMRNList(filterExpression: "");
                 
@@ -48,49 +50,27 @@ class InitViewController: BaseViewController {
                     }
                     listMRN += String(mrn);
                 }
+                if listMRN == "" {
+                    isDifferentDBVersion = false;
+                }
                 
                 self.indicator.startAnimating();
-                let deviceID = UIDevice.current.identifierForVendor!.uuidString;
-                reloadDataAfterUpdateApps(listMRN: listMRN, deviceID: deviceID, completionHandler: { (result) -> Void in
-                    DispatchQueue.main.async() {
-                        self.indicator.stopAnimating();
-                    }
-                    var ctr:Int = 0;
-                    for patient in result.returnObjPatient{
-                        patient.LastSyncDateTime = DateTime.now();
-                        patient.LastSyncAppointmentDateTime = DateTime.now();
-                        patient.LastSyncVaccinationDateTime = DateTime.now();
-                        patient.LastSyncLabResultDateTime = DateTime.now();
-                        let _ = BusinessLayer.insertPatient(record: patient);
-                        
-                        let returnObjImg = result.returnObjImg[ctr];
-                        if(returnObjImg != ""){
-                            let imageData = NSData(base64Encoded: returnObjImg);
-                            let image = UIImage(data: imageData! as Data);
-                            let _ = saveImageToDocumentDirectory(medicalNo: patient.MedicalNo!, image!);
-                        }
-                        ctr += 1;
-                        
-                    }
-                    for app in result.returnObjAppointment{
-                        let _ = BusinessLayer.insertAppointment(record: app);
-                    }
-                    for vaccination in result.returnObjVaccination{
-                        let _ = BusinessLayer.insertVaccinationShotDt(record: vaccination);
-                    }
-                    for labResultHd in result.returnObjLabResultHd{
-                        let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
-                    }                    
-                    for labResultDt in result.returnObjLabResultDt{
-                        let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
-                    }
+                
+                if isDifferentDBVersion {
+                    UserDefaults.standard.set(Constant.LIST_MRN, forKey:listMRN);
+                    reloadDateTask(listMRN: listMRN);
 
-                    DispatchQueue.main.async() {
-                        self.goToNextPage();
-                    }
-                });
+                }
             }
             else{
+                var listMRN = "";
+                if UserDefaults.standard.object(forKey: Constant.LIST_MRN) != nil {
+                    listMRN = (UserDefaults.standard.object(forKey: Constant.LIST_MRN) as? String)!;
+                }
+                if listMRN != "" {
+                    reloadDateTask(listMRN: listMRN);
+                }                
+                
                 let _ = DaoBase.getInstance();
             }
         }
@@ -107,6 +87,54 @@ class InitViewController: BaseViewController {
         if isGoToNextPage {
             goToNextPage();
         }
+    }
+    
+    private func reloadDateTask(listMRN:String){
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString;
+        reloadDataAfterUpdateApps(listMRN: listMRN, deviceID: deviceID, completionHandler: { (result) -> Void in
+            DispatchQueue.main.async() {
+                self.indicator.stopAnimating();
+            }
+            var ctr:Int = 0;
+            for patient in result.returnObjPatient{
+                patient.LastSyncDateTime = DateTime.now();
+                patient.LastSyncAppointmentDateTime = DateTime.now();
+                patient.LastSyncVaccinationDateTime = DateTime.now();
+                patient.LastSyncLabResultDateTime = DateTime.now();
+                let _ = BusinessLayer.insertPatient(record: patient);
+                
+                let returnObjImg = result.returnObjImg[ctr];
+                if(returnObjImg != ""){
+                    let imageData = NSData(base64Encoded: returnObjImg);
+                    let image = UIImage(data: imageData! as Data);
+                    let _ = saveImageToDocumentDirectory(medicalNo: patient.MedicalNo!, image!);
+                }
+                ctr += 1;
+                
+            }
+            for app in result.returnObjAppointment{
+                let _ = BusinessLayer.insertAppointment(record: app);
+            }
+            for vaccination in result.returnObjVaccination{
+                let _ = BusinessLayer.insertVaccinationShotDt(record: vaccination);
+            }
+            for labResultHd in result.returnObjLabResultHd{
+                let _ = BusinessLayer.insertLaboratoryResultHd(record: labResultHd);
+            }
+            for labResultDt in result.returnObjLabResultDt{
+                let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
+            }
+            for announcement in result.returnObjAnnouncement{
+                let _ = BusinessLayer.insertAnnouncement(record: announcement);
+            }
+
+            UserDefaults.standard.set(Constant.LIST_MRN, forKey:"");
+            
+            DispatchQueue.main.async() {
+                self.goToNextPage();
+            }
+        });
+
     }
     
     public func reloadDataAfterUpdateApps(listMRN:String, deviceID: String, completionHandler: @escaping (_ result:WebServiceResponsePatient2) -> Void){
@@ -139,6 +167,11 @@ class InitViewController: BaseViewController {
             for tmp in objLabResultDt{
                 let entity:LaboratoryResultDt = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: LaboratoryResultDt()) as! LaboratoryResultDt
                 retval.returnObjLabResultDt.append(entity);
+            }
+            let objAnnouncement = dict?["ReturnObjAnnouncement"] as! NSArray
+            for tmp in objAnnouncement{
+                let entity:Announcement = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Announcement()) as! Announcement
+                retval.returnObjAnnouncement.append(entity);
             }
             
             let objPatient = dict?["ReturnObjPatient"] as! NSArray
@@ -186,6 +219,40 @@ class InitViewController: BaseViewController {
                 });
             }
         }
+        if(pageType.isEqual(to: "ann")){
+            let announcement = BusinessLayer.getAnnouncement(AnnouncementID: announcementID)
+            if(announcement != nil){
+                UserDefaults.standard.set(MRN, forKey:"MRN");
+                UserDefaults.standard.set(pageType, forKey:"pageType");
+                UserDefaults.standard.set(self.announcementID, forKey:"announcementID");
+                UserDefaults.standard.synchronize();
+                self.performSegue(withIdentifier: "mainViewInit", sender: self);
+            }
+            else{
+                self.showLoadingPanel();
+                
+                let dtNow = DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)
+                
+                BusinessLayerWebService.getAnnouncementList(filterExpression: "'\(dtNow)' BETWEEN StartDate AND EndDate", completionHandler: { (result) -> Void in
+                    self.hideLoadingPanel();
+                    let lstOldAnnouncement = BusinessLayer.getAnnouncementList(filterExpression: "");
+                    for announcement in lstOldAnnouncement{
+                        let _ = BusinessLayer.deleteAnnouncement(AnnouncementID: announcement.AnnouncementID as! Int);
+                    }
+                    for announcement in result.returnObj{
+                        let _ = BusinessLayer.insertAnnouncement(record: announcement as! Announcement);
+                    }
+                    DispatchQueue.main.async() {
+                        UserDefaults.standard.set(self.MRN, forKey:"MRN");
+                        UserDefaults.standard.set(self.pageType, forKey:"pageType");
+                        UserDefaults.standard.set(self.announcementID, forKey:"announcementID");
+                        UserDefaults.standard.synchronize();
+                        self.performSegue(withIdentifier: "mainViewInit", sender: self);
+                    }
+                });
+            }
+        }
+
         else if(pageType.isEqual(to: "lab")){
             self.showLoadingPanel()
             syncLabResultPerID(ID: labResultID , completionHandler: { (result) -> Void in

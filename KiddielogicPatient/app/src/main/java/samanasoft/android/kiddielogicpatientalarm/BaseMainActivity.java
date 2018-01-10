@@ -133,17 +133,17 @@ public class BaseMainActivity extends AppCompatActivity
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         int appointmentCount = lstAppointment.size();
         if(appointmentCount > 0)
-            addCounterDigit(R.id.nav_message_center, "Message Center", appointmentCount);
+            addCounterDigit(R.id.nav_message_center, "     Message Center", appointmentCount);
 
         lstAppointment = BusinessLayer.getvAppointmentList(this, String.format("GCAppointmentStatus != '%1$s' AND StartDate >= '%2$s' AND MRN = '%3$s'", Constant.AppointmentStatus.VOID, DateTime.now().toString(Constant.FormatString.DATE_FORMAT_DB), MRN));
         //Log.d("filterExpression", String.format("GCAppointmentStatus = '%1$s' AND StartDate LIKE '%2$s%%'", Constant.AppointmentStatus.OPEN, DateTime.tomorrow().toString(Constant.FormatString.DATE_FORMAT_DB)));
         appointmentCount = lstAppointment.size();
         if(appointmentCount > 0)
-            addCounterDigit(R.id.nav_appointment, "My Appointment", appointmentCount);
+            addCounterDigit(R.id.nav_appointment, "     My Appointment", appointmentCount);
 
-        addCounterDigitAnnouncement(R.id.nav_announcement, "Announcement", Constant.AnnouncementType.ANNOUNCEMENT);
-        addCounterDigitAnnouncement(R.id.nav_news, "News", Constant.AnnouncementType.NEWS);
-        addCounterDigitAnnouncement(R.id.nav_advertisement, "Advertisement",Constant.AnnouncementType.ADVERTISEMENT);
+        addCounterDigitAnnouncement(R.id.nav_announcement, "     Announcement", Constant.AnnouncementType.ANNOUNCEMENT);
+        addCounterDigitAnnouncement(R.id.nav_news, "     News", Constant.AnnouncementType.NEWS);
+        addCounterDigitAnnouncement(R.id.nav_advertisement, "     Advertisement",Constant.AnnouncementType.ADVERTISEMENT);
     }
 
     private void addCounterDigitAnnouncement(int id, String originalText, String GCAnnouncementType){

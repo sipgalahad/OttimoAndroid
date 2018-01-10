@@ -11,7 +11,8 @@ import Foundation
 public class Constant {
     public static let APP_VERSION = "1.0";
     public static let DB_VERSION = "2";
-    
+    public static let LIST_MRN = "2";
+
     public static let SHORT_MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     public static let MONTHS = [ "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December" ];
@@ -44,6 +45,13 @@ public class Constant {
         public static let MALE = "0003^M";
         public static let FEMALE = "0003^F";
     }
+    public class AnnouncementType
+    {
+        public static let ANNOUNCEMENT = "OT040^001";
+        public static let NEWS = "OT040^002";
+        public static let ADVERTISEMENT = "OT040^003";
+    }
+
     public class AppointmentStatus
     {
         public static let OPEN = "0278^001";

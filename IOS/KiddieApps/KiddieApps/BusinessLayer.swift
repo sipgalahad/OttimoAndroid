@@ -9,6 +9,44 @@
 import Foundation
 
 public class BusinessLayer{
+    // MARK: Announcement
+    public static func getAnnouncement(AnnouncementID:Int) -> Announcement?
+    {
+        return AnnouncementDao().get(AnnouncementID: AnnouncementID);
+    }
+    public static func insertAnnouncement(record:Announcement) -> Bool
+    {
+        return AnnouncementDao().insert(record: record);
+    }
+    public static func updateAnnouncement(record:Announcement) -> Bool
+    {
+        return AnnouncementDao().update(record: record);
+    }
+    public static func deleteAnnouncement(AnnouncementID:Int) -> Bool
+    {
+        return AnnouncementDao().delete(AnnouncementID: AnnouncementID);
+    }
+    public static func getAnnouncementList(filterExpression:String) -> [Announcement]{
+        var result:Array<Announcement> = Array();
+        //do
+        //{
+        let helper:DBHelper = DBHelper();
+        sharedInstance.database!.open()
+        let query = helper.select(tableName: "Announcement", filterExpression: filterExpression);
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        while (row.next()) {
+            result.append(helper.dataRowToObject(row: row, obj: Announcement()) as! Announcement);
+        }
+        sharedInstance.database!.close()
+        
+        //}
+        //catch (Exception)
+        // {
+        //e.printStackTrace();
+        //}
+        return result;
+    }
+
     // MARK: Appointment
     public static func getAppointment(AppointmentID:Int) -> Appointment?
     {

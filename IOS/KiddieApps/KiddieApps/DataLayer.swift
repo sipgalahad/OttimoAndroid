@@ -9,6 +9,58 @@
 import Foundation
 
 
+public class Announcement : BaseClass{
+    var AnnouncementID:NSNumber?
+    var Title:String?
+    var StartDate:DateTime?
+    var EndDate:DateTime?
+    var GCAnnouncementType:String?
+    var AnnouncementType:String?
+    var Remarks:String?
+    var LastUpdatedDate:DateTime?
+    
+    override func getPrimaryKey() -> [String]{
+        return ["AnnouncementID"];
+    }
+}
+public class AnnouncementDao{
+    private var helper:DBHelper;
+    private let p_AnnouncementID = "@p_AnnouncementID";
+    
+    public init() {
+        helper = DBHelper();
+    }
+    public func get(AnnouncementID:Int) -> Announcement?{
+        sharedInstance.database!.open()
+        var query = helper.getRecord(tableName: "Announcement", lstPrimaryKey: Announcement().getPrimaryKey());
+        query = query.replacingOccurrences(of: p_AnnouncementID, with: String(AnnouncementID));
+        let row = DaoBase.getInstance().getDataRow(query: query);
+        let temp = helper.dataListRowToObject(row: row, obj: Announcement());
+        sharedInstance.database!.close()
+        if(temp != nil) {
+            let result = temp as! Announcement?;
+            return result;
+        }
+        return nil
+    }
+    public func insert(record:Announcement) -> Bool{
+        let query = helper.insert(tableName: "Announcement", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func update(record:Announcement) -> Bool{
+        let query = helper.update(tableName: "Announcement", record: record);
+        return DaoBase.getInstance().executeNonQuery(query: query!);
+    }
+    public func delete(AnnouncementID:Int) -> Bool{
+        let record = get(AnnouncementID: AnnouncementID);
+        if(record != nil){
+            let query = helper.delete(tableName: "Announcement", record: record!);
+            return DaoBase.getInstance().executeNonQuery(query: query!);
+        }
+        return false;
+    }
+}
+
 
 public class Appointment : BaseClass{
     var AppointmentID:NSNumber?
@@ -65,8 +117,6 @@ public class AppointmentDao{
         return DaoBase.getInstance().executeNonQuery(query: query!);
     }
 }
-
-
 
 public class LaboratoryResultDt : BaseClass{
     var LaboratoryResultDtID:NSNumber?

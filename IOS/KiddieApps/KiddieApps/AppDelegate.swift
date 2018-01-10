@@ -290,6 +290,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 vc.pageType = "lab"
                 self.window?.rootViewController = vc;
             }
+            else if(type.isEqual(to: "Announcement")){
+                let lstPatient = BusinessLayer.getPatientList(filterExpression: "")
+                if(lstPatient.count > 0){
+                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                    
+                    let announcementID = userInfo["announcementID"] as! NSString;
+                    let vc = storyBoard.instantiateViewController(withIdentifier: "InitViewController") as! InitViewController;
+                    
+                    vc.announcementID = Int(announcementID as String)!;
+                    vc.MRN = lstPatient[0].MRN as! Int;
+                    vc.pageType = "ann"
+                    self.window?.rootViewController = vc;
+                }
+            }
             else if(type.isEqual(to: "SyncApp")){
                 let MRN = userInfo["MRN"] as! NSString;
                 
