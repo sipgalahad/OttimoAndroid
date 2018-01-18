@@ -11,6 +11,7 @@ public class Constant {
     {
         public static final String APP_DATA_URL = "http://192.168.0.102/appdata/ottimo";
         public static final String BRIDGING_SERVER = "http://114.199.103.10:8080/KiddielogicTest/BridgingServer/Program/Mobile/MobileService.asmx";
+        public static final String SUBSRICE_ANDROID = "androidtest";
         //public static final String BRIDGING_SERVER = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
         //public static final String BRIDGING_SERVER = "http://10.10.205.93/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
     }

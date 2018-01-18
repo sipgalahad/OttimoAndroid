@@ -75,7 +75,7 @@ public class DBInitActivity extends Activity {
         boolean isDifferentDBVersion = false;
 
         if (isDBHasCreated.equals("")) {
-            FirebaseMessaging.getInstance().subscribeToTopic("android");
+            FirebaseMessaging.getInstance().subscribeToTopic(samanasoft.android.framework.Constant.Url.SUBSRICE_ANDROID);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Constant.SharedPreference.DB_CONF, "1");
             editor.putString(Constant.SharedPreference.DB_VERSION, samanasoft.android.framework.Constant.DB_VERSION);

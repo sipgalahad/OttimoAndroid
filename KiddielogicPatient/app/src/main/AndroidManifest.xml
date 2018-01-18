@@ -96,6 +96,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.SelfRegistrationActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name="samanasoft.android.kiddielogicpatientalarm.AnnouncementActivity"
             android:label="@string/app_name"
             android:noHistory="true"

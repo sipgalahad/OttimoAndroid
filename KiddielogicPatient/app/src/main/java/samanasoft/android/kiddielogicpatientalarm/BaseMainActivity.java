@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -319,6 +320,11 @@ public class BaseMainActivity extends AppCompatActivity
             startActivity(i);
         } else if (id == R.id.nav_user_help) {
             Helper.CopyReadAssets(this);
+        } else if (id == R.id.nav_selfregistration) {
+            Intent i = new Intent(getBaseContext(), SelfRegistrationActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

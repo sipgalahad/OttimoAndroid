@@ -15,6 +15,9 @@
             android:id="@+id/nav_labresult"
             android:title="     My Laboratory Result" />
         <item
+            android:id="@+id/nav_selfregistration"
+            android:title="     Self Registration" />
+        <item
             android:id="@+id/nav_change_password"
             android:title="     Change Password" />
         <item
