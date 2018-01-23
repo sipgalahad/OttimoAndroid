@@ -187,6 +187,7 @@ class LoginViewController: BaseViewController {
                 }
                 UserDefaults.standard.set(entityPatient.MRN, forKey:"MRN");
                 UserDefaults.standard.set("", forKey:"pageType");
+                UserDefaults.standard.set(result.timeStamp, forKey:Constant.SharedPreference.ANNOUNCEMENT_LASTUPDATEDDATE);
                 UserDefaults.standard.synchronize();
                 DispatchQueue.main.async() {
                     self.performSegue(withIdentifier: "mainView", sender: self);

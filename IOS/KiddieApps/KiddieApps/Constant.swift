@@ -11,15 +11,18 @@ import Foundation
 public class Constant {
     public static let APP_VERSION = "1.0";
     public static let DB_VERSION = "2";
-    public static let LIST_MRN = "2";
-
+    
+    public class SharedPreference{
+        public static let LIST_MRN = "2";
+        public static let ANNOUNCEMENT_LASTUPDATEDDATE = "2018-01-01 00:00:00";
+    }
     public static let SHORT_MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     public static let MONTHS = [ "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December" ];
     public class Url
     {
         public static let APP_DATA_URL = "http://192.168.0.102/appdata/ottimo";
-        public static let BRIDGING_SERVER = "http://114.199.103.10:8080/KiddielogicTest/BridgingServer/Program/Mobile/MobileService.asmx";
+        public static let BRIDGING_SERVER = "http://114.199.103.10:8080/Kiddielogic/BridgingServer/Program/Mobile/MobileService.asmx";
         //public static let BRIDGING_SERVER = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
     }
     public static let APP_TOKEN = "40BD001563085FC35165329EA1FF5C5ECBDBBEEF";

@@ -85,7 +85,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
     }
     
     private func syncPatientPerMRN(entity:Patient, deviceID:String){
-        syncPatient(MRN: entity.MRN as! Int, deviceID: deviceID, patientLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, photoLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, appointmentLastUpdatedDate: (entity.LastSyncAppointmentDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, vaccinationLastUpdatedDate: (entity.LastSyncVaccinationDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, labResultLastUpdatedDate: (entity.LastSyncLabResultDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, completionHandler: { (result) -> Void in
+        var lastSyncAnnouncement = "";
+        if UserDefaults.standard.object(forKey: Constant.SharedPreference.ANNOUNCEMENT_LASTUPDATEDDATE) != nil {
+            lastSyncAnnouncement = (UserDefaults.standard.object(forKey: Constant.SharedPreference.ANNOUNCEMENT_LASTUPDATEDDATE) as? String)!;
+        }
+
+        
+        syncPatient(MRN: entity.MRN as! Int, deviceID: deviceID, patientLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, photoLastUpdatedDate: (entity.LastSyncDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, appointmentLastUpdatedDate: (entity.LastSyncAppointmentDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, vaccinationLastUpdatedDate: (entity.LastSyncVaccinationDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, labResultLastUpdatedDate: (entity.LastSyncLabResultDateTime?.toString(format: Constant.FormatString.DATE_TIME_FORMAT_DB))!, announcementLastUpdatedDate: lastSyncAnnouncement, completionHandler: { (result) -> Void in
             
             if(result.returnObjPatient.count > 0){
                 let entityPatient = result.returnObjPatient[0];
@@ -126,16 +132,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 }
                 
                 lstID = "";
-                for entity in result.returnObjLabResultHd{
+                for entity in result.returnObjVaccination{
                     if lstID != ""{
                         lstID += ",";
                     }
                     lstID += String(describing: entity.ID!);
                 }
                 if (lstID != ""){
-                    let lstOldEntity:[LaboratoryResultHd] = BusinessLayer.getLaboratoryResultHdList(filterExpression: "ID IN (\(lstID))");
+                    let lstOldEntity:[VaccinationShotDt] = BusinessLayer.getVaccinationShotDtList(filterExpression: "Type = 1 AND ID IN (\(lstID))");
                     for oldEntity in lstOldEntity{
-                        let _ = BusinessLayer.deleteLaboratoryResultHd(ID: oldEntity.ID as! Int);
+                        let _ = BusinessLayer.deleteVaccinationShotDt(Type: 1, ID: oldEntity.ID as! Int);
+                    }
+                }
+                
+                lstID = "";
+                for entity in result.returnObjAnnouncement{
+                    if lstID != ""{
+                        lstID += ",";
+                    }
+                    lstID += String(describing: entity.AnnouncementID!);
+                }
+                if (lstID != ""){
+                    let lstOldEntity:[Announcement] = BusinessLayer.getAnnouncementList(filterExpression: "AnnouncementID IN (\(lstID))");
+                    for oldEntity in lstOldEntity{
+                        let _ = BusinessLayer.deleteAnnouncement(AnnouncementID: oldEntity.AnnouncementID as! Int);
                     }
                 }
                 
@@ -165,6 +185,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 for labResultDt in result.returnObjLabResultDt{
                     let _ = BusinessLayer.insertLaboratoryResultDt(record: labResultDt);
                 }
+                for announcement in result.returnObjAnnouncement{
+                    let _ = BusinessLayer.insertAnnouncement(record: announcement);
+                }
+
                 
                 
                 if(result.returnObjImg != ""){
@@ -178,8 +202,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         
     }
     
-    public func syncPatient(MRN:Int, deviceID:String, patientLastUpdatedDate:String, photoLastUpdatedDate:String, appointmentLastUpdatedDate:String, vaccinationLastUpdatedDate:String, labResultLastUpdatedDate:String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
-        WebServiceHelper().SyncPatient(MRN: MRN, deviceID: deviceID, patientLastUpdatedDate: patientLastUpdatedDate, photoLastUpdatedDate: photoLastUpdatedDate, appointmentLastUpdatedDate: appointmentLastUpdatedDate, vaccinationLastUpdatedDate: vaccinationLastUpdatedDate, labResultLastUpdatedDate: labResultLastUpdatedDate, completionHandler: { (result) -> Void in
+    public func syncPatient(MRN:Int, deviceID:String, patientLastUpdatedDate:String, photoLastUpdatedDate:String, appointmentLastUpdatedDate:String, vaccinationLastUpdatedDate:String, labResultLastUpdatedDate:String, announcementLastUpdatedDate:String, completionHandler: @escaping (_ result:WebServiceResponsePatient) -> Void){
+        WebServiceHelper().SyncPatient(MRN: MRN, deviceID: deviceID, patientLastUpdatedDate: patientLastUpdatedDate, photoLastUpdatedDate: photoLastUpdatedDate, appointmentLastUpdatedDate: appointmentLastUpdatedDate, vaccinationLastUpdatedDate: vaccinationLastUpdatedDate, labResultLastUpdatedDate: labResultLastUpdatedDate, announcementLastUpdatedDate: announcementLastUpdatedDate, completionHandler: { (result) -> Void in
             //self.txtMedicalNo.text = result;
             let retval:WebServiceResponsePatient = WebServiceResponsePatient();
             
@@ -193,6 +217,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                     retval.returnObjAppointment.append(entity);
                 }
             }
+            if(dict?["ReturnObjAnnouncement"] != nil){
+                let objAnnouncement = dict?["ReturnObjAnnouncement"] as! NSArray
+                for tmp in objAnnouncement{
+                    let entity:Announcement = WebServiceHelper.JSONObjectToObject(row: tmp as! [String : AnyObject], obj: Announcement()) as! Announcement
+                    retval.returnObjAnnouncement.append(entity);
+                }
+            }
+
             if(dict?["ReturnObjVaccination"] != nil){
                 let objVaccination = dict?["ReturnObjVaccination"] as! NSArray
                 for tmp in objVaccination{
@@ -265,7 +297,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         
         let state:UIApplicationState = application.applicationState
         
-        if(state == .background || state == .active || state == .inactive){            let type = userInfo["type"] as! NSString;
+        if(state == .background || state == .active || state == .inactive){
+            let type = userInfo["type"] as! NSString;
             if(type.isEqual(to: "AppReminder")){
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 

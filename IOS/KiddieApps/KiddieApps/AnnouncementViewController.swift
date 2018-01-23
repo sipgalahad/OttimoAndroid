@@ -124,6 +124,8 @@ class AnnouncementViewController: BasePatientTableViewController {
             dtNow = "\(DateTime.now().toString(format: Constant.FormatString.DATE_FORMAT_DB)) 00:00:00"
             self.lstAnnouncement = BusinessLayer.getAnnouncementList(filterExpression: "'\(dtNow)' BETWEEN StartDate AND EndDate AND GCAnnouncementType = '\(String(describing: self.GCAnnouncementType))'");
             
+            UserDefaults.standard.set(result.timeStamp, forKey:Constant.SharedPreference.ANNOUNCEMENT_LASTUPDATEDDATE);
+            UserDefaults.standard.synchronize();
             DispatchQueue.main.async() {
                 self.tableView.reloadData();
             }

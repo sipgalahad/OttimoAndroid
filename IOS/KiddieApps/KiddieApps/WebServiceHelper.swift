@@ -120,7 +120,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
     
     
     
-    public func SyncPatient(MRN:Int, deviceID:String, patientLastUpdatedDate:String, photoLastUpdatedDate:String, appointmentLastUpdatedDate:String, vaccinationLastUpdatedDate:String, labResultLastUpdatedDate:String, completionHandler: @escaping (_ result:String) -> Void){
+    public func SyncPatient(MRN:Int, deviceID:String, patientLastUpdatedDate:String, photoLastUpdatedDate:String, appointmentLastUpdatedDate:String, vaccinationLastUpdatedDate:String, labResultLastUpdatedDate:String, announcementLastUpdatedDate:String, completionHandler: @escaping (_ result:String) -> Void){
         let appToken:String = Constant.APP_TOKEN;
         
         var data:String = "<REQUEST><DATA>";
@@ -131,6 +131,7 @@ class WebServiceHelper : NSObject,XMLParserDelegate{
         data += addXMLElement(elementName: "APPOINTMENT_LASTUPDATEDDATE", value: appointmentLastUpdatedDate);
         data += addXMLElement(elementName: "VACCINATION_LASTUPDATEDDATE", value: vaccinationLastUpdatedDate);
         data += addXMLElement(elementName: "LAB_RESULT_LASTUPDATEDDATE", value: labResultLastUpdatedDate);
+        data += addXMLElement(elementName: "ANNOUNCEMENT_LASTUPDATEDDATE", value: announcementLastUpdatedDate);
         data += "</DATA></REQUEST>";
         
         var lstParameter:Array<Variable> = Array();

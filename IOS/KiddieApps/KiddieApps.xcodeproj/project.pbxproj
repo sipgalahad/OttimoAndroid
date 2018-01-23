@@ -25,6 +25,7 @@
 		F34B5CB81F1FA7DA00B99271 /* LabResultViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB71F1FA7DA00B99271 /* LabResultViewCell.swift */; };
 		F34B5CBA1F1FB95D00B99271 /* LabResultDtViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CB91F1FB95D00B99271 /* LabResultDtViewCell.swift */; };
 		F34B5CBE1F1FBBF300B99271 /* LabResultDtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B5CBD1F1FBBF300B99271 /* LabResultDtViewController.swift */; };
+		F373950A200F5619007EDA28 /* SelfRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3739509200F5619007EDA28 /* SelfRegistrationViewController.swift */; };
 		F392F5731F7508F90062BA5C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F392F5721F7508F90062BA5C /* UserNotifications.framework */; };
 		F3B189041EF241F8002A9C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189031EF241F8002A9C0B /* AppDelegate.swift */; };
 		F3B189061EF241F8002A9C0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B189051EF241F8002A9C0B /* ViewController.swift */; };
@@ -108,6 +109,7 @@
 		F34B5CB71F1FA7DA00B99271 /* LabResultViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultViewCell.swift; sourceTree = "<group>"; };
 		F34B5CB91F1FB95D00B99271 /* LabResultDtViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultDtViewCell.swift; sourceTree = "<group>"; };
 		F34B5CBD1F1FBBF300B99271 /* LabResultDtViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabResultDtViewController.swift; sourceTree = "<group>"; };
+		F3739509200F5619007EDA28 /* SelfRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfRegistrationViewController.swift; sourceTree = "<group>"; };
 		F392F5711F7508140062BA5C /* KiddieApps.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KiddieApps.entitlements; sourceTree = "<group>"; };
 		F392F5721F7508F90062BA5C /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		F3B189001EF241F8002A9C0B /* KiddieApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KiddieApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -392,6 +394,7 @@
 				F3DB17EF1F03F7C6005D9DF8 /* MyAppointmentViewController.swift */,
 				F3DB17E91F03E09C005D9DF8 /* ProfileViewController.swift */,
 				F3EAF1351F100D51002E47D9 /* RequestPasswordViewController.swift */,
+				F3739509200F5619007EDA28 /* SelfRegistrationViewController.swift */,
 				F34B5CAD1F14CDC900B99271 /* VaccinationViewCell.swift */,
 				F34B5CAF1F14CDE200B99271 /* VaccinationViewController.swift */,
 				F3B189051EF241F8002A9C0B /* ViewController.swift */,
@@ -633,6 +636,7 @@
 				F34B5CBA1F1FB95D00B99271 /* LabResultDtViewCell.swift in Sources */,
 				F3138AB220052F9300668533 /* AnnouncementDtViewController.swift in Sources */,
 				F3D4CCCA1EFA44F5009E8FC9 /* DateTime.swift in Sources */,
+				F373950A200F5619007EDA28 /* SelfRegistrationViewController.swift in Sources */,
 				F3DB17F21F03FDC4005D9DF8 /* ChangePasswordViewController.swift in Sources */,
 				F307300E1F1022FE00E66E1A /* ErrorFeedbackViewController.swift in Sources */,
 				F3B189361EF923E3002A9C0B /* InitViewController.swift in Sources */,

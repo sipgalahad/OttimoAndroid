@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import FirebaseMessaging
 
 class InitViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        Messaging.messaging().subscribe(toTopic: "ios")
 
         // Do any additional setup after loading the view.
     }
@@ -35,6 +37,7 @@ class InitViewController: BaseViewController {
         else{
             let DBVersion = UserDefaults.standard.object(forKey: Constant.Session.DB_VERSION) as? String;
             if DBVersion != Constant.DB_VERSION{
+            //if 1 == 1 {
                 var isDifferentDBVersion = true;
                 let _ = DaoBase.getInstance();
                 let lstMRN:[Int] = BusinessLayer.getPatientMRNList(filterExpression: "");
@@ -57,15 +60,15 @@ class InitViewController: BaseViewController {
                 self.indicator.startAnimating();
                 
                 if isDifferentDBVersion {
-                    UserDefaults.standard.set(Constant.LIST_MRN, forKey:listMRN);
+                    UserDefaults.standard.set(Constant.SharedPreference.LIST_MRN, forKey:listMRN);
                     reloadDateTask(listMRN: listMRN);
 
                 }
             }
             else{
                 var listMRN = "";
-                if UserDefaults.standard.object(forKey: Constant.LIST_MRN) != nil {
-                    listMRN = (UserDefaults.standard.object(forKey: Constant.LIST_MRN) as? String)!;
+                if UserDefaults.standard.object(forKey: Constant.SharedPreference.LIST_MRN) != nil {
+                    listMRN = (UserDefaults.standard.object(forKey: Constant.SharedPreference.LIST_MRN) as? String)!;
                 }
                 if listMRN != "" {
                     reloadDateTask(listMRN: listMRN);
@@ -128,7 +131,9 @@ class InitViewController: BaseViewController {
                 let _ = BusinessLayer.insertAnnouncement(record: announcement);
             }
 
-            UserDefaults.standard.set(Constant.LIST_MRN, forKey:"");
+            UserDefaults.standard.set(Constant.SharedPreference.LIST_MRN, forKey:"");
+            UserDefaults.standard.synchronize();
+
             
             DispatchQueue.main.async() {
                 self.goToNextPage();
@@ -219,7 +224,7 @@ class InitViewController: BaseViewController {
                 });
             }
         }
-        if(pageType.isEqual(to: "ann")){
+        else if(pageType.isEqual(to: "ann")){
             let announcement = BusinessLayer.getAnnouncement(AnnouncementID: announcementID)
             if(announcement != nil){
                 UserDefaults.standard.set(MRN, forKey:"MRN");

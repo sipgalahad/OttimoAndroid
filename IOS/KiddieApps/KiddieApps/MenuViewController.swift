@@ -26,7 +26,7 @@ class MenuViewController: UITableViewController {
         super.viewDidLoad()
         
         if(UserDefaults.standard.object(forKey: "pageType") != nil){
-            pageType = (UserDefaults.standard.object(forKey: "pageType") as? NSString)!;
+            self.pageType = (UserDefaults.standard.object(forKey: "pageType") as? NSString)!;
         }
         let entity:Patient = BusinessLayer.getPatient(MRN: self.MRN)!;
         self.imgProfile.layer.cornerRadius = self.imgProfile.frame.size.width / 2;
@@ -144,11 +144,11 @@ class MenuViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
-        return 16;
+        return 17;
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(indexPath.row == 6){
+        if(indexPath.row == 7){
             let lstOldAppointment:[Appointment] = BusinessLayer.getAppointmentList(filterExpression: "MRN = \(String(describing: self.MRN))");
             for app in lstOldAppointment {
                 let _ = BusinessLayer.deleteAppointment(AppointmentID: app.AppointmentID as! Int);
@@ -186,15 +186,15 @@ class MenuViewController: UITableViewController {
             
             self.performSegue(withIdentifier: "initViewLogout", sender: self)
         }
-        else if(indexPath.row == 8){
+        else if(indexPath.row == 9){
             UserDefaults.standard.set(Constant.AnnouncementType.ANNOUNCEMENT, forKey:"GCAnnouncementType");
             self.performSegue(withIdentifier: "announcementView", sender: self)
         }
-        else if(indexPath.row == 9){
+        else if(indexPath.row == 10){
             UserDefaults.standard.set(Constant.AnnouncementType.NEWS, forKey:"GCAnnouncementType");
             self.performSegue(withIdentifier: "announcementView", sender: self)
         }
-        else if(indexPath.row == 10){
+        else if(indexPath.row == 11){
             UserDefaults.standard.set(Constant.AnnouncementType.ADVERTISEMENT, forKey:"GCAnnouncementType");
             self.performSegue(withIdentifier: "announcementView", sender: self)
         }
