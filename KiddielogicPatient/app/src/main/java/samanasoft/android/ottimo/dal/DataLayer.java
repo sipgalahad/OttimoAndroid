@@ -339,6 +339,12 @@ public class DataLayer{
         @Column(DataType = DataType.STRING, Name = "Remarks")
         public String Remarks;
 
+        @Column(DataType = DataType.STRING, Name = "GCPatientMobileStatus")
+        public String GCPatientMobileStatus;
+
+        @Column(DataType = DataType.BOOLEAN, Name = "IsPendingUpdateData")
+        public Boolean IsPendingUpdateData;
+
         @Column(DataType = DataType.DATETIME, Name = "LastUpdatedDate")
         public DateTime LastUpdatedDate;
     }

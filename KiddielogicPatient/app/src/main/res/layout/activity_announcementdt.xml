@@ -32,17 +32,15 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin">
-            <TextView
-                android:id="@+id/tvRemarks"
+            <WebView
+                android:id="@+id/wvRemarks"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:layout_height="match_parent">
+            </WebView>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

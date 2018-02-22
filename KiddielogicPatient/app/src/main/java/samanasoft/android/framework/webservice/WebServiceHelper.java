@@ -185,6 +185,34 @@ public class WebServiceHelper {
 		}
 		return result;
 	}
+	public static JSONObject UpdateLabResultMobileStatus(Context ctx, Integer ID, String GCPatientMobileStatus){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "UpdateLabResultMobileStatus");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("LAB_RESULT_ID", ID.toString());
+		data += addXMLElement("GC_PATIENT_MOBILE_STATUS", GCPatientMobileStatus);
+		data += "</DATA></REQUEST>";
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/UpdateLabResultMobileStatus", envelope);
+			result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public static JSONObject SyncPatient(Context ctx, Integer MRN, String deviceID, String patientLastUpdatedDate, String photoLastUpdatedDate, String appointmentLastUpdatedDate, String vaccinationLastUpdatedDate, String labResultLastUpdatedDate, String announcementLastUpdatedDate){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 

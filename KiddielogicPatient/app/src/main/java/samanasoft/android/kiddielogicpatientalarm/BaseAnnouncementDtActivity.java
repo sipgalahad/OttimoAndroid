@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import samanasoft.android.ottimo.dal.BusinessLayer;
@@ -23,10 +24,10 @@ public class BaseAnnouncementDtActivity extends AppCompatActivity {
         MRN = myIntent.getIntExtra("mrn", 0);
         AnnouncementID = myIntent.getIntExtra("announcementid", 0);
 
-        TextView tvRemarks = (TextView)findViewById(R.id.tvRemarks);
-
+        WebView wvRemarks = (WebView)findViewById(R.id.wvRemarks);
+        wvRemarks.getSettings().setDomStorageEnabled(true);
         DataLayer.Announcement entityHd = BusinessLayer.getAnnouncement(this, AnnouncementID);
-        tvRemarks.setText(Html.fromHtml(entityHd.Remarks));
+        wvRemarks.loadData(entityHd.Remarks, "text/html; charset=utf-8", "UTF-8");
         //tvLabResultDateTime.setText(String.format("%1$s %2$s", entityHd.ResultDate.toString(Constant.FormatString.DATE_FORMAT), entityHd.ResultTime));
         //tvLabResultProvider.setText(entityHd.ProviderName);
         //tvLabResultRemarks.setText(entityHd.Remarks);

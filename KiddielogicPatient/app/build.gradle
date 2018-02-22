@@ -7,8 +7,8 @@ android {
         applicationId "samanasoft.android.kiddielogicpatientalarm"
         minSdkVersion 15
         targetSdkVersion 22
-        versionName '1.3.0'
-        versionCode 8
+        versionName '1.3.2'
+        versionCode 10
     }
     buildTypes {
         release {

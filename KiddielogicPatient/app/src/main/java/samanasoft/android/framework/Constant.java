@@ -1,8 +1,8 @@
 package samanasoft.android.framework;
 
 public class Constant {
-    public static final String AppVersion = "1.1.1";
-    public static final String DB_VERSION = "2";
+    public static final String AppVersion = "1.3.2";
+    public static final String DB_VERSION = "3";
 
 	public static final String[] SHORT_MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }; 
 	public static final String[] MONTHS = { "January", "February", "March", "April", "May", "June", "July", 
@@ -45,6 +45,13 @@ public class Constant {
         public static final String CHECK_IN = "0278^004";
         public static final String CANCELLED = "0278^005";
         public static final String VOID = "0278^999";
+    }
+    public static class PatientMobileStatus
+    {
+        public static final String OPEN = "OT043^001";
+        public static final String SEND = "OT043^002";
+        public static final String DELIVERED = "OT043^003";
+        public static final String READ = "OT043^004";
     }
     public static class LabResultSummary
     {
