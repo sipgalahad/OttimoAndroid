@@ -1,8 +1,8 @@
 package samanasoft.android.framework;
 
 public class Constant {
-    public static final String AppVersion = "1.3.2";
-    public static final String DB_VERSION = "3";
+    public static final String AppVersion = "1.4.1";
+    public static final String DB_VERSION = "4";
 
 	public static final String[] SHORT_MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }; 
 	public static final String[] MONTHS = { "January", "February", "March", "April", "May", "June", "July", 
@@ -12,7 +12,7 @@ public class Constant {
         public static final String APP_DATA_URL = "http://192.168.0.102/appdata/ottimo";
         public static final String BRIDGING_SERVER = "http://114.199.103.10:8080/KiddielogicTest/BridgingServer/Program/Mobile/MobileService.asmx";
         public static final String SUBSRICE_ANDROID = "androidtest";
-        //public static final String BRIDGING_SERVER = "http://192.168.0.102/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
+        //public static final String BRIDGING_SERVER = "http://192.168.0.104/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
         //public static final String BRIDGING_SERVER = "http://10.10.205.93/research/Ottimov2.0/BridgingServer/Program/Mobile/MobileService.asmx";
     }
     public static final String APP_TOKEN = "40BD001563085FC35165329EA1FF5C5ECBDBBEEF";

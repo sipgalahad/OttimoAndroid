@@ -312,6 +312,7 @@ public class DBInitActivity extends Activity {
                             entity.LastSyncAppointmentDateTime = result.timestamp;
                             entity.LastSyncVaccinationDateTime = result.timestamp;
                             entity.LastSyncLabResultDateTime = result.timestamp;
+                            entity.LastSyncCDCGrowthChartDateTime = result.timestamp;
 
                             BusinessLayer.insertPatient(getBaseContext(), entity);
                             FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
@@ -340,6 +341,34 @@ public class DBInitActivity extends Activity {
                                 }
                             }
                             ctr++;
+                        }
+                    }
+
+                    List<DataLayer.Variable> lstCDCGrowthChart = (List<DataLayer.Variable>) result.returnObjCDCGrowthChart;
+                    Log.d("lstCDCGrowthChart", lstCDCGrowthChart.size() + ";");
+                    for (DataLayer.Variable entity2 : lstCDCGrowthChart) {
+                        if(!entity2.Value.equals("")) {
+                            Log.d("haha", "hahahaha");
+                            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                            File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+                            File mypath = new File(directory, entity2.Code + ".jpg");
+
+                            FileOutputStream fos = null;
+                            try {
+                                fos = new FileOutputStream(mypath);
+
+                                byte[] decodedString = Base64.decode(entity2.Value, Base64.DEFAULT);
+                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                decodedByte.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
 
@@ -428,6 +457,7 @@ public class DBInitActivity extends Activity {
             JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
             JSONArray returnObjAnnouncement = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAnnouncement");
             JSONArray returnObjImg = WebServiceHelper.getCustomReturnObject(response, "ReturnObjImage");
+            JSONArray returnObjCDCGrowthChart = WebServiceHelper.getCustomReturnObject(response, "ReturnObjCDCGrowthChart");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
             List<DataLayer.Patient> lst = new ArrayList<Patient>();
@@ -464,6 +494,11 @@ public class DBInitActivity extends Activity {
                 JSONObject row = (JSONObject) returnObjAnnouncement.get(i);
                 lst7.add((DataLayer.Announcement)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Announcement()));
             }
+            List<DataLayer.Variable> lst8 = new ArrayList<DataLayer.Variable>();
+            for (int i = 0; i < returnObjCDCGrowthChart.length();++i){
+                JSONObject row = (JSONObject) returnObjCDCGrowthChart.get(i);
+                lst8.add((DataLayer.Variable)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Variable()));
+            }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
@@ -471,6 +506,7 @@ public class DBInitActivity extends Activity {
             result.returnObjLabResultDt = lst5;
             result.returnObjImg = lst6;
             result.returnObjAnnouncement = lst7;
+            result.returnObjCDCGrowthChart = lst8;
             result.timestamp = timestamp;
         } catch (Exception e) {
             result = null;
@@ -486,6 +522,7 @@ public class DBInitActivity extends Activity {
         public List<?> returnObjLabResultHd;
         public List<?> returnObjLabResultDt;
         public List<?> returnObjAnnouncement;
+        public List<?> returnObjCDCGrowthChart;
         public List<String> returnObjImg;
     }
 }

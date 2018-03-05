@@ -41,6 +41,11 @@
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.CDCGrowthChartActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="samanasoft.android.kiddielogicpatientalarm.LabResultActivity"
             android:label="@string/app_name"
             android:noHistory="true"

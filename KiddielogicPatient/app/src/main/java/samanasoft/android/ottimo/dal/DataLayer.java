@@ -17,10 +17,15 @@ import samanasoft.android.ottimo.common.Constant;
 public class DataLayer{
     //region Variable
     public static class Variable {
-        public int Code;
+        @Column(DataType = DataType.STRING, Name = "Code")
+        public String Code;
+
+        @Column(DataType = DataType.STRING, Name = "Value")
         public String Value;
 
-        public Variable(int Code, String Value) {
+        public Variable() {
+        }
+        public Variable(String Code, String Value) {
             this.Code = Code;
             this.Value = Value;
         }
@@ -437,6 +442,9 @@ public class DataLayer{
 
         @Column(DataType = DataType.DATETIME, Name = "LastSyncLabResultDateTime")
         public DateTime LastSyncLabResultDateTime;
+
+        @Column(DataType = DataType.DATETIME, Name = "LastSyncCDCGrowthChartDateTime")
+        public DateTime LastSyncCDCGrowthChartDateTime;
 
         public String getMobilePhoneNoDisplay(){
             if(MobilePhoneNo2 != null && !MobilePhoneNo2.isEmpty())

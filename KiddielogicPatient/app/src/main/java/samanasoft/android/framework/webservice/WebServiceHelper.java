@@ -130,6 +130,34 @@ public class WebServiceHelper {
 		prop.setType(type);
 		return prop;
 	}
+	public static JSONObject SyncCDCGrowthChart(Context ctx, Integer MRN, String CDCGrowthChartLastUpdatedDate){
+		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
+
+		JSONObject result = null;
+		SoapObject request = new SoapObject(NAMESPACE, "SyncCDCGrowthChart");
+
+		String data = "<REQUEST><DATA>";
+		data += addXMLElement("MRN", MRN.toString());
+		data += addXMLElement("CDC_GROWTH_CHART_LASTUPDATEDDATE", CDCGrowthChartLastUpdatedDate);
+		data += "</DATA></REQUEST>";
+
+		request.addProperty(createPropertyInfo("appToken", samanasoft.android.framework.Constant.APP_TOKEN, String.class));
+		request.addProperty(createPropertyInfo("data", data, String.class));
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envelope.dotNet = true;	//used only if we use the webservice from a dot net file (asmx)
+		envelope.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+		try {
+			androidHttpTransport.call("http://tempuri.org/SyncCDCGrowthChart", envelope);
+			result = new JSONObject((String)envelope.getResponse());
+		} catch (Exception e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public static JSONObject SyncLabResult(Context ctx, Integer MRN, String labResultLastUpdatedDate){
 		//URL = ctx.getSharedPreferences(Constant.SharedPreference.NAME, ctx.MODE_PRIVATE).getString(Constant.SharedPreference.WEB_SERVICE_URL, "");
 

@@ -293,6 +293,7 @@ public class LoginActivity extends AppCompatActivity {
                         entity.LastSyncAppointmentDateTime = result.timestamp;
                         entity.LastSyncVaccinationDateTime = result.timestamp;
                         entity.LastSyncLabResultDateTime = result.timestamp;
+                        entity.LastSyncCDCGrowthChartDateTime = result.timestamp;
                         BusinessLayer.insertPatient(getBaseContext(), entity);
                         FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
                         List<DataLayer.Appointment> lstOldAppointment = BusinessLayer.getAppointmentList(getBaseContext(), String.format("MRN = '%1$s'", entity.MRN));
@@ -349,6 +350,34 @@ public class LoginActivity extends AppCompatActivity {
                         List<DataLayer.Announcement> lstAnnouncement = (List<DataLayer.Announcement>) result.returnObjAnnouncement;
                         for (DataLayer.Announcement entity2 : lstAnnouncement) {
                             BusinessLayer.insertAnnouncement(getBaseContext(), entity2);
+                        }
+
+                        List<DataLayer.Variable> lstCDCGrowthChart = (List<DataLayer.Variable>) result.returnObjCDCGrowthChart;
+                        Log.d("lstCDCGrowthChart", lstCDCGrowthChart.size() + ";");
+                        for (DataLayer.Variable entity2 : lstCDCGrowthChart) {
+                            if(!entity2.Value.equals("")) {
+                                Log.d("haha", "hahahaha");
+                                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                                File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+                                File mypath = new File(directory, entity.MedicalNo + "_" + entity2.Code + ".jpg");
+
+                                FileOutputStream fos = null;
+                                try {
+                                    fos = new FileOutputStream(mypath);
+
+                                    byte[] decodedString = Base64.decode(entity2.Value, Base64.DEFAULT);
+                                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                    decodedByte.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    try {
+                                        fos.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
 
                         if(!result.returnObjImg.equals("")) {
@@ -499,6 +528,7 @@ public class LoginActivity extends AppCompatActivity {
             JSONArray returnObjLabResultHd = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultHd");
             JSONArray returnObjLabResultDt = WebServiceHelper.getCustomReturnObject(response, "ReturnObjLabResultDt");
             JSONArray returnObjAnnouncement = WebServiceHelper.getCustomReturnObject(response, "ReturnObjAnnouncement");
+            JSONArray returnObjCDCGrowthChart = WebServiceHelper.getCustomReturnObject(response, "ReturnObjCDCGrowthChart");
             String img = response.optString("ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
@@ -532,12 +562,18 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject row = (JSONObject) returnObjAnnouncement.get(i);
                 lst6.add((DataLayer.Announcement)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Announcement()));
             }
+            List<DataLayer.Variable> lst7 = new ArrayList<DataLayer.Variable>();
+            for (int i = 0; i < returnObjCDCGrowthChart.length();++i){
+                JSONObject row = (JSONObject) returnObjCDCGrowthChart.get(i);
+                lst7.add((DataLayer.Variable)WebServiceHelper.JSONObjectToObject(row, new DataLayer.Variable()));
+            }
             result.returnObjPatient = lst;
             result.returnObjAppointment = lst2;
             result.returnObjVaccination = lst3;
             result.returnObjLabResultHd = lst4;
             result.returnObjLabResultDt = lst5;
             result.returnObjAnnouncement = lst6;
+            result.returnObjCDCGrowthChart = lst7;
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception e) {
@@ -554,6 +590,7 @@ public class LoginActivity extends AppCompatActivity {
         public List<?> returnObjLabResultHd;
         public List<?> returnObjLabResultDt;
         public List<?> returnObjAnnouncement;
+        public List<?> returnObjCDCGrowthChart;
         public String returnObjImg;
     }
 }

@@ -29,6 +29,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import samanasoft.android.framework.Constant;
@@ -243,6 +244,19 @@ public class BaseMainActivity extends AppCompatActivity
             File mypath = new File(directory, patient.MedicalNo + ".jpg");
             if(mypath.exists())
                 mypath.delete();
+            List<DataLayer.Variable> lstCDCGrowthChartType = new ArrayList<DataLayer.Variable>();
+            lstCDCGrowthChartType.add(0, new DataLayer.Variable("W_20Y", "Berat Badan - 20 Tahun"));
+            lstCDCGrowthChartType.add(1, new DataLayer.Variable("H_20Y", "Tinggi - 20 Tahun"));
+            lstCDCGrowthChartType.add(2, new DataLayer.Variable("B_20Y", "BMI - 20 Tahun"));
+            lstCDCGrowthChartType.add(3, new DataLayer.Variable("W_36M", "Berat Badan - 36 Bulan"));
+            lstCDCGrowthChartType.add(4, new DataLayer.Variable("C_36M", "Lingkar Kepala - 36 Bulan"));
+            lstCDCGrowthChartType.add(5, new DataLayer.Variable("H_36M", "Tinggi - 36 Bulan"));
+            for(int i = 0;i<lstCDCGrowthChartType.size();++i){
+                String url = patient.MedicalNo + "_" + lstCDCGrowthChartType.get(i).Code + ".jpg";
+                mypath = new File(directory, url);
+                if(mypath.exists())
+                    mypath.delete();
+            }
 
             List<Patient> lstPatient = BusinessLayer.getPatientList(getBaseContext(), "");
             if (lstPatient.size() == 1) {
@@ -269,6 +283,11 @@ public class BaseMainActivity extends AppCompatActivity
             startActivity(i);
         } else if (id == R.id.nav_vaccination) {
             Intent i = new Intent(getBaseContext(), VaccinationActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
+        } else if (id == R.id.nav_cdcgrowthchart) {
+            Intent i = new Intent(getBaseContext(), CDCGrowthChartActivity.class);
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             i.putExtra("mrn", MRN);
             startActivity(i);
