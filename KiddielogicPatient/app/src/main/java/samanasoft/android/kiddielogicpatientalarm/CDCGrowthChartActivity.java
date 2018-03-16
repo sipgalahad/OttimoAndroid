@@ -61,14 +61,19 @@ public class CDCGrowthChartActivity extends BaseMainActivity {
 
         imgCDCGrowthChart = (ImageView) findViewById(R.id.imgCDCGrowthChart);
 
-
+        DateTime now = DateTime.now();
+        int ageInMonth = 12*(now.Year - entity.DateOfBirth.Year) + now.Month - entity.DateOfBirth.Month;
         List<DataLayer.Variable> lstCDCGrowthChartType = new ArrayList<DataLayer.Variable>();
-        lstCDCGrowthChartType.add(0, new DataLayer.Variable("W_20Y", "Berat Badan - 20 Tahun"));
-        lstCDCGrowthChartType.add(1, new DataLayer.Variable("H_20Y", "Tinggi - 20 Tahun"));
-        lstCDCGrowthChartType.add(2, new DataLayer.Variable("B_20Y", "BMI - 20 Tahun"));
-        lstCDCGrowthChartType.add(3, new DataLayer.Variable("W_36M", "Berat Badan - 36 Bulan"));
-        lstCDCGrowthChartType.add(4, new DataLayer.Variable("C_36M", "Lingkar Kepala - 36 Bulan"));
-        lstCDCGrowthChartType.add(5, new DataLayer.Variable("H_36M", "Tinggi - 36 Bulan"));
+        if(ageInMonth <= 36) {
+            lstCDCGrowthChartType.add(3, new DataLayer.Variable("W_36M", "Berat Badan - 36 Bulan"));
+            lstCDCGrowthChartType.add(4, new DataLayer.Variable("C_36M", "Lingkar Kepala - 36 Bulan"));
+            lstCDCGrowthChartType.add(5, new DataLayer.Variable("H_36M", "Tinggi - 36 Bulan"));
+        }
+        else {
+            lstCDCGrowthChartType.add(0, new DataLayer.Variable("W_20Y", "Berat Badan - 20 Tahun"));
+            lstCDCGrowthChartType.add(1, new DataLayer.Variable("H_20Y", "Tinggi - 20 Tahun"));
+            lstCDCGrowthChartType.add(2, new DataLayer.Variable("B_20Y", "BMI - 20 Tahun"));
+        }
 
         //Log.d("testVaksin",lstVaccinationType.get(0).VaccinationTypeID + "");
 

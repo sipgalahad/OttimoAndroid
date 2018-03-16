@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -131,9 +132,9 @@ public class BusinessLayer {
         }
         return result;
     }
-    public static WebServiceResponse getWebServiceListAppointment(Context context, String filterExpression){
+    public static WebServiceResponse getWebServiceListAppointment(Context context, String filterExpression) throws JSONException {
         WebServiceResponse result = new WebServiceResponse();
-        try {
+        //try {
             JSONObject response = WebServiceHelper.getListObject(context, "GetvMobileAppointmentList", filterExpression);
 
             JSONArray returnObj = WebServiceHelper.getReturnObject(response);
@@ -146,10 +147,10 @@ public class BusinessLayer {
             }
             result.returnObj = lst;
             result.timestamp = timestamp;
-        } catch (Exception e) {
-            result = null;
-            e.printStackTrace();
-        }
+        //} catch (Exception e) {
+        //    result = null;
+        //    e.printStackTrace();
+        //}
         return result;
     }
     public static WebServiceResponse postAppointmentAnswer(Context context, String mobilePhoneNo, String replyText){

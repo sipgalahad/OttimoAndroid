@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="samanasoft.android.kiddielogicparamedicalarm">
+
+    <uses-sdk android:minSdkVersion="14" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ErrorFeedbackActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DBInitActivity"
+            android:label="@string/app_name"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NotificationOpenerActivity"
+            android:label="@string/app_name"
+            android:noHistory="true">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="samanasoft.android.kiddielogicparamedicalarm.PatientActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="samanasoft.android.kiddielogicparamedicalarm.PatientChatActivity"
+            android:label="Detil"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="samanasoft.android.kiddielogicparamedicalarm.PatientActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicparamedicalarm.PatientActivity" />
+
+        </activity>
+        <activity
+            android:name="samanasoft.android.kiddielogicparamedicalarm.PatientSOAPActivity"
+            android:label="Detil"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="samanasoft.android.kiddielogicparamedicalarm.PatientChatActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicparamedicalarm.PatientChatActivity" />
+
+        </activity>
+        <activity
+            android:name=".UpdateApplicationActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ManageAccountActivity"
+            android:label="@string/title_activity_manage_account"/>
+
+        <service android:name=".AlarmSyncDataService" />
+        <service
+            android:name=".AlarmStartService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action
+                    android:name="samanasoft.android.kiddielogicpatientalarm.AlarmStartService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".FCMMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".FCMInstanceIDService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".AlarmNotificationService">
+            <intent-filter>
+                <action android:name="samanasoft.android.kiddielogicpatient.intent.action.NOTIFICATION_SERVICE"></action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".AlarmAutoStart"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".NetworkChangeReceiver"
+            android:process=":hascode_process">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".RestartServiceReceiver" android:enabled="true" android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="samanasoft.android.kiddielogicpatientalarm.intent.action.RESTART_SERVICE"></action>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

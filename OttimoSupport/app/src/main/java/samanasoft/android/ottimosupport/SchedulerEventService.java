@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -55,7 +58,12 @@ public class SchedulerEventService extends Service {
             gc.add(Calendar.DATE, 1);
             DateTime appointmentDate = new DateTime(gc.get(Calendar.YEAR), gc.get(Calendar.MONTH) + 1, gc.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
             String filterExpression = String.format("StartDate = '%1$s'", appointmentDate.toString(Constant.FormatString.DATE_FORMAT_112));
-            WebServiceResponse result = BusinessLayer.getWebServiceListAppointment(context, filterExpression);
+            WebServiceResponse result = null;
+            try {
+                result = BusinessLayer.getWebServiceListAppointment(context, filterExpression);
+            } catch (final JSONException e) {
+
+            }
             return result;
         }
         protected void onPostExecute(WebServiceResponse result) {

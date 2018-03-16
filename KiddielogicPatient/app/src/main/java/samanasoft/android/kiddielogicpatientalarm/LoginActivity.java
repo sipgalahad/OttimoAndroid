@@ -577,6 +577,10 @@ public class LoginActivity extends AppCompatActivity {
             result.returnObjImg = img;
             result.timestamp = timestamp;
         } catch (Exception e) {
+            String stackTrace = e.getStackTrace().toString();
+            String message = e.getMessage();
+            deviceID = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
+            new Helper.InsertErrorLog(ctx, 1, deviceID, message, stackTrace).execute((Void) null);
             result = null;
             e.printStackTrace();
         }

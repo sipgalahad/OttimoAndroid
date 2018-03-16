@@ -1,0 +1,81 @@
+{
+  "project_info": {
+    "project_number": "619055338956",
+    "firebase_url": "https://kiddielogic-163205.firebaseio.com",
+    "project_id": "kiddielogic-163205",
+    "storage_bucket": "kiddielogic-163205.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619055338956:android:77b731ce58d7389f",
+        "android_client_info": {
+          "package_name": "samanasoft.android.kiddielogicpatientalarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619055338956-vac333ejgatfjadmkjbru6ejbgb33c84.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "619055338956-4k2fm79hj80sd2fulld3h4ejmr2cpjkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgzKOhXWX4I4KVPBirs11fLMK14Q0mx_w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619055338956:android:56ba1d394e3901f1",
+        "android_client_info": {
+          "package_name": "samanasoft.android.kiddielogicparamedicalarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619055338956-vac333ejgatfjadmkjbru6ejbgb33c84.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "619055338956-4k2fm79hj80sd2fulld3h4ejmr2cpjkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgzKOhXWX4I4KVPBirs11fLMK14Q0mx_w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

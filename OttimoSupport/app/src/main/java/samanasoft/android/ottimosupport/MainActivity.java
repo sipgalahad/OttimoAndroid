@@ -33,6 +33,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -796,7 +798,19 @@ public class MainActivity extends ActionBarActivity {
 
             filterExpression += " ORDER BY StartTime";
             Log.d("test",filterExpression);
-            WebServiceResponse result = BusinessLayer.getWebServiceListAppointment(getBaseContext(),filterExpression);
+            WebServiceResponse result = null;
+            try {
+                result = BusinessLayer.getWebServiceListAppointment(getBaseContext(), filterExpression);
+            } catch (final JSONException e) {
+                runOnUiThread(new Runnable() {
+
+                    public void run() {
+
+                        Toast.makeText(getApplicationContext(), e.getStackTrace().toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
             return result;
         }
         public static final String ACTION_SMS_SENT = "com.example.android.apis.os.SMS_SENT_ACTION";
