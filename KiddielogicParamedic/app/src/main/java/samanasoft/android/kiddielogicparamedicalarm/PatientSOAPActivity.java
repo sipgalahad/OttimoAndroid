@@ -26,6 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.webservice.WebServiceResponse;
 import samanasoft.android.ottimo.dal.BusinessLayer;
 import samanasoft.android.ottimo.dal.DataLayer;
@@ -43,6 +44,7 @@ public class PatientSOAPActivity extends AppCompatActivity {
     LoadConsultVisitTask mAuthTask = null;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("test", "create");
         setContentView(R.layout.activity_patientsoap);
 
         Intent myIntent = getIntent();
@@ -62,9 +64,22 @@ public class PatientSOAPActivity extends AppCompatActivity {
         //List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", entity.MRN));
         //refreshListLabResult();
 
-        showProgress(true);
-        mAuthTask = new LoadConsultVisitTask(MRN);
-        mAuthTask.execute((Void) null);
+        String filterExpression = String.format("MRN = '%1$s' ORDER BY VisitDate DESC", MRN);
+        List<DataLayer.ConsultVisit> lstEntity = BusinessLayer.getConsultVisitList(getBaseContext(), filterExpression);
+        Log.d("test", "" + lstEntity.size());
+        if (lstEntity.size() > 0)
+            fillListLabResult(lstEntity);
+        else {
+            showProgress(true);
+            mAuthTask = new LoadConsultVisitTask(MRN);
+            mAuthTask.execute((Void) null);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("test", "resume");
     }
 
     private PatientInformationAdapter adapter;
@@ -73,6 +88,16 @@ public class PatientSOAPActivity extends AppCompatActivity {
         adapter = new PatientInformationAdapter(getBaseContext(), lstLabResult);
         Log.d("ahaha2" , "" + lstLabResult.size() + " ho");
         lvwView.setAdapter(adapter);
+        lvwView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                DataLayer.ConsultVisit entity = (DataLayer.ConsultVisit) myAdapter.getItemAtPosition(myItemInt);
+                Intent i = new Intent(getBaseContext(), PatientSOAPDtActivity.class);
+                i.putExtra("paramedicid", ParamedicID);
+                i.putExtra("mrn", entity.MRN);
+                i.putExtra("visitid", entity.VisitID);
+                startActivity(i);
+            }
+        });
     }
 
     //region Adapter
@@ -101,16 +126,20 @@ public class PatientSOAPActivity extends AppCompatActivity {
             Log.d("position", position + "");
             if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.template_patient_information, null);
+                convertView = mInflater.inflate(R.layout.template_patient_soap_information, null);
 
-                holder.txtPatientName = (TextView) convertView.findViewById(R.id.txtPatientName);
+                holder.txtVisitDate = (TextView) convertView.findViewById(R.id.txtVisitDate);
+                holder.txtServiceUnitName = (TextView) convertView.findViewById(R.id.txtServiceUnitName);
+                holder.txtParamedicName = (TextView) convertView.findViewById(R.id.txtParamedicName);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
             // Bind the data efficiently with the holder.
-            holder.txtPatientName.setText(entity.ServiceUnitName);
+            holder.txtVisitDate.setText(entity.VisitDate.toString(Constant.FormatString.DATE_FORMAT));
+            holder.txtServiceUnitName.setText(entity.ServiceUnitName);
+            holder.txtParamedicName.setText(entity.ParamedicName);
 
             return convertView;
 
@@ -118,7 +147,9 @@ public class PatientSOAPActivity extends AppCompatActivity {
 
     }
     private static class ViewHolder {
-        TextView txtPatientName;
+        TextView txtVisitDate;
+        TextView txtServiceUnitName;
+        TextView txtParamedicName;
     }
     //endregion
 
@@ -178,8 +209,25 @@ public class PatientSOAPActivity extends AppCompatActivity {
             } else {
                 Log.d("test","haha");
                 if (result.returnObj != null) {
-                    Log.d("test","masuk kok");
-                    fillListLabResult((List<DataLayer.ConsultVisit>) result.returnObj);
+                    Log.d("test", "masuk kok");
+
+                    try {
+                        String filterExpression = String.format("MRN = '%1$s'", MRN);
+                        List<DataLayer.ConsultVisit> lstEntity = BusinessLayer.getConsultVisitList(getBaseContext(), filterExpression);
+                        for (DataLayer.ConsultVisit entity : lstEntity) {
+                            BusinessLayer.deleteConsultVisit(getBaseContext(), entity.VisitID);
+                        }
+                        List<DataLayer.ConsultVisit> lstNewEntity = (List<DataLayer.ConsultVisit>) result.returnObj;
+                        for (DataLayer.ConsultVisit entity : lstNewEntity) {
+                            BusinessLayer.insertConsultVisit(getBaseContext(), entity);
+                        }
+                        filterExpression = String.format("MRN = '%1$s' ORDER BY VisitDate DESC", MRN);
+                        lstEntity = BusinessLayer.getConsultVisitList(getBaseContext(), filterExpression);
+                        fillListLabResult(lstEntity);
+                    }
+                    catch (Exception e){
+                        Log.d("test",e.getStackTrace().toString());
+                    }
                 }
             }
         }

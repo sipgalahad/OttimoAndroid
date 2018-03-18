@@ -61,6 +61,48 @@ public class DataLayer{
 
         @Column(DataType = DataType.STRING, Name = "ServiceUnitName")
         public String ServiceUnitName;
+
+        @Column(DataType = DataType.STRING, Name = "ClassInitial")
+        public String ClassInitial;
+
+        @Column(DataType = DataType.STRING, Name = "VisitNoteSubjective")
+        public String VisitNoteSubjective;
+
+        @Column(DataType = DataType.STRING, Name = "VisitNoteObjective")
+        public String VisitNoteObjective;
+
+        @Column(DataType = DataType.STRING, Name = "VisitNoteAssessment")
+        public String VisitNoteAssessment;
+
+        @Column(DataType = DataType.STRING, Name = "VisitNotePlanning")
+        public String VisitNotePlanning;
+
+        @Column(DataType = DataType.STRING, Name = "VisitNoteInternalNotes")
+        public String VisitNoteInternalNotes;
+
+        @Column(DataType = DataType.STRING, Name = "VitalSign")
+        public String VitalSign;
+
+        @Column(DataType = DataType.STRING, Name = "DiagnosisText")
+        public String DiagnosisText;
+
+        @Column(DataType = DataType.STRING, Name = "ProcedureText")
+        public String ProcedureText;
+
+        @Column(DataType = DataType.STRING, Name = "LabOrderText")
+        public String LabOrderText;
+
+        @Column(DataType = DataType.STRING, Name = "Prescription")
+        public String Prescription;
+
+        @Column(DataType = DataType.STRING, Name = "Vaccination")
+        public String Vaccination;
+
+        @Column(DataType = DataType.STRING, Name = "FollowUpVisit")
+        public String FollowUpVisit;
+
+        @Column(DataType = DataType.STRING, Name = "ChargesService")
+        public String ChargesService;
     }
     public static class ConsultVisitDao{
         private DbHelper helper;
@@ -75,7 +117,7 @@ public class DataLayer{
             String query = helper.getRecord();
             query = query.replace(p_VisitID, Integer.toString(VisitID));
             Cursor row = daoBase.getDataRow(query);
-            return (row == null) ? null : (ConsultVisit)helper.dataRowToObject(row, new Patient());
+            return (row == null) ? null : (ConsultVisit)helper.dataRowToObject(row, new ConsultVisit());
         }
         public int insert(ConsultVisit record){
             String query = helper.insert(record);

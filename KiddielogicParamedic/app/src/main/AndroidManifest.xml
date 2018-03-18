@@ -62,6 +62,7 @@
         <activity
             android:name="samanasoft.android.kiddielogicparamedicalarm.PatientChatActivity"
             android:label="Detil"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="samanasoft.android.kiddielogicparamedicalarm.PatientActivity" >
             <!-- The meta-data element is needed for versions lower than 4.1 -->
@@ -73,6 +74,7 @@
         <activity
             android:name="samanasoft.android.kiddielogicparamedicalarm.PatientSOAPActivity"
             android:label="Detil"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="samanasoft.android.kiddielogicparamedicalarm.PatientChatActivity" >
             <!-- The meta-data element is needed for versions lower than 4.1 -->
@@ -82,9 +84,22 @@
 
         </activity>
         <activity
+            android:name="samanasoft.android.kiddielogicparamedicalarm.PatientSOAPDtActivity"
+            android:label="Detil"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="samanasoft.android.kiddielogicparamedicalarm.PatientSOAPActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicparamedicalarm.PatientSOAPActivity" />
+
+        </activity>
+        <activity
             android:name=".UpdateApplicationActivity"
             android:label="@string/app_name"
             android:noHistory="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ManageAccountActivity"
