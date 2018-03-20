@@ -55,7 +55,9 @@ public class PatientSOAPActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setTitle("Bobob - SOAP");
+
+        DataLayer.Patient entityPatient = BusinessLayer.getPatient(this, MRN);
+        setTitle(entityPatient.FullName + " - SOAP");
 
         lvwView = (ListView)findViewById(R.id.lvwPatient);
         lvwView.setDivider(null);
@@ -80,6 +82,41 @@ public class PatientSOAPActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("test", "resume");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_soap, menu);
+        return true;
+    }
+
+    private void loadSOAPData() {
+        if (mAuthTask != null) {
+            return;
+        }
+
+        // Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        showProgress(true);
+        mAuthTask = new LoadConsultVisitTask(MRN);
+        mAuthTask.execute((Void) null);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            loadSOAPData();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private PatientInformationAdapter adapter;
@@ -152,29 +189,6 @@ public class PatientSOAPActivity extends AppCompatActivity {
         TextView txtParamedicName;
     }
     //endregion
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_appointment, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_refresh) {
-            loadLabResultData();
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate

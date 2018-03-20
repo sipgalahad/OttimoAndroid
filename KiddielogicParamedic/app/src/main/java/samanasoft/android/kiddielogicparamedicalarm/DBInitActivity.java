@@ -59,6 +59,8 @@ public class DBInitActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
+        Context context = getApplicationContext();
+
         setContentView(R.layout.activity_init);
         mProgressView = findViewById(R.id.login_progress);
 
