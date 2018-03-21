@@ -299,6 +299,100 @@ public class BusinessLayer {
         return result;
     }
     //endregion
+    //region ParamedicMaster
+    public static DataLayer.ParamedicMaster getParamedicMaster(Context context, int ParamedicID)
+    {
+        return new DataLayer.ParamedicMasterDao(context).get(ParamedicID);
+    }
+    public static int insertParamedicMaster(Context context, DataLayer.ParamedicMaster record)
+    {
+        return new DataLayer.ParamedicMasterDao(context).insert(record);
+    }
+    public static int updateParamedicMaster(Context context, DataLayer.ParamedicMaster record)
+    {
+        return new DataLayer.ParamedicMasterDao(context).update(record);
+    }
+    public static int deleteParamedicMaster(Context context, int ParamedicID)
+    {
+        return new DataLayer.ParamedicMasterDao(context).delete(ParamedicID);
+    }
+    public static List<DataLayer.ParamedicMaster> getParamedicMasterList(Context context, String filterExpression){
+        List<DataLayer.ParamedicMaster> result = new ArrayList<DataLayer.ParamedicMaster>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(DataLayer.ParamedicMaster.class);
+            String query = helper.select(filterExpression);
+            Log.d("query Pasien", query);
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add((DataLayer.ParamedicMaster)helper.dataReaderToObject(reader, new DataLayer.ParamedicMaster()));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    public static List<Integer> getParamedicMasterParamedicIDList(Context context, String filterExpression){
+        List<Integer> result = new ArrayList<Integer>();
+        DaoBase daoBase = new DaoBase(context);
+        try
+        {
+            DbHelper helper = new DbHelper(DataLayer.ParamedicMaster.class);
+            String query = helper.selectListColumn(filterExpression, "ParamedicID");
+            Cursor reader = daoBase.getDataReader(query);
+            if(reader.moveToFirst()){
+                do {
+                    result.add(reader.getInt(0));
+                }
+                while(reader.moveToNext());
+            }
+
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            daoBase.close();
+        }
+        return result;
+    }
+    public static WebServiceResponse getWebServiceListParamedicMaster(Context context, String filterExpression){
+        WebServiceResponse result = new WebServiceResponse();
+        try {
+            JSONObject response = WebServiceHelper.getListObject(context, "GetvMobileUserParamedicList", filterExpression);
+
+            JSONArray returnObj = WebServiceHelper.getReturnObject(response);
+            DateTime timestamp = WebServiceHelper.getTimestamp(response);
+
+            List<DataLayer.ParamedicMaster> lst = new ArrayList<DataLayer.ParamedicMaster>();
+            for (int i = 0; i < returnObj.length();++i){
+                JSONObject row = (JSONObject) returnObj.get(i);
+                lst.add((DataLayer.ParamedicMaster)WebServiceHelper.JSONObjectToObject(row, new DataLayer.ParamedicMaster()));
+            }
+            result.returnObj = lst;
+            result.timestamp = timestamp;
+        } catch (Exception e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //endregion
     //region Patient
     public static Patient getPatient(Context context, int MRN)
     {

@@ -383,6 +383,67 @@ public class DataLayer{
         }
     }
     //endregion
+    //region ParamedicMaster
+    @Table(Name = "ParamedicMaster")
+    public static class ParamedicMaster{
+        @Column(DataType = DataType.INT, Name = "ParamedicID", IsPrimaryKey = Bool.TRUE)
+        public int ParamedicID;
+
+        @Column(DataType = DataType.STRING, Name = "ParamedicCode")
+        public String ParamedicCode;
+
+        @Column(DataType = DataType.STRING, Name = "UserName")
+        public String UserName;
+
+        @Column(DataType = DataType.STRING, Name = "ParamedicName")
+        public String ParamedicName;
+
+        @Column(DataType = DataType.STRING, Name = "PreferredName")
+        public String PreferredName;
+
+        @Column(DataType = DataType.STRING, Name = "Initial")
+        public String Initial;
+
+        @Column(DataType = DataType.STRING, Name = "GCGender")
+        public String GCGender;
+
+        @Column(DataType = DataType.STRING, Name = "Gender")
+        public String Gender;
+
+        @Column(DataType = DataType.DATETIME, Name = "LastSyncDateTime")
+        public DateTime LastSyncDateTime;
+    }
+    public static class ParamedicMasterDao{
+        private DbHelper helper;
+        private DaoBase daoBase;
+        private final String p_ParamedicID = "@p_ParamedicID";
+
+        public ParamedicMasterDao(Context context){
+            this.helper = new DbHelper(ParamedicMaster.class);
+            this.daoBase = new DaoBase(context);
+        }
+        public ParamedicMaster get(int ParamedicID){
+            String query = helper.getRecord();
+            query = query.replace(p_ParamedicID, Integer.toString(ParamedicID));
+            Cursor row = daoBase.getDataRow(query);
+            return (row == null) ? null : (ParamedicMaster)helper.dataRowToObject(row, new ParamedicMaster());
+        }
+        public int insert(ParamedicMaster record){
+            String query = helper.insert(record);
+            //Log.d("query Pasien", query);
+            return daoBase.executeNonQuery(query);
+        }
+        public int update(ParamedicMaster record){
+            String query = helper.update(record);
+            return daoBase.executeNonQuery(query);
+        }
+        public int delete(int ParamedicID){
+            ParamedicMaster record = get(ParamedicID);
+            String query = helper.delete(record);
+            return daoBase.executeNonQuery(query);
+        }
+    }
+    //endregion
     //region Patient
     @Table(Name = "Patient")
     public static class Patient{

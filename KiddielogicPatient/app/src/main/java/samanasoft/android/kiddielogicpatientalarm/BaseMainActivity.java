@@ -276,6 +276,11 @@ public class BaseMainActivity extends AppCompatActivity
                 startActivity(i);
             }
             finish();
+        } else if (id == R.id.nav_chat) {
+            Intent i = new Intent(getBaseContext(), ParamedicActivity.class);
+            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.putExtra("mrn", MRN);
+            startActivity(i);
         } else if (id == R.id.nav_labresult) {
             Intent i = new Intent(getBaseContext(), LabResultActivity.class);
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);

@@ -1,18 +1,16 @@
-package samanasoft.android.kiddielogicparamedicalarm;
+package samanasoft.android.kiddielogicpatientalarm;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Message;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,28 +22,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import android.content.Intent;
-
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-import android.widget.ListView;
-import android.widget.ScrollView;
 
 import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
@@ -55,7 +37,7 @@ import samanasoft.android.ottimo.dal.DataLayer;
 /**
  * Created by Ari on 2/2/2015.
  */
-public class PatientChatActivity extends AppCompatActivity {
+public class ParamedicChatActivity extends AppCompatActivity {
 
     private Button btn_send_msg;
     private EditText input_msg;
@@ -71,7 +53,7 @@ public class PatientChatActivity extends AppCompatActivity {
     List<Message> lstEntity = new ArrayList<Message>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patientchat);
+        setContentView(R.layout.activity_paramedicchat);
 
         Intent myIntent = getIntent();
         ParamedicID = myIntent.getIntExtra("paramedicid", 0);
@@ -84,14 +66,14 @@ public class PatientChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         DataLayer.Patient entityPatient = BusinessLayer.getPatient(this, MRN);
-        setTitle(entityPatient.FullName);
 
         DataLayer.ParamedicMaster entityParamedic = BusinessLayer.getParamedicMaster(this, ParamedicID);
+        setTitle(entityParamedic.ParamedicName);
 
 
         btn_send_msg = (Button)findViewById(R.id.button);
         input_msg = (EditText)findViewById(R.id.editText);
-        user_name = ParamedicID.toString();
+        user_name = MRN.toString();
         room_name = ParamedicID + "_" + MRN;
 
 
@@ -233,32 +215,5 @@ public class PatientChatActivity extends AppCompatActivity {
     private static class ViewHolder {
         TextView txtMessage;
         TextView txtTime;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_patient_chat, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_soap) {
-            Intent i = new Intent(getBaseContext(), PatientSOAPActivity.class);
-
-            i.putExtra("paramedicid", ParamedicID);
-            i.putExtra("mrn", MRN);
-            startActivity(i);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

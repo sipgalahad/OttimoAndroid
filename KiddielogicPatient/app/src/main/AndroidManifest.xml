@@ -163,6 +163,23 @@
                 android:value="samanasoft.android.kiddielogicpatientalarm.AdvertisementActivity" />
         </activity>
 
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.ParamedicActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="samanasoft.android.kiddielogicpatientalarm.ParamedicChatActivity"
+            android:label="Detil"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="samanasoft.android.kiddielogicpatientalarm.ParamedicActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="samanasoft.android.kiddielogicpatientalarm.ParamedicActivity" />
+
+        </activity>
+
         <service android:name="samanasoft.android.kiddielogicpatientalarm.AlarmSyncDataService" />
         <service
             android:name="samanasoft.android.kiddielogicpatientalarm.AlarmStartService"

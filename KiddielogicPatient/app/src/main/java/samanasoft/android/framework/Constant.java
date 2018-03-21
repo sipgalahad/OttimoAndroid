@@ -1,8 +1,8 @@
 package samanasoft.android.framework;
 
 public class Constant {
-    public static final String AppVersion = "1.4.1";
-    public static final String DB_VERSION = "4";
+    public static final String AppVersion = "1.5.1";
+    public static final String DB_VERSION = "5";
 
 	public static final String[] SHORT_MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }; 
 	public static final String[] MONTHS = { "January", "February", "March", "April", "May", "June", "July", 

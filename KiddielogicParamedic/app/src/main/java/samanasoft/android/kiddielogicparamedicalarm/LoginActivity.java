@@ -261,6 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                         BusinessLayer.insertParamedicMaster(getBaseContext(), entity);
                         FirebaseMessaging.getInstance().subscribeToTopic(entity.UserName);
 
+                        Log.d("img", "img + " + result.returnObjImg);
                         if(!result.returnObjImg.equals("")) {
                             ContextWrapper cw = new ContextWrapper(getApplicationContext());
                             File directory = cw.getDir("KiddielogicParamedic", Context.MODE_PRIVATE);

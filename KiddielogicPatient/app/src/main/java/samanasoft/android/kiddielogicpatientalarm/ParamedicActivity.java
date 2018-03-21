@@ -1,26 +1,6 @@
-package samanasoft.android.kiddielogicparamedicalarm;
+package samanasoft.android.kiddielogicpatientalarm;
 
 
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -29,7 +9,6 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,19 +20,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import samanasoft.android.framework.Constant;
 import samanasoft.android.framework.DateTime;
@@ -68,7 +63,7 @@ import samanasoft.android.ottimo.dal.DataLayer.Patient;
 /**
  * Created by Ari on 2/2/2015.
  */
-public class PatientActivity extends BaseMainActivity {
+public class ParamedicActivity extends BaseMainActivity {
 
     private ListView lvwView;
     ScrollView scrlMain;
@@ -82,10 +77,10 @@ public class PatientActivity extends BaseMainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParamedicMaster entity = InitActivity(savedInstanceState, R.layout.activity_patient);
-        ParamedicID = entity.ParamedicID;
+        Patient entity = InitActivity(savedInstanceState, R.layout.activity_paramedic);
+        MRN = entity.MRN;
 
-        listRoom = root.orderByChild("paramedicid").equalTo(ParamedicID);
+        listRoom = root.orderByChild("mrn").equalTo(MRN);
         lvwView = (ListView)findViewById(R.id.lvwPatient);
         lvwView.setDivider(null);
         lvwView.setDividerHeight(0);
@@ -94,7 +89,7 @@ public class PatientActivity extends BaseMainActivity {
         //List<Appointment> lstAppointment = BusinessLayer.getAppointmentList(this, String.format("MRN = '%1$s'", entity.MRN));
 
         String filterExpression = String.format("");
-        List<DataLayer.Patient> lstEntity = BusinessLayer.getPatientList(getBaseContext(), filterExpression);
+        List<ParamedicMaster> lstEntity = BusinessLayer.getParamedicMasterList(getBaseContext(), filterExpression);
         Log.d("test", "" + lstEntity.size());
         if (lstEntity.size() > 0)
             fillListLabResult(lstEntity);
@@ -131,7 +126,7 @@ public class PatientActivity extends BaseMainActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_soap, menu);
+        getMenuInflater().inflate(R.menu.menu_paramedic, menu);
         return true;
     }
 
@@ -165,14 +160,14 @@ public class PatientActivity extends BaseMainActivity {
 
     private PatientInformationAdapter adapter;
 
-    private void fillListLabResult(List<Patient> lstLabResult){
+    private void fillListLabResult(List<ParamedicMaster> lstLabResult){
         adapter = new PatientInformationAdapter(getBaseContext(), lstLabResult);
         lvwView.setAdapter(adapter);
         lvwView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
-                Patient entity = (Patient) myAdapter.getItemAtPosition(myItemInt);
+                ParamedicMaster entity = (ParamedicMaster) myAdapter.getItemAtPosition(myItemInt);
 
-                String roomName = ParamedicID + "_" + entity.MRN;
+                String roomName = entity.ParamedicID + "_" + MRN;
                 if (!list_of_rooms.contains(roomName)) {
                     Log.d("Test", "masuk bikin map baru");
                     Map<String,Object> map = new HashMap<String, Object>();
@@ -182,15 +177,15 @@ public class PatientActivity extends BaseMainActivity {
 
                     DatabaseReference room_root = root.child(roomName);
                     Map<String, Object> map2 = new HashMap<String, Object>();
-                    map2.put("paramedicid", ParamedicID);
-                    map2.put("mrn", entity.MRN);
+                    map2.put("paramedicid", entity.ParamedicID);
+                    map2.put("mrn", MRN);
                     map2.put("message", "");
                     room_root.updateChildren(map2);
                 }
 
-                Intent i = new Intent(getBaseContext(), PatientChatActivity.class);
-                i.putExtra("paramedicid", ParamedicID);
-                i.putExtra("mrn", entity.MRN);
+                Intent i = new Intent(getBaseContext(), ParamedicChatActivity.class);
+                i.putExtra("paramedicid", entity.ParamedicID);
+                i.putExtra("mrn", MRN);
                 startActivity(i);
             }
         });
@@ -200,9 +195,9 @@ public class PatientActivity extends BaseMainActivity {
     private class PatientInformationAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
         private Context context;
-        private List<Patient> lstView;
+        private List<ParamedicMaster> lstView;
 
-        public PatientInformationAdapter(Context context, List<Patient> lstView1) {
+        public PatientInformationAdapter(Context context, List<ParamedicMaster> lstView1) {
             mInflater = LayoutInflater.from(context);
             this.context = context;
             lstView = lstView1;
@@ -218,11 +213,11 @@ public class PatientActivity extends BaseMainActivity {
         }
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
-            final Patient entity = lstView.get(position);
+            final ParamedicMaster entity = lstView.get(position);
             Log.d("position", position + "");
             if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.template_patient_information, null);
+                convertView = mInflater.inflate(R.layout.template_paramedic_information, null);
 
                 holder.txtPatientName = (TextView) convertView.findViewById(R.id.txtPatientName);
                 holder.imgProfile = (CircularImageView) convertView.findViewById(R.id.imgProfile);
@@ -232,7 +227,7 @@ public class PatientActivity extends BaseMainActivity {
             }
 
             // Bind the data efficiently with the holder.
-            holder.txtPatientName.setText(entity.FullName);
+            holder.txtPatientName.setText(entity.ParamedicName);
             holder.imgProfile.setImageBitmap(loadImageFromStorage(entity));
 
             return convertView;
@@ -241,20 +236,21 @@ public class PatientActivity extends BaseMainActivity {
 
     }
 
-    protected Bitmap loadImageFromStorage(Patient entity)
+    protected Bitmap loadImageFromStorage(ParamedicMaster entity)
     {
 
         try {
 
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             // path to /data/data/yourapp/app_data/imageDir
-            File directory = cw.getDir("KiddielogicParamedic", Context.MODE_PRIVATE);
-            File mypath = new File(directory, "PT" + entity.MedicalNo + ".jpg");
+            File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+            Log.d("pathload", "PM" + entity.ParamedicCode + ".jpg");
+            File mypath = new File(directory, "PM" + entity.ParamedicCode + ".jpg");
             Bitmap b = null;
             if(mypath.exists())
                 b = BitmapFactory.decodeStream(new FileInputStream(mypath));
             else {
-                if(entity.GCSex.equals(Constant.Sex.MALE))
+                if(entity.GCGender.equals(Constant.Sex.MALE))
                     b = BitmapFactory.decodeResource(getResources(), R.drawable.patient_male);
                 else
                     b = BitmapFactory.decodeResource(getResources(), R.drawable.patient_female);
@@ -285,10 +281,10 @@ public class PatientActivity extends BaseMainActivity {
 
         @Override
         protected WebServiceResponsePatient doInBackground(Void... params) {
-            String filterExpression = String.format("MRN IN (SELECT MRN FROM PatientParamedicChatRoom WHERE ParamedicID = %1$s AND IsActive = 1)", ParamedicID);
-            Log.d("test",filterExpression);
+            //String filterExpression = String.format("ParamedicID IN (SELECT ParamedicID FROM PatientParamedicChatRoom WHERE MRN = %1$s AND IsActive = 1)", MRN);
+            //Log.d("test",filterExpression);
             try {
-                WebServiceResponsePatient result = LoadPatientList(getBaseContext(), ParamedicID);
+                WebServiceResponsePatient result = LoadParamedicMasterList(getBaseContext(), MRN);
                 return result;
             } catch (Exception ex) {
                 //Toast.makeText(getBaseContext(), "Get LabResult Failed", Toast.LENGTH_SHORT).show();
@@ -304,29 +300,31 @@ public class PatientActivity extends BaseMainActivity {
             if (result == null) {
                 Toast.makeText(getBaseContext(), "Update Data Gagal. Silakan Cek Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
             } else {
-                if (result.returnObjPatient != null) {
+                Log.d("test", "haha");
+                if (result.returnObjParamedic != null) {
                     String filterExpression = String.format("");
-                    List<DataLayer.Patient> lstEntity = BusinessLayer.getPatientList(getBaseContext(), filterExpression);
-                    for (DataLayer.Patient entity : lstEntity) {
-                        BusinessLayer.deletePatient(getBaseContext(), entity.MRN);
+                    List<DataLayer.ParamedicMaster> lstEntity = BusinessLayer.getParamedicMasterList(getBaseContext(), filterExpression);
+                    for (DataLayer.ParamedicMaster entity : lstEntity) {
+                        BusinessLayer.deleteParamedicMaster(getBaseContext(), entity.ParamedicID);
                     }
 
                     @SuppressWarnings("unchecked")
-                    List<Patient> lstPatient = (List<Patient>) result.returnObjPatient;
+                    List<ParamedicMaster> lstParamedic = (List<ParamedicMaster>) result.returnObjParamedic;
                     int ctr = 0;
-                    for (Patient entity : lstPatient) {
-                        Patient tempPatient = BusinessLayer.getPatient(getBaseContext(), entity.MRN);
-                        if (tempPatient == null) {
+                    for (ParamedicMaster entity : lstParamedic) {
+                        ParamedicMaster tempParamedic = BusinessLayer.getParamedicMaster(getBaseContext(), entity.ParamedicID);
+                        if (tempParamedic == null) {
                             entity.LastSyncDateTime = result.timestamp;
 
-                            BusinessLayer.insertPatient(getBaseContext(), entity);
-                            FirebaseMessaging.getInstance().subscribeToTopic(entity.MedicalNo);
+                            BusinessLayer.insertParamedicMaster(getBaseContext(), entity);
+                            FirebaseMessaging.getInstance().subscribeToTopic(entity.ParamedicCode);
 
                             String returnObjImg = result.returnObjImg.get(ctr);
                             if (!returnObjImg.equals("")) {
                                 ContextWrapper cw = new ContextWrapper(getApplicationContext());
-                                File directory = cw.getDir("KiddielogicParamedic", Context.MODE_PRIVATE);
-                                File mypath = new File(directory, "PT" + entity.MedicalNo + ".jpg");
+                                File directory = cw.getDir("Kiddielogic", Context.MODE_PRIVATE);
+                                File mypath = new File(directory, "PM" + entity.ParamedicCode + ".jpg");
+                                Log.d("path", "PM" + entity.ParamedicCode + ".jpg");
 
                                 FileOutputStream fos = null;
                                 try {
@@ -348,9 +346,8 @@ public class PatientActivity extends BaseMainActivity {
                             ctr++;
                         }
                     }
-                    fillListLabResult(lstPatient);
+                    fillListLabResult(lstParamedic);
                 }
-
             }
         }
 
@@ -397,25 +394,25 @@ public class PatientActivity extends BaseMainActivity {
         }
     }
 
-    public WebServiceResponsePatient LoadPatientList(Context context, Integer paramedicID){
+    public WebServiceResponsePatient LoadParamedicMasterList(Context context, Integer MRN){
         WebServiceResponsePatient result = new WebServiceResponsePatient();
         try {
-            JSONObject response = WebServiceHelper.LoadPatientList(context, paramedicID);
+            JSONObject response = WebServiceHelper.LoadParamedicMasterList(context, MRN);
 
-            JSONArray returnObjPatient = WebServiceHelper.getCustomReturnObject(response, "ReturnObjPatient");
+            JSONArray returnObjParamedic = WebServiceHelper.getCustomReturnObject(response, "ReturnObjParamedic");
             JSONArray returnObjImg = WebServiceHelper.getCustomReturnObject(response, "ReturnObjImage");
             DateTime timestamp = WebServiceHelper.getTimestamp(response);
 
-            List<DataLayer.Patient> lst = new ArrayList<Patient>();
-            for (int i = 0; i < returnObjPatient.length();++i){
-                JSONObject row = (JSONObject) returnObjPatient.get(i);
-                lst.add((DataLayer.Patient)WebServiceHelper.JSONObjectToObject(row, new Patient()));
+            List<DataLayer.ParamedicMaster> lst = new ArrayList<ParamedicMaster>();
+            for (int i = 0; i < returnObjParamedic.length();++i){
+                JSONObject row = (JSONObject) returnObjParamedic.get(i);
+                lst.add((DataLayer.ParamedicMaster)WebServiceHelper.JSONObjectToObject(row, new ParamedicMaster()));
             }
             List<String> lst2 = new ArrayList();
             for (int i = 0; i < returnObjImg.length();++i){
                 lst2.add(returnObjImg.get(i).toString());
             }
-            result.returnObjPatient = lst;
+            result.returnObjParamedic = lst;
             result.returnObjImg = lst2;
             result.timestamp = timestamp;
         } catch (Exception e) {
@@ -426,7 +423,7 @@ public class PatientActivity extends BaseMainActivity {
     }
     public class WebServiceResponsePatient {
         public DateTime timestamp;
-        public List<?> returnObjPatient;
+        public List<?> returnObjParamedic;
         public List<String> returnObjImg;
     }
 }
