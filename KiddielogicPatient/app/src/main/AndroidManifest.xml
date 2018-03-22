@@ -19,6 +19,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -236,6 +237,7 @@
                 <action android:name="samanasoft.android.kiddielogicpatientalarm.intent.action.RESTART_SERVICE"></action>
             </intent-filter>
         </receiver>
+        <activity android:name=".SelfRegistrationScanActivity">
+        </activity>
     </application>
-
 </manifest>
