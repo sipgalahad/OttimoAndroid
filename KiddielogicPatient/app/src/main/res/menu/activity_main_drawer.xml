@@ -18,12 +18,6 @@
             android:id="@+id/nav_cdcgrowthchart"
             android:title="     CDC Growth Chart" />
         <item
-            android:id="@+id/nav_chat"
-            android:title="     Chat" />
-        <item
-            android:id="@+id/nav_selfregistration"
-            android:title="     Self Registration" />
-        <item
             android:id="@+id/nav_change_password"
             android:title="     Change Password" />
         <item

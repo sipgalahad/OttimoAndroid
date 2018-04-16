@@ -45,76 +45,81 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subjective"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:text="- Subjective"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#800000" />
             <TextView
                 android:id="@+id/tvSubjective"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Tes"
                 android:maxLines="5"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#212121" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Objective"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:layout_marginTop="20dp"
+                android:text="- Objective"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#800000" />
             <TextView
                 android:id="@+id/tvObjective"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Tes"
                 android:maxLines="10"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#212121" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Assessment"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:layout_marginTop="20dp"
+                android:text="- Assessment"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#800000" />
             <TextView
                 android:id="@+id/tvAssessment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Tes"
                 android:maxLines="5"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#212121" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Planning"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:layout_marginTop="20dp"
+                android:text="- Planning"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#800000" />
             <TextView
                 android:id="@+id/tvPlanning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Tes"
                 android:maxLines="15"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#212121" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Internal Notes"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:layout_marginTop="20dp"
+                android:text="- Internal Notes"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#800000" />
             <TextView
                 android:id="@+id/tvInternalNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Tes"
                 android:maxLines="5"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#212121" />
         </LinearLayout>
     </LinearLayout>

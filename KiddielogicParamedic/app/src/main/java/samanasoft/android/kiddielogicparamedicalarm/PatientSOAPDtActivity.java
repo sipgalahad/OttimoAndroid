@@ -71,9 +71,9 @@ public class PatientSOAPDtActivity extends AppCompatActivity {
             String noteText = entity.VisitNoteObjective;
             String value = "";
             if (!entity.VitalSign.equals(""))
-                value += String.format("Tanda Vital :<br/>%1$s", entity.VitalSign.replace("/sp/", "").replace("/sp/", "").replace("/sp/", "").replace("/sp/", "").replace("\\sp\\", "").replace("\\sp\\", "").replace("\\sp\\", "").replace("\\sp\\", ""));
+                value += String.format("<u><font color=\"#0b439e\">Tanda Vital</font></u> :<br/>%1$s", entity.VitalSign.replace("/sp/", "").replace("/sp/", "").replace("/sp/", "").replace("/sp/", "").replace("\\sp\\", "").replace("\\sp\\", "").replace("\\sp\\", "").replace("\\sp\\", ""));
             if (!value.equals(""))
-                value += "<br/>";
+                value += "<br/><br/>";
             value += noteText;
             tvObjective.setText(Html.fromHtml(value));
         }
@@ -84,14 +84,14 @@ public class PatientSOAPDtActivity extends AppCompatActivity {
             if (!entity.DiagnosisText.equals(""))
             {
                 if (!value.equals(""))
-                    value += "<br class='brSeparator'/>";
-                value += String.format("Diagnosa :<br/>%1$s", entity.DiagnosisText.replace("/Dx/", "<b>Dx</b>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>"));
+                    value += "<br class='brSeparator'/><br class='brSeparator'/>";
+                value += String.format("<u><font color=\"#0b439e\">Diagnosa</font></u> :<br/>%1$s", entity.DiagnosisText.replace("/Dx/", "<b>Dx</b>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>"));
             }
             if (!entity.ProcedureText.equals(""))
             {
                 if (!value.equals(""))
-                    value += "<br class='brSeparator'/>";
-                value += String.format("Procedure :<br/>%1$s", entity.ProcedureText.replace("/Px/", "<b>Px</b>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>"));
+                    value += "<br class='brSeparator'/><br class='brSeparator'/>";
+                value += String.format("<u><font color=\"#0b439e\">Procedure</font></u> :<br/>%1$s", entity.ProcedureText.replace("/Px/", "<b>Px</b>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>").replace("/br/", "<br/>"));
             }
             tvAssessment.setText(Html.fromHtml(value));
         }
@@ -108,15 +108,15 @@ public class PatientSOAPDtActivity extends AppCompatActivity {
             if (!entity.Prescription.equals(""))
             {
                 if (!value.equals(""))
-                    value += "<br class='brSeparator'/>";
-                value += String.format("<label class='spanTitle lblLink spnCopyPrescriptionDt'>Resep</label> :<br/>");
+                    value += "<br class='brSeparator'/><br class='brSeparator'/>";
+                value += String.format("<u><font color=\"#0b439e\">Resep</font></u> :<br/>");
                 value += String.format("<span>%1$s</span>", entity.Prescription);
             }
             if (!entity.Vaccination.equals(""))
             {
                 if (!value.equals(""))
-                    value += "<br class='brSeparator'/>";
-                value += String.format("<span class='spanTitle'>Vaksin</span> :<br/>");
+                    value += "<br class='brSeparator'/><br class='brSeparator'/>";
+                value += String.format("<u><font color=\"#0b439e\">Vaksin</font></u> :<br/>");
                 String lstVaccination = entity.Vaccination.replace("/b/", "<b style='color:Maroon'>")
                         .replace("/b/", "<b style='color:Maroon'>").replace("/b/", "<b style='color:Maroon'>").replace("/b/", "<b style='color:Maroon'>")
                         .replace("\\b\\", "</b>").replace("\\b\\", "</b>").replace("\\b\\", "</b>").replace("\\b\\", "</b>");
@@ -126,8 +126,8 @@ public class PatientSOAPDtActivity extends AppCompatActivity {
             if (!entity.FollowUpVisit.equals(""))
             {
                 if (!value.equals(""))
-                    value += "<br class='brSeparator'/>";
-                value += String.format("<label class='spanTitle lblLink spnCopyPrescriptionDt'>Kunjungan Berikutnya</label> :<br/>");
+                    value += "<br class='brSeparator'/><br class='brSeparator'/>";
+                value += String.format("<u><font color=\"#0b439e\">Kunjungan Berikutnya</font></u> :<br/>");
                 value += String.format("<span>%1$s</span>", entity.FollowUpVisit);
             }
             tvPlanning.setText(Html.fromHtml(value));
